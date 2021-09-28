@@ -1,0 +1,422 @@
+learn_remote:
+  sequence:
+  - service: remote.learn_command
+    target:
+      entity_id: remote.downstairs_tv_remote
+    data:
+      device: Xfinity
+      command:
+      - Replay
+  mode: single
+  alias: Learn remote
+turn_off_lights_on_restart:
+  sequence:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: binary_sensor.outside_garage_door
+        state: 'off'
+      sequence:
+      - type: turn_off
+        device_id: 2883dfd4ee7d32b6069bc33aa9d8f6b5
+        entity_id: switch.dog_run
+        domain: switch
+    default: []
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: binary_sensor.front_entry_motion
+        state: 'off'
+      sequence:
+      - type: turn_off
+        device_id: 4e01fd4c9483873139846b8172548fb9
+        entity_id: switch.front_stairs_lights
+        domain: switch
+    default: []
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: binary_sensor.hallway_motion
+        state: 'off'
+      sequence:
+      - type: turn_off
+        device_id: 01234a8756742395a61c02fe8328d31c
+        entity_id: switch.back_stairs_lights
+        domain: switch
+    default: []
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: binary_sensor.master_bathroom_motion
+        state: 'off'
+        for: 00:05:00
+      sequence:
+      - type: turn_off
+        device_id: 8c22ac95adf287b795831ca2d91a0ffa
+        entity_id: switch.bathroom_bath_light
+        domain: switch
+      - type: turn_off
+        device_id: 8c22ac95adf287b795831ca2d91a0ffa
+        entity_id: switch.bathroom_vanity
+        domain: switch
+      - type: turn_off
+        device_id: 6aa62bb4294ac780d9e6ef46f8c339cb
+        entity_id: switch.shower_light
+        domain: switch
+    default: []
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: cover.garage_door
+        state: open
+        for: 00:05:00
+      sequence:
+      - service: notify.mobile_app_matts_iphone
+        data:
+          message: 'Warning: The garage door is open'
+    default: []
+  - choose:
+    - conditions:
+      - condition: numeric_state
+        entity_id: sensor.master_bathroom_humidity
+        below: '60'
+      sequence:
+      - type: turn_off
+        device_id: 6aa62bb4294ac780d9e6ef46f8c339cb
+        entity_id: switch.shower_fan
+        domain: switch
+    default: []
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: binary_sensor.inside_garage_door
+        state: 'off'
+        for: 00:10:00
+      sequence:
+      - type: turn_off
+        device_id: 5492be1f2756861ce86ce4fdb69479ef
+        entity_id: switch.garage_lights
+        domain: switch
+    default: []
+  mode: single
+  alias: Reset system on restart
+xfinity_left:
+  alias: Rachel Maddow Show
+  sequence:
+  - service: remote.send_command
+    target:
+      device_id: e25a5843dcd6df5832a249f48c90e1f9
+    data:
+      device: Xfinity
+      command: Exit
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 3
+      milliseconds: 0
+  - service: remote.send_command
+    target:
+      device_id: e25a5843dcd6df5832a249f48c90e1f9
+    data:
+      device: Xfinity
+      command:
+      - b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHFBx0HPAcZBxkHGQc4BxkHGQcAClEHHQc4BxkHXAcrBysHJgdXBwABxQcdBxkHPAcZBxkHOAcZBxkHAApRAAAAAAAAAAA=
+  - delay: 3
+  - service: remote.send_command
+    target:
+      device_id: e25a5843dcd6df5832a249f48c90e1f9
+    data:
+      device: Xfinity
+      command:
+      - b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHFBx0HUwcZBxkHGQciBxkHGQcAClEHHQc4BxkHXAcrBysHJgdXBwABxQcdBy8HPAcZBxkHIgcZBxkHAApRAAAAAAAAAAA=
+  - delay: 3
+  - service: remote.send_command
+    target:
+      device_id: e25a5843dcd6df5832a249f48c90e1f9
+    data:
+      device: Xfinity
+      command:
+      - b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHFBx0HUwcZBxkHGQciBxkHGQcAClEHHQc4BxkHXAcrBysHJgdXBwABxQcdBy8HPAcZBxkHIgcZBxkHAApRAAAAAAAAAAA=
+  - delay: 3
+  - service: remote.send_command
+    target:
+      device_id: e25a5843dcd6df5832a249f48c90e1f9
+    data:
+      device: Xfinity
+      command:
+      - b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHFBx0HSgcZBxkHGQcrBxkHGQcAClEHHQc4BxkHXAcrBysHJgdXBwABxQcdByYHPAcZBxkHKwcZBxkHAApRAAAAAAAAAAA=
+  - delay: 3
+  - service: remote.send_command
+    target:
+      device_id: e25a5843dcd6df5832a249f48c90e1f9
+    data:
+      device: Xfinity
+      command:
+      - b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHEBx0HTwcZBxkHGQcmBxkHGQcACk4HHQc4BxkHXAcrBysHJgdXBwABxAcdBysHPAcZBxkHJgcZBxkHAApOAAAAAAAAAAA=
+  - delay: 3
+  - service: remote.send_command
+    target:
+      device_id: e25a5843dcd6df5832a249f48c90e1f9
+    data:
+      device: Xfinity
+      command:
+      - b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHFBx0HRgcZBxkHGQcvBxkHGQcAClEHHQc4BxkHXAcrBysHJgdXBwABxQcdByIHPAcZBxkHLwcZBxkHAApRAAAAAAAAAAA=
+  - delay: 3
+  - service: remote.send_command
+    target:
+      device_id: e25a5843dcd6df5832a249f48c90e1f9
+    data:
+      device: Xfinity
+      command:
+      - b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHEBx0HXAcZBxkHGQcZBxkHGQcACk4HHQc4BxkHXAcrBysHJgdXBwABxAcdBzgHPAcZBxkHGQcZBxkHAApOAAAAAAAAAAA=
+  - delay: 3
+  - service: remote.send_command
+    target:
+      device_id: e25a5843dcd6df5832a249f48c90e1f9
+    data:
+      device: Xfinity
+      command:
+      - b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHFBx0HQQcZBxkHGQc0BxkHGQcAClEHHQc4BxkHXAcrBysHJgdXBwABxQcdBx0HPAcZBxkHNAcZBxkHAApRAAAAAAAAAAA=
+  - delay: 3
+  - service: remote.send_command
+    target:
+      device_id: e25a5843dcd6df5832a249f48c90e1f9
+    data:
+      device: Xfinity
+      command:
+      - b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHFBx0HUwcZBxkHGQciBxkHGQcAClEHHQc4BxkHXAcrBysHJgdXBwABxQcdBy8HPAcZBxkHIgcZBxkHAApRAAAAAAAAAAA=
+  - delay: 3
+  - service: remote.send_command
+    target:
+      device_id: e25a5843dcd6df5832a249f48c90e1f9
+    data:
+      device: Xfinity
+      command:
+      - b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHEBx0HTwcZBxkHGQcmBxkHGQcACk4HHQc4BxkHXAcrBysHJgdXBwABxAcdBysHPAcZBxkHJgcZBxkHAApOAAAAAAAAAAA=
+  - delay: 3
+  - service: remote.send_command
+    target:
+      device_id: e25a5843dcd6df5832a249f48c90e1f9
+    data:
+      device: Xfinity
+      command:
+      - b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHEBx0HTwcZBxkHGQcmBxkHGQcACk4HHQc4BxkHXAcrBysHJgdXBwABxAcdBysHPAcZBxkHJgcZBxkHAApOAAAAAAAAAAA=
+  - delay: 3
+  - service: remote.send_command
+    target:
+      device_id: e25a5843dcd6df5832a249f48c90e1f9
+    data:
+      device: Xfinity
+      command:
+      - b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHFBx0HQQcZBxkHGQc0BxkHGQcAClEHHQc4BxkHXAcrBysHJgdXBwABxQcdBx0HPAcZBxkHNAcZBxkHAApRAAAAAAAAAAA=
+  - delay: 3
+  - service: remote.send_command
+    target:
+      device_id: e25a5843dcd6df5832a249f48c90e1f9
+    data:
+      device: Xfinity
+      command:
+      - b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHFBx0HNAcZBxkHGQdBBxkHGQcAClEHHQc4BxkHXAcrBysHJgdXBwABxQcdB1cHPAcZBxkHQQcZBxkHAApRAAAAAAAAAAA=
+  - delay: 3
+  - service: remote.send_command
+    target:
+      device_id: e25a5843dcd6df5832a249f48c90e1f9
+    data:
+      device: Xfinity
+      command:
+      - b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHFBx0HSgcZBxkHIgciBxkHGQcAClEHHQc4BxkHXAcrBysHJgdXBwABxQcdByYHPAcZByIHIgcZBxkHAApRAAAAAAAAAAA=
+  - delay: 3
+  - service: remote.send_command
+    target:
+      device_id: e25a5843dcd6df5832a249f48c90e1f9
+    data:
+      device: Xfinity
+      command: b64:JgDEAAYdBjkIFwZdCCoFLAglBlkIAAHDCBwJOwYZBhoEJQYwBhoFGgYACk0IHAY5CRcGXQgpCSkFKAZYCQABwwgcBhoGPQYaBSQFMQYaBQAKbgccCDcGGgZdCCkGKwYoBVkGAAHFBh8GGgU+BhkJIAYxBhkGAApsCRwGOQYaBV0GLAYrBicGWQgAAcMIHQgXBj4IFwYjBjEFGgYaBAALTAgcBjoFGgZdCCkGLAYnBlgJAAHDBh4GIwYaBRoFWgZdCBcGGgUADQU=
+  mode: single
+downstairs_tv_power_on:
+  alias: Downstairs TV Power On
+  sequence:
+  - service: remote.send_command
+    target:
+      device_id: e25a5843dcd6df5832a249f48c90e1f9
+    data:
+      device: Yamaha
+      command: PowerOn
+  - service: remote.send_command
+    target:
+      device_id: e25a5843dcd6df5832a249f48c90e1f9
+    data:
+      device: PioneerTV
+      command: Power
+  mode: single
+downstairs_tv_power_off:
+  alias: Downstairs TV Power Off
+  sequence:
+  - service: remote.send_command
+    target:
+      device_id: e25a5843dcd6df5832a249f48c90e1f9
+    data:
+      device: PioneerTV
+      command: Power
+  - service: remote.send_command
+    target:
+      device_id: e25a5843dcd6df5832a249f48c90e1f9
+    data:
+      device: Yamaha
+      command: PowerOff
+  mode: single
+turn_off_all_lights:
+  sequence:
+  - type: turn_off
+    device_id: 2883dfd4ee7d32b6069bc33aa9d8f6b5
+    entity_id: switch.dog_run
+    domain: switch
+  - type: turn_off
+    device_id: 7ac4495f01bc553282c24d44578c5679
+    entity_id: light.0302020370039fcc4e6a
+    domain: light
+  - type: turn_off
+    device_id: 43bc5cb46bb4e1cb3d49c8e2ae9f605e
+    entity_id: switch.family_room_lamp
+    domain: switch
+  - type: turn_off
+    device_id: f7d71653250c2a8a414fbd4fb25ca8ff
+    entity_id: switch.downstairs_fireplace
+    domain: switch
+  - type: turn_off
+    device_id: 52a568acd1f3b04f9214c056c506d39b
+    entity_id: switch.office_lamp
+    domain: switch
+  - type: turn_off
+    device_id: 169499903865fa71bffd19ca577476a8
+    entity_id: light.403747275002910a032c
+    domain: light
+  - type: turn_off
+    device_id: 01234a8756742395a61c02fe8328d31c
+    entity_id: switch.back_stairs_lights
+    domain: switch
+  - type: turn_off
+    device_id: 4e01fd4c9483873139846b8172548fb9
+    entity_id: switch.front_stairs_lights
+    domain: switch
+  - type: turn_off
+    device_id: 5492be1f2756861ce86ce4fdb69479ef
+    entity_id: switch.garage_lights
+    domain: switch
+  - type: turn_off
+    device_id: cf3821306021aef41fb6387b6b0a76e1
+    entity_id: switch.outside_pantry_light
+    domain: switch
+  - type: turn_off
+    device_id: b023bd3813f402bfeeaca70e7a3faf40
+    entity_id: switch.kitchen_lights
+    domain: switch
+  - type: turn_off
+    device_id: b023bd3813f402bfeeaca70e7a3faf40
+    entity_id: switch.kitchen_island_lights
+    domain: switch
+  - type: turn_off
+    device_id: f17ecafc667c65cc84d742080faf7d3a
+    entity_id: switch.kitchen_nook_lights
+    domain: switch
+  - type: turn_off
+    device_id: f17ecafc667c65cc84d742080faf7d3a
+    entity_id: switch.patio_lights
+    domain: switch
+  - type: turn_off
+    device_id: 473ea148622c80694fb8d21c55c157c9
+    entity_id: switch.powder_room_fan
+    domain: switch
+  - type: turn_off
+    device_id: 473ea148622c80694fb8d21c55c157c9
+    entity_id: switch.powder_room_lights
+    domain: switch
+  - type: turn_off
+    device_id: 5d4e4fef57e28bcb2e4dc43f9fac3fd8
+    entity_id: switch.entry_way_chandelier
+    domain: switch
+  - type: turn_off
+    device_id: e2e7303676b14841303b54a684eec67b
+    entity_id: switch.laundry_room_lights
+    domain: switch
+  - type: turn_off
+    device_id: 6bc7532e181ba4dbd99a3e6210aaceb2
+    entity_id: switch.downstairs_playroom_lights
+    domain: switch
+  - type: turn_off
+    device_id: 544bb27d0b76922e27d1056796669a1d
+    entity_id: switch.outside_powder_lights
+    domain: switch
+  - type: turn_off
+    device_id: 5d4e4fef57e28bcb2e4dc43f9fac3fd8
+    entity_id: switch.front_porch_lights
+    domain: switch
+  mode: single
+  alias: Turn off all downstairs lights
+  icon: mdi:lightbulb
+turn_off_all_upstairs_lights_except_kids:
+  alias: Turn off all upstairs lights (except kids)
+  sequence:
+  - type: turn_off
+    device_id: 8c22ac95adf287b795831ca2d91a0ffa
+    entity_id: switch.bathroom_bath_light
+    domain: switch
+  - type: turn_off
+    device_id: 8c22ac95adf287b795831ca2d91a0ffa
+    entity_id: switch.bathroom_vanity
+    domain: switch
+  - type: turn_off
+    device_id: 6aa62bb4294ac780d9e6ef46f8c339cb
+    entity_id: switch.shower_light
+    domain: switch
+  - type: turn_off
+    device_id: 894bb86f8d542d016d773a9c3f30358d
+    entity_id: switch.master_fireplace
+    domain: switch
+  - type: turn_off
+    device_id: 01234a8756742395a61c02fe8328d31c
+    entity_id: switch.kids_hall_lights
+    domain: switch
+  - type: turn_off
+    device_id: 4e01fd4c9483873139846b8172548fb9
+    entity_id: switch.master_hall_lights
+    domain: switch
+  - type: turn_off
+    device_id: 8763cd4d5cc472d279fefd6910d3d62f
+    entity_id: switch.outside_shower_light
+    domain: switch
+  - type: turn_off
+    device_id: 016281f1ed29da39c80a51d863425fa7
+    entity_id: switch.master_lights
+    domain: switch
+  - type: turn_off
+    device_id: c32cc10983532262a768e043288f286f
+    entity_id: switch.guest_bedroom_lights
+    domain: switch
+  - type: turn_off
+    device_id: b29548f0b2914a3ab0e8282219832abe
+    entity_id: switch.master_toilet_light
+    domain: switch
+  - type: turn_off
+    device_id: b29548f0b2914a3ab0e8282219832abe
+    entity_id: switch.master_toilet_fan
+    domain: switch
+  - type: turn_off
+    device_id: 4e01fd4c9483873139846b8172548fb9
+    entity_id: switch.front_stairs_lights
+    domain: switch
+  mode: single
+  icon: mdi:lightbulb
+turn_off_kids_lights:
+  alias: Turn off all kids lights
+  sequence:
+  - type: turn_off
+    device_id: d8c1e1f1292a82d5ff174bbec10f80a5
+    entity_id: switch.annas_room_closet_light
+    domain: switch
+  - type: turn_off
+    device_id: d8c1e1f1292a82d5ff174bbec10f80a5
+    entity_id: switch.annas_room_overhead_light
+    domain: switch
+  mode: single
+  icon: mdi:lightbulb
