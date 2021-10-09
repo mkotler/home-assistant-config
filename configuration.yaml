@@ -1,6 +1,13 @@
 # Configure a default setup of Home Assistant (frontend, api, etc)
 default_config:
 
+# Add support for multiple-entity-row 
+lovelace:
+  mode: yaml
+  resources:
+    - url: /hacsfiles/lovelace-multiple-entity-row/multiple-entity-row.js
+      type: module
+
 # Envisalink Alarm Panel
 envisalink:
   host: !secret honeywell_host

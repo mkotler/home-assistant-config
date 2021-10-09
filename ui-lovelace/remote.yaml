@@ -1,0 +1,512 @@
+title: Remote
+path: remote
+badges: []
+cards:
+  - type: picture-elements
+    elements:
+      - type: service-button
+        title: null
+        style:
+          top: 8%
+          left: 33%
+          width: 10%
+          border: 0px solid red
+        service: script.downstairs_tv_power_on
+      - type: service-button
+        title: null
+        style:
+          top: 8%
+          left: 67%
+          width: 10%
+          border: 0px solid red
+        service: script.downstairs_tv_power_off
+      - type: service-button
+        title: null
+        style:
+          top: 14%
+          left: 34%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Yamaha
+          command: VolumeUp
+          num_repeats: 5
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 20%
+          left: 34%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Yamaha
+          command: VolumeDown
+          num_repeats: 5
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 14%
+          left: 50%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Yamaha
+          command: Mute
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 20.5%
+          left: 50%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: Replay
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 14%
+          left: 67%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: ChUp
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 20%
+          left: 67%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: ChDown
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 26.3%
+          left: 34%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: Rewind
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 26.3%
+          left: 50%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: PlayPause
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 26.3%
+          left: 66.5%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: FastForward
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 31.5%
+          left: 34%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: Exit
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 31.5%
+          left: 66.5%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: Record
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 36.5%
+          left: 34%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: Guide
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 36.5%
+          left: 50%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: >-
+            b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHFBx0HUwcZBxkHIgcZBxkHGQcAClEHHQc4BxkHXAcrBysHJgdXBwABxQcdBy8HPAcZByIHGQcZBxkHAApRAAAAAAAAAAA=
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 36.5%
+          left: 66.5%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: PageUp
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 43%
+          left: 50.5%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: >-
+            b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHFBx0HTwcZBxkHIgcdBxkHGQcAClEHHQc4BxkHXAcrBysHJgdXBwABxQcdBysHPAcZByIHHQcZBxkHAApRAAAAAAAAAAA=
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 49.2%
+          left: 35%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: >-
+            b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHFBx0HRgcZBxkHIgcmBxkHGQcAClEHHQc4BxkHXAcrBysHJgdXBwABxQcdByIHPAcZByIHJgcZBxkHAApRAAAAAAAAAAA=
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 49.2%
+          left: 50.5%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: OK
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 49.2%
+          left: 65%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: >-
+            b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHFBx0HQQcZBxkHIgcrBxkHGQcAClEHHQc4BxkHXAcrBysHJgdXBwABxQcdBx0HPAcZByIHKwcZBxkHAApRAAAAAAAAAAA=
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 56%
+          left: 50.5%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: >-
+            b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHFBx0HSgcZBxkHIgciBxkHGQcAClEHHQc4BxkHXAcrBysHJgdXBwABxQcdByYHPAcZByIHIgcZBxkHAApRAAAAAAAAAAA=
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 61.5%
+          left: 34%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: Last
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 61.5%
+          left: 50%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: Info
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 61.5%
+          left: 66.5%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: PageDown
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 66%
+          left: 32%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: A
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 66%
+          left: 44%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: B
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 66%
+          left: 57%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: C
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 66%
+          left: 69%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: D
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 71%
+          left: 34%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: >-
+            b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHFBx0HVwcZBxkHGQcdBxkHGQcAClEHHQc4BxkHXAcrBysHJgdXBwABxQcdBzQHPAcZBxkHHQcZBxkHAApRAAAAAAAAAAA=
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 71%
+          left: 50%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: >-
+            b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHFBx0HUwcZBxkHGQciBxkHGQcAClEHHQc4BxkHXAcrBysHJgdXBwABxQcdBy8HPAcZBxkHIgcZBxkHAApRAAAAAAAAAAA=
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 71%
+          left: 66.5%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: >-
+            b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHEBx0HTwcZBxkHGQcmBxkHGQcACk4HHQc4BxkHXAcrBysHJgdXBwABxAcdBysHPAcZBxkHJgcZBxkHAApOAAAAAAAAAAA=
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 76.2%
+          left: 34%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: >-
+            b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHFBx0HSgcZBxkHGQcrBxkHGQcAClEHHQc4BxkHXAcrBysHJgdXBwABxQcdByYHPAcZBxkHKwcZBxkHAApRAAAAAAAAAAA=
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 76.2%
+          left: 50%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: >-
+            b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHFBx0HRgcZBxkHGQcvBxkHGQcAClEHHQc4BxkHXAcrBysHJgdXBwABxQcdByIHPAcZBxkHLwcZBxkHAApRAAAAAAAAAAA=
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 76.2%
+          left: 66.5%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: >-
+            b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHFBx0HQQcZBxkHGQc0BxkHGQcAClEHHQc4BxkHXAcrBysHJgdXBwABxQcdBx0HPAcZBxkHNAcZBxkHAApRAAAAAAAAAAA=
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 81.5%
+          left: 34%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: >-
+            b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHFBx0HPAcZBxkHGQc4BxkHGQcAClEHHQc4BxkHXAcrBysHJgdXBwABxQcdBxkHPAcZBxkHOAcZBxkHAApRAAAAAAAAAAA=
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 81.5%
+          left: 50%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: >-
+            b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHFBx0HOAcZBxkHGQc8BxkHGQcAClEHHQc4BxkHXAcrBysHJgdXBwABxQcdB1wHPAcZBxkHPAcZBxkHAApRAAAAAAAAAAA=
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 81.5%
+          left: 66.5%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: >-
+            b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHFBx0HNAcZBxkHGQdBBxkHGQcAClEHHQc4BxkHXAcrBysHJgdXBwABxQcdB1cHPAcZBxkHQQcZBxkHAApRAAAAAAAAAAA=
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 86.5%
+          left: 50%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: >-
+            b64:JgBQAAcdBzgHGQdcBysHKwcmB1cHAAHEBx0HXAcZBxkHGQcZBxkHGQcACk4HHQc4BxkHXAcrBysHJgdXBwABxAcdBzgHPAcZBxkHGQcZBxkHAApOAAAAAAAAAAA=
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: service-button
+        title: null
+        style:
+          top: 86.5%
+          left: 66.5%
+          width: 10%
+          border: 0px solid red
+        service: remote.send_command
+        service_data:
+          device: Xfinity
+          command: TVInput
+          device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: icon
+        icon: mdi:magnify
+        style:
+          top: 93%
+          left: 35%
+          color: white
+          '--mdc-icon-size': 15px
+          tap_action:
+            action: call-service
+            service: remote.send_command
+            service_data:
+              device: Xfinity
+              command: Search
+              device_id: e25a5843dcd6df5832a249f48c90e1f9
+      - type: icon
+        icon: mdi:debug-step-over
+        style:
+          top: 93%
+          left: 50%
+          color: white
+          '--mdc-icon-size': 15px
+          tap_action:
+            action: call-service
+            service: remote.send_command
+            service_data:
+              device: Xfinity
+              command: Skip
+              device_id: e25a5843dcd6df5832a249f48c90e1f9
+    image: /local/remote/welcome-xr11.png

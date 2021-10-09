@@ -57,7 +57,7 @@ turn_off_lights_on_restart:
         domain: switch
       - type: turn_off
         device_id: 8c22ac95adf287b795831ca2d91a0ffa
-        entity_id: switch.bathroom_vanity
+        entity_id: switch.bathroom_vanity_lights
         domain: switch
       - type: turn_off
         device_id: 6aa62bb4294ac780d9e6ef46f8c339cb
@@ -276,10 +276,6 @@ turn_off_all_lights:
     entity_id: light.0302020370039fcc4e6a
     domain: light
   - type: turn_off
-    device_id: 43bc5cb46bb4e1cb3d49c8e2ae9f605e
-    entity_id: switch.family_room_lamp
-    domain: switch
-  - type: turn_off
     device_id: f7d71653250c2a8a414fbd4fb25ca8ff
     entity_id: switch.downstairs_fireplace
     domain: switch
@@ -363,7 +359,7 @@ turn_off_all_upstairs_lights_except_kids:
     domain: switch
   - type: turn_off
     device_id: 8c22ac95adf287b795831ca2d91a0ffa
-    entity_id: switch.bathroom_vanity
+    entity_id: switch.bathroom_vanity_lights
     domain: switch
   - type: turn_off
     device_id: 6aa62bb4294ac780d9e6ef46f8c339cb

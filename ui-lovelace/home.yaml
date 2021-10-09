@@ -1,0 +1,628 @@
+title: Home
+path: default_view
+visible:
+  - user: 550d61f3e9914a8c9b18cd8ed14eaa02
+  - user: 86dcb1b99d524cd398b6dfb4139401ac
+badges: []
+cards:
+  - type: horizontal-stack
+    cards:
+      - type: picture-elements
+        elements:
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.shower_light
+            style:
+              top: 30.3%
+              left: 94.5%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.outside_shower_light
+            style:
+              top: 27%
+              left: 82%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.master_toilet_light
+            style:
+              top: 36.5%
+              left: 90%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:fan
+            entity: switch.master_toilet_fan
+            style:
+              top: 36.5%
+              left: 95%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:fan
+            entity: switch.shower_fan
+            style:
+              top: 30.5%
+              left: 86.5%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb-group
+            entity: switch.bathroom_vanity
+            style:
+              top: 6%
+              left: 87.9%
+              transform: rotate(55deg)
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.bathroom_bath_light
+            style:
+              top: 16%
+              left: 75.5%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.master_hall_lights
+            style:
+              top: 40%
+              left: 47%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.front_stairs_lights
+            style:
+              top: 76%
+              left: 64%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.back_stairs_lights
+            style:
+              top: 40%
+              left: 4.5%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.kids_hall_lights
+            style:
+              top: 55%
+              left: 27.3%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.annas_room_closet_light
+            style:
+              top: 77%
+              left: 36%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.annas_room_overhead_light
+            style:
+              top: 95.5%
+              left: 43%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.guest_bedroom_lights
+            style:
+              top: 63%
+              left: 11%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:fire
+            entity: switch.master_fireplace
+            style:
+              top: 11%
+              left: 63%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.master_lights
+            style:
+              top: 18%
+              left: 63%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:minus
+            entity: binary_sensor.master_bedroom_motion
+            style:
+              top: 35.5%
+              left: 61%
+              '--mdc-icon-size': 33px
+          - type: state-icon
+            icon: mdi:minus
+            entity: binary_sensor.toilet_motion
+            style:
+              top: 33.5%
+              left: 88%
+              '--mdc-icon-size': 33px
+          - type: state-icon
+            icon: mdi:bed
+            entity: input_boolean.matt_in_bed
+            style:
+              top: 18%
+              left: 40%
+              '--mdc-icon-size': 15px
+        image: /local/floorplan/upstairs.png
+      - type: picture-elements
+        elements:
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.kitchen_lights
+            style:
+              top: 15%
+              left: 35%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.kitchen_island_lights
+            style:
+              top: 28%
+              left: 48%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.kitchen_nook_lights
+            style:
+              top: 8%
+              left: 59%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.patio_lights
+            style:
+              top: 3%
+              left: 48%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: light.0302020370039fcc4e6a
+            color: rgb(245,239,66)
+            style:
+              top: 30%
+              left: 93%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:fire
+            entity: switch.downstairs_fireplace
+            style:
+              top: 24%
+              left: 93%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lamp
+            entity: switch.family_room_lamp
+            style:
+              top: 33%
+              left: 70%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.powder_room_lights
+            style:
+              top: 42.5%
+              left: 47.5%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:fan
+            entity: switch.powder_room_fan
+            style:
+              top: 42.5%
+              left: 52.5%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.outside_powder_lights
+            style:
+              top: 39%
+              left: 60.5%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.front_stairs_lights
+            style:
+              top: 55%
+              left: 60.5%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:ceiling-light
+            entity: switch.entry_way_chandelier
+            style:
+              top: 75%
+              left: 60.5%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.front_porch_lights
+            style:
+              top: 92%
+              left: 60.5%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.downstairs_playroom_lights
+            style:
+              top: 27%
+              left: 14%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.back_stairs_lights
+            style:
+              top: 42%
+              left: 4.5%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.laundry_room_lights
+            style:
+              top: 54%
+              left: 22%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: light.403747275002910a032c
+            color: rgb(245,239,66)
+            style:
+              top: 45%
+              left: 85%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lamp
+            entity: switch.office_lamp
+            style:
+              top: 59%
+              left: 85%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:minus
+            entity: binary_sensor.back_stairs_motion
+            style:
+              top: 30%
+              left: 8%
+              transform: rotate(90deg)
+          - type: state-icon
+            icon: mdi:minus
+            entity: binary_sensor.inside_garage_door
+            style:
+              top: 60.5%
+              left: 23%
+          - type: state-icon
+            icon: mdi:minus
+            entity: binary_sensor.outside_garage_door
+            style:
+              top: 60%
+              left: '-9.5%'
+              transform: rotate(90deg)
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.dog_run
+            style:
+              top: 69%
+              left: 6%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:lightbulb
+            entity: switch.garage_lights
+            style:
+              top: 73%
+              left: 24%
+              '--mdc-icon-size': 15px
+          - type: state-icon
+            icon: mdi:minus
+            entity: binary_sensor.laundry_room_motion
+            style:
+              top: 48%
+              left: 22%
+          - type: state-icon
+            icon: mdi:signal-variant
+            entity: binary_sensor.kitchen_nook_motion
+            style:
+              top: '-5%'
+              left: 51%
+              transform: rotate(135deg)
+              '--mdc-icon-size': 10px
+          - type: state-icon
+            icon: mdi:minus
+            entity: binary_sensor.powder_room_motion
+            style:
+              top: 32%
+              left: 49%
+              transform: rotate(90deg)
+          - type: state-icon
+            icon: mdi:signal-variant
+            entity: binary_sensor.front_entry_motion
+            style:
+              top: 72%
+              left: 51%
+              transform: rotate(-45deg)
+              '--mdc-icon-size': 10px
+          - type: state-icon
+            icon: mdi:signal-variant
+            entity: binary_sensor.office_motion
+            style:
+              top: 51%
+              left: 67%
+              transform: rotate(0deg)
+              '--mdc-icon-size': 10px
+          - type: state-icon
+            icon: mdi:garage-variant
+            entity: cover.garage_door
+            style:
+              top: 91%
+              left: 20%
+              '--mdc-icon-size': 15px
+        image: /local/floorplan/downstairs.png
+  - type: grid
+    title: Quick Actions!
+    cards:
+      - type: button
+        tap_action:
+          action: toggle
+        entity: script.turn_off_all_lights
+        name: Downstairs
+      - type: button
+        tap_action:
+          action: toggle
+        entity: script.turn_off_all_upstairs_lights_except_kids
+        name: Upstairs
+      - type: button
+        tap_action:
+          action: toggle
+        entity: script.turn_off_kids_lights
+        name: Kids
+    columns: 4
+  - type: glance
+    columns: 4
+    entities:
+      - entity: switch.kitchen_lights
+        icon: mdi:lightbulb
+        name: Kitchen
+        tap_action:
+          action: toggle
+      - entity: switch.kitchen_island_lights
+        icon: mdi:lightbulb
+        name: Island
+        tap_action:
+          action: toggle
+      - entity: switch.kitchen_nook_lights
+        icon: mdi:lightbulb
+        name: Nook
+        tap_action:
+          action: toggle
+      - entity: switch.laundry_room_lights
+        icon: mdi:lightbulb
+        name: Laundry
+        tap_action:
+          action: toggle
+      - entity: light.0302020370039fcc4e6a
+        icon: mdi:lightbulb
+        name: Family Room
+        tap_action:
+          action: toggle
+      - entity: switch.family_room_lamp
+        icon: mdi:lamp
+        name: Lamp
+        tap_action:
+          action: toggle
+      - entity: switch.downstairs_fireplace
+        icon: mdi:fire
+        name: Fireplace
+        tap_action:
+          action: toggle
+      - entity: switch.patio_lights
+        icon: mdi:lightbulb
+        name: Back Patio
+        tap_action:
+          action: toggle
+      - entity: switch.powder_room_lights
+        icon: mdi:lightbulb
+        name: Powder
+        tap_action:
+          action: toggle
+      - entity: switch.powder_room_fan
+        icon: mdi:fan
+        name: Powder Fan
+        tap_action:
+          action: toggle
+      - entity: switch.outside_powder_lights
+        icon: mdi:lightbulb
+        name: Powder Hall
+        tap_action:
+          action: toggle
+      - entity: switch.downstairs_playroom_lights
+        icon: mdi:lightbulb
+        name: Playroom
+        tap_action:
+          action: toggle
+      - entity: light.403747275002910a032c
+        icon: mdi:lightbulb
+        name: Office Light
+        tap_action:
+          action: toggle
+      - entity: switch.office_lamp
+        icon: mdi:lamp
+        name: Office Lamp
+        tap_action:
+          action: toggle
+      - entity: switch.entry_way_chandelier
+        icon: mdi:ceiling-light
+        name: Entry Way
+        tap_action:
+          action: toggle
+      - entity: switch.front_porch_lights
+        icon: mdi:lightbulb
+        name: Front Porch
+        tap_action:
+          action: toggle
+    title: Downstairs
+  - type: glance
+    entities:
+      - entity: switch.garage_lights
+        tap_action:
+          action: toggle
+      - entity: switch.dog_run
+        tap_action:
+          action: toggle
+      - entity: cover.garage_door
+        tap_action:
+          action: toggle
+    title: Garage
+  - type: glance
+    columns: 3
+    entities:
+      - entity: switch.master_lights
+        name: Master Bedroom
+        tap_action:
+          action: toggle
+      - entity: switch.master_fireplace
+        name: Fireplace
+        tap_action:
+          action: toggle
+        icon: mdi:fire
+      - entity: switch.master_hall_lights
+        name: Master Hallway
+        tap_action:
+          action: toggle
+      - entity: switch.front_stairs_lights
+        name: Front Stairs
+        tap_action:
+          action: toggle
+      - entity: switch.back_stairs_lights
+        name: Back Stairs
+        tap_action:
+          action: toggle
+    title: Upstairs
+  - type: glance
+    columns: 4
+    entities:
+      - entity: switch.bathroom_vanity_lights
+        name: Vanity Lights
+        icon: mdi:lightbulb-group
+        tap_action:
+          action: toggle
+      - entity: switch.bathroom_bath_light
+        name: Bathtub
+        icon: mdi:lightbulb
+        tap_action:
+          action: toggle
+      - entity: switch.shower_light
+        name: Shower
+        icon: mdi:lightbulb
+        tap_action:
+          action: toggle
+      - entity: switch.shower_fan
+        name: Shower Fan
+        icon: mdi:fan
+        tap_action:
+          action: toggle
+      - entity: switch.outside_shower_light
+        name: Towel Rack
+        icon: mdi:lightbulb
+        tap_action:
+          action: toggle
+      - entity: switch.master_toilet_light
+        name: Toilet
+        tap_action:
+          action: toggle
+      - entity: switch.master_toilet_fan
+        name: Toilet Fan
+        tap_action:
+          action: toggle
+    state_color: true
+    title: Master Bathroom
+  - type: glance
+    columns: 2
+    entities:
+      - entity: switch.kids_hall_lights
+        name: Kids Hall
+        icon: mdi:lightbulb
+        tap_action:
+          action: toggle
+      - entity: switch.guest_bedroom_lights
+        name: Guest Room
+        tap_action:
+          action: toggle
+      - entity: switch.annas_room_overhead_light
+        name: Anna's Light
+        icon: mdi:lightbulb
+        tap_action:
+          action: toggle
+      - entity: switch.annas_room_closet_light
+        name: Anna's Closet
+        icon: mdi:lightbulb
+        tap_action:
+          action: toggle
+    title: Bedrooms
+  - type: glance
+    entities:
+      - entity: binary_sensor.kitchen_occupancy
+        name: Kitchen
+        icon: mdi:food-fork-drink
+      - entity: binary_sensor.anna_room_occupancy
+        name: Anna's Room
+        icon: mdi:horse
+      - entity: binary_sensor.master_bathroom_motion
+        name: Master Bath
+        icon: mdi:shower
+    title: Activity
+  - type: glance
+    entities:
+      - entity: device_tracker.life360_julie_kotler
+        name: Julie
+      - entity: device_tracker.life360_matt
+        name: Matt
+      - entity: device_tracker.life360_katie
+        name: Katie
+      - entity: device_tracker.life360_anna
+        name: Anna
+    title: Family Whereabouts
+  - type: weather-forecast
+    entity: weather.downstairs_hall
+    show_forecast: true
+    name: ' '
+  - type: custom:sun-card
+  - type: thermostat
+    entity: climate.downstairs_hall
+  - type: thermostat
+    entity: climate.master_bedroom
+  - type: glance
+    entities:
+      - entity: switch.tesla_climate
+        name: Climate
+        tap_action:
+          action: toggle
+      - entity: lock.matt_s_tesla_door_lock
+        name: Doors
+      - entity: lock.matt_s_tesla_trunk_lock
+        name: Trunk
+      - entity: lock.matt_s_tesla_frunk_lock
+        name: Frunk
+      - entity: binary_sensor.matt_s_tesla_charger_sensor
+        name: Charging
+    title: Tesla
+    state_color: true
+  - type: glance
+    entities:
+      - entity: sensor.epson_et_3760_series
+        name: Epson
+      - entity: sensor.epson_et_3760_series_black_ink
+        name: Black
+      - entity: sensor.epson_et_3760_series_cyan_ink
+        name: Cyan
+      - entity: sensor.epson_et_3760_series_magenta_ink
+        name: Magenta
+      - entity: sensor.epson_et_3760_series_yellow_ink
+        name: Yellow
+    state_color: true
+    title: Printer
+  - type: custom:mini-graph-card
+    points_per_hour: 2
+    aggregate_func: max
+    entities:
+      - sensor.master_bathroom_temperature
+  - type: custom:mini-graph-card
+    points_per_hour: 2
+    aggregate_func: max
+    entities:
+      - sensor.master_bathroom_humidity

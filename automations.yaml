@@ -68,7 +68,7 @@
     domain: switch
   - type: turn_off
     device_id: 8c22ac95adf287b795831ca2d91a0ffa
-    entity_id: switch.bathroom_vanity
+    entity_id: switch.bathroom_vanity_lights
     domain: switch
   mode: single
 - id: '1621202178175'
@@ -85,11 +85,11 @@
     - conditions:
       - condition: time
         after: 05:30
-        before: '22:00'
+        before: '22:00:00'
       sequence:
       - type: turn_on
         device_id: 8c22ac95adf287b795831ca2d91a0ffa
-        entity_id: switch.bathroom_vanity
+        entity_id: switch.bathroom_vanity_lights
         domain: switch
     default:
     - type: turn_on
@@ -216,7 +216,7 @@
   action:
   - type: turn_off
     device_id: 8c22ac95adf287b795831ca2d91a0ffa
-    entity_id: switch.bathroom_vanity
+    entity_id: switch.bathroom_vanity_lights
     domain: switch
   - type: turn_off
     device_id: 8c22ac95adf287b795831ca2d91a0ffa
@@ -253,7 +253,7 @@
     - condition: device
       type: is_on
       device_id: 8c22ac95adf287b795831ca2d91a0ffa
-      entity_id: switch.bathroom_vanity
+      entity_id: switch.bathroom_vanity_lights
       domain: switch
     - condition: device
       type: is_on
@@ -648,22 +648,22 @@
     entity_id: binary_sensor.front_door
     id: front door
     to: 'on'
-    for: 00:05:00
+    for: '{{ states(''input_datetime.delay_short'') }}'
   - platform: state
     entity_id: binary_sensor.inside_garage_door
     id: door to the garage
     to: 'on'
-    for: 00:05:00
+    for: '{{ states(''input_datetime.delay_short'') }}'
   - platform: state
     entity_id: binary_sensor.kitchen_sliding_door
     id: sliding door
     to: 'on'
-    for: 00:15:00
+    for: '{{ states(''input_datetime.delay_medium'') }}'
   - platform: state
     entity_id: binary_sensor.outside_garage_door
     id: door to the dog run
     to: 'on'
-    for: 00:05:00
+    for: '{{ states(''input_datetime.delay_short'') }}'
   condition: []
   action:
   - service: notify.alexa_media_kitchen
@@ -688,12 +688,7 @@
     entity_id: binary_sensor.outside_garage_door
     from: 'off'
     to: 'on'
-  condition:
-  - condition: device
-    type: is_off
-    device_id: 5492be1f2756861ce86ce4fdb69479ef
-    entity_id: switch.garage_lights
-    domain: switch
+  condition: []
   action:
   - type: turn_on
     device_id: 5492be1f2756861ce86ce4fdb69479ef
@@ -717,7 +712,7 @@
     type: is_closed
   - condition: state
     entity_id: binary_sensor.outside_garage_door
-    state: 'on'
+    state: 'off'
   action:
   - type: turn_off
     device_id: 5492be1f2756861ce86ce4fdb69479ef
@@ -803,7 +798,7 @@
     domain: switch
   mode: single
 - id: '1630384855022'
-  alias: 'Bathroom Lights:  Turn off lights after 10 min  (toiler light on)'
+  alias: 'Bathroom Lights:  Turn off lights after 10 min  (toilet light on)'
   description: ''
   trigger:
   - platform: state
@@ -825,7 +820,7 @@
   action:
   - type: turn_off
     device_id: 8c22ac95adf287b795831ca2d91a0ffa
-    entity_id: switch.bathroom_vanity
+    entity_id: switch.bathroom_vanity_lights
     domain: switch
   - type: turn_off
     device_id: 8c22ac95adf287b795831ca2d91a0ffa
@@ -1339,15 +1334,15 @@
   - platform: state
     entity_id: light.0302020370039fcc4e6a, light.403747275002910a032c, switch.annas_room_closet_light,
       switch.annas_room_overhead_light, switch.back_stairs_lights, switch.bathroom_bath_light,
-      switch.bathroom_vanity, switch.dog_run, switch.downstairs_fireplace, switch.downstairs_playroom_lights,
-      switch.entry_way_chandelier, switch.family_room_lamp, switch.front_porch_lights,
-      switch.front_stairs_lights, switch.garage_lights, switch.guest_bedroom_lights,
-      switch.kids_hall_lights, switch.kitchen_island_lights, switch.kitchen_lights,
-      switch.kitchen_nook_lights, switch.laundry_room_lights, switch.master_fireplace,
-      switch.master_hall_lights, switch.master_lights, switch.master_toilet_fan, switch.master_toilet_light,
-      switch.office_lamp, switch.outside_pantry_light, switch.outside_powder_lights,
-      switch.outside_shower_light, switch.patio_lights, switch.powder_room_fan, switch.powder_room_lights,
-      switch.shower_fan, switch.shower_light
+      switch.bathroom_vanity_lights, switch.dog_run, switch.downstairs_fireplace,
+      switch.downstairs_playroom_lights, switch.entry_way_chandelier, switch.family_room_lamp,
+      switch.front_porch_lights, switch.front_stairs_lights, switch.garage_lights,
+      switch.guest_bedroom_lights, switch.kids_hall_lights, switch.kitchen_island_lights,
+      switch.kitchen_lights, switch.kitchen_nook_lights, switch.laundry_room_lights,
+      switch.master_fireplace, switch.master_hall_lights, switch.master_lights, switch.master_toilet_fan,
+      switch.master_toilet_light, switch.office_lamp, switch.outside_pantry_light,
+      switch.outside_powder_lights, switch.outside_shower_light, switch.patio_lights,
+      switch.powder_room_fan, switch.powder_room_lights, switch.shower_fan, switch.shower_light
   condition:
   - condition: template
     value_template: '{{ trigger.to_state.context.parent_id is none }}'
@@ -1362,20 +1357,21 @@
     entities: light.0302020370039fcc4e6a,light.403747275002910a032c,switch.anna_s_room_do_not_disturb_switch,
       switch.anna_s_room_repeat_switch, switch.anna_s_room_shuffle_switch, switch.annas_room_closet_light,
       switch.annas_room_overhead_light, switch.back_stairs_lights, switch.bathroom_bath_light,
-      switch.bathroom_vanity, switch.dog_run, switch.downstairs_fireplace, switch.downstairs_playroom_lights,
-      switch.entry_way_chandelier, switch.everywhere_do_not_disturb_switch, switch.everywhere_repeat_switch,
-      switch.everywhere_shuffle_switch, switch.family_room_lamp, switch.front_porch_lights,
-      switch.front_stairs_lights, switch.garage_lights, switch.guest_bedroom_lights,
-      switch.kids_hall_lights, switch.kitchen_do_not_disturb_switch, switch.kitchen_island_lights,
-      switch.kitchen_lights, switch.kitchen_nook_lights, switch.kitchen_repeat_switch,
-      switch.kitchen_shuffle_switch, switch.laundry_room_lights, switch.master_bathroom_do_not_disturb_switch,
-      switch.master_bathroom_repeat_switch, switch.master_bathroom_shuffle_switch,
-      switch.master_fireplace, switch.master_hall_lights, switch.master_lights, switch.master_toilet_fan,
-      switch.master_toilet_light, switch.matt_s_tesla_charger_switch, switch.matt_s_tesla_maxrange_switch,
-      switch.matt_s_tesla_sentry_mode_switch, switch.matt_s_tesla_update_switch, switch.office_lamp,
-      switch.outside_pantry_light, switch.outside_powder_lights, switch.outside_shower_light,
-      switch.patio_lights, switch.powder_room_fan, switch.powder_room_lights, switch.shower_fan,
-      switch.shower_light, switch.tesla_climate, switch.wyze_notifications
+      switch.bathroom_vanity_lights, switch.dog_run, switch.downstairs_fireplace,
+      switch.downstairs_playroom_lights, switch.entry_way_chandelier, switch.everywhere_do_not_disturb_switch,
+      switch.everywhere_repeat_switch, switch.everywhere_shuffle_switch, switch.family_room_lamp,
+      switch.front_porch_lights, switch.front_stairs_lights, switch.garage_lights,
+      switch.guest_bedroom_lights, switch.kids_hall_lights, switch.kitchen_do_not_disturb_switch,
+      switch.kitchen_island_lights, switch.kitchen_lights, switch.kitchen_nook_lights,
+      switch.kitchen_repeat_switch, switch.kitchen_shuffle_switch, switch.laundry_room_lights,
+      switch.master_bathroom_do_not_disturb_switch, switch.master_bathroom_repeat_switch,
+      switch.master_bathroom_shuffle_switch, switch.master_fireplace, switch.master_hall_lights,
+      switch.master_lights, switch.master_toilet_fan, switch.master_toilet_light,
+      switch.matt_s_tesla_charger_switch, switch.matt_s_tesla_maxrange_switch, switch.matt_s_tesla_sentry_mode_switch,
+      switch.matt_s_tesla_update_switch, switch.office_lamp, switch.outside_pantry_light,
+      switch.outside_powder_lights, switch.outside_shower_light, switch.patio_lights,
+      switch.powder_room_fan, switch.powder_room_lights, switch.shower_fan, switch.shower_light,
+      switch.tesla_climate, switch.wyze_notifications
   max: 10
 - id: '1632711561209'
   alias: 'Bed Sensor: Turn on if pressure over 50'
@@ -1442,4 +1438,63 @@
   - service: light.turn_off
     target:
       entity_id: '{{trigger.event.data.message["Motion sensor failed to turn off "|length():trigger.event.data.message|length()]}}'
+  mode: single
+- id: '1632886551954'
+  alias: 'Back Patio: Turn off after 30 min'
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: f17ecafc667c65cc84d742080faf7d3a
+    entity_id: switch.patio_lights
+    domain: switch
+  condition: []
+  action:
+  - type: turn_off
+    device_id: f17ecafc667c65cc84d742080faf7d3a
+    entity_id: switch.patio_lights
+    domain: switch
+  mode: single
+- id: '1633441051995'
+  alias: 'Fireplaces: Turn off at 1am '
+  description: ''
+  trigger:
+  - platform: time
+    at: 01:00:00
+  condition: []
+  action:
+  - type: turn_off
+    device_id: f7d71653250c2a8a414fbd4fb25ca8ff
+    entity_id: switch.downstairs_fireplace
+    domain: switch
+  - type: turn_off
+    device_id: 894bb86f8d542d016d773a9c3f30358d
+    entity_id: switch.master_fireplace
+    domain: switch
+  mode: single
+- id: '1633578192167'
+  alias: 'Announcement: Reminder for Anna when she gets home'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: device_tracker.life360_anna
+    attribute: place
+    to: Home
+    id: Anna
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+      milliseconds: 0
+  condition:
+  - condition: time
+    after: '13:00:00'
+    before: '18:00:00'
+  action:
+  - service: notify.alexa_media_kitchen
+    data:
+      data:
+        type: announce
+        method: speak
+      message: Anna, don't forget to take care of your face
   mode: single

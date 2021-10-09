@@ -1,0 +1,49 @@
+title: Why
+path: debugging
+badges: []
+cards:
+  - type: entities
+    entities:
+      - entity: input_datetime.delay_short
+        type: custom:multiple-entity-row
+        format: time
+      - entity: input_datetime.delay_medium
+        type: custom:multiple-entity-row
+        format: time
+      - entity: input_datetime.delay_long
+        type: custom:multiple-entity-row
+        format: time
+    title: Delays
+  - type: custom:auto-entities
+    card:
+      type: entities
+      title: Lights On
+    filter:
+      include:
+        - entity_id: switch.*_light*
+          state: 'on'
+          options:
+            secondary_info: last-changed
+        - entity_id: light.*
+          state: 'on'
+          options:
+            secondary_info: last-changed
+      exclude: []
+  - type: custom:auto-entities
+    card:
+      type: entities
+      title: Lights Off
+      show_header_toggle: false
+    filter:
+      include:
+        - entity_id: switch.*_light*
+          state: 'off'
+          options:
+            secondary_info: last-updated
+        - entity_id: light.*
+          state: 'off'
+          options:
+            secondary_info: last-updated
+      exclude: []
+    sort:
+      method: none
