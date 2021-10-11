@@ -1,11 +1,30 @@
 # Configure a default setup of Home Assistant (frontend, api, etc)
 default_config:
 
+# Debugging
+#logger:
+#  logs:
+#    homeassistant.components.upnp: debug
+#    async_upnp_client: debug
+#    async_upnp_client.traffic: debug
+
 # Add support for multiple-entity-row 
 lovelace:
   mode: yaml
   resources:
+    - url: /hacsfiles/home-assistant-sun-card/home-assistant-sun-card.js
+      type: module
+    - url: /hacsfiles/lovelace-auto-entities/auto-entities.js
+      type: module
+    - url: /hacsfiles/lovelace-card-templater/lovelace-card-templater.js
+      type: module
+    - url: /hacsfiles/ha-floorplan/floorplan.js
+      type: module
+    - url: /hacsfiles/mini-graph-card/mini-graph-card-bundle.js
+      type: module
     - url: /hacsfiles/lovelace-multiple-entity-row/multiple-entity-row.js
+      type: module
+    - url: /hacsfiles/lovelace-template-entity-row/template-entity-row.js
       type: module
 
 # Envisalink Alarm Panel
@@ -255,7 +274,7 @@ sensor:
   json_attributes_topic: "home-assistant/computers/9001"
 - platform: mqtt
   state_topic: "home-assistant/sensors/nodeMCU1"
-  name: "Master Bedroom Matt Bed Presence"
+  name: "Master Bedroom Bed Presence"
   value_template: >
     {% if value_json is defined and value_json.id == 8001 and value_json.pressure != '' %}
       {{ value_json.pressure }}
@@ -274,10 +293,6 @@ sensor:
 # Text to speech
 tts:
   - platform: google_translate
-
-# Setting HomeAssistant IP for UPnP device discovery
-upnp:
-  local_ip: !secret upnp_local_ip
 
 # Tesla integration
 homeassistant:

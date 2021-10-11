@@ -1374,31 +1374,51 @@
       switch.tesla_climate, switch.wyze_notifications
   max: 10
 - id: '1632711561209'
-  alias: 'Bed Sensor: Turn on if pressure over 50'
+  alias: "Bed Sensor: Set Presence in Master Bed"
   description: ''
   trigger:
-  - platform: numeric_state
-    entity_id: sensor.master_bedroom_matt_bed_presence
-    above: '50'
-  condition: []
+  - platform: mqtt
+    topic: "home-assistant/sensors/nodeMCU1"
   action:
-  - service: input_boolean.turn_on
-    target:
-      entity_id: input_boolean.matt_in_bed
-  mode: single
-- id: '1632711618386'
-  alias: 'Bed Sensor: Turn off if pressure under 50'
-  description: ''
-  trigger:
-  - platform: numeric_state
-    entity_id: sensor.master_bedroom_matt_bed_presence
-    below: '50'
-  condition: []
-  action:
-  - service: input_boolean.turn_off
-    target:
-      entity_id: input_boolean.matt_in_bed
-  mode: single
+  - choose:
+    # Neither Matt and Julie in bed
+    - conditions:
+        - condition: template
+          value_template: "{{ trigger.payload_json['pressure'] < 100 }}"
+      sequence:
+        - service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.master_bed_julie, input_boolean.master_bed_matt
+    # Matt in bed
+    - conditions:
+        - condition: template
+          value_template: "{{ trigger.payload_json['pressure'] > 50 and trigger.payload_json['pressure'] < 300 }}"
+      sequence:
+        - service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.master_bed_matt
+        - service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.master_bed_julie
+    # Julie in bed
+    - conditions:
+        - condition: template
+          value_template: "{{ trigger.payload_json['pressure'] > 300 and trigger.payload_json['pressure'] < 650 }}"
+      sequence:
+        - service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.master_bed_julie
+        - service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.master_bed_matt
+    # Both Matt and Julie in bed
+    - conditions:
+        - condition: template
+          value_template: "{{ trigger.payload_json['pressure'] > 650 }}"
+      sequence:
+        - service: input_boolean.turn_on
+          target:
+            entity_id: input_boolean.master_bed_julie, input_boolean.master_bed_matt
 - id: '1632799149721'
   alias: 'Front Porch: Turn on light when open door'
   description: ''
@@ -1490,6 +1510,12 @@
   - condition: time
     after: '13:00:00'
     before: '18:00:00'
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
   action:
   - service: notify.alexa_media_kitchen
     data:
