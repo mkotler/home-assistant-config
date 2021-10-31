@@ -17,36 +17,57 @@ cards:
   - type: custom:auto-entities
     card:
       type: entities
-      title: Lights On
+      title: Lights On 
     filter:
       include:
         - entity_id: switch.*_light*
           state: 'on'
           options:
-            secondary_info: last-changed
+            type: custom:template-entity-row
+            secondary: '{{ states("input_text." + config.entity[7:] + "_why_on") }}'
+            toggle: true
         - entity_id: light.*
           state: 'on'
           options:
-            secondary_info: last-changed
+            type: custom:template-entity-row
+            secondary: '{{ states("input_text." + config.entity[6:] + "_why_on") }}'
+            toggle: true
+        - entity_id: timer.*
+          state: 'active'
+          options:
+            type: custom:timer-bar-card
       exclude: []
+    sort:
+      method: last_updated
+      reverse: true
   - type: custom:auto-entities
     card:
       type: entities
-      title: Lights Off
-      show_header_toggle: false
+      title: Lights Off 
     filter:
       include:
         - entity_id: switch.*_light*
           state: 'off'
           options:
-            secondary_info: last-updated
+            type: custom:template-entity-row
+            secondary: '{{ states("input_text." + config.entity[7:] + "_why_off") }}'
+            toggle: true
         - entity_id: light.*
           state: 'off'
           options:
-            secondary_info: last-updated
+            type: custom:template-entity-row
+            secondary: '{{ states("input_text." + config.entity[6:] + "_why_off") }}'
+            toggle: true
       exclude: []
     sort:
-      method: none
+      method: last_updated
+      reverse: true
+  - type: entities
+    title: Powder Room Light
+    entities: 
+      - entity: timer.powder_room_lights
+        type: custom:timer-bar-card
+      - entity: switch.powder_room_lights
   - type: custom:auto-entities
     card:
       type: entities

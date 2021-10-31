@@ -1,0 +1,70 @@
+office_light:
+  name: Office Light
+family_room_light:
+  name: Family Room Light
+annas_room_closet_light:
+  name: "Anna's Room Closet Light"
+annas_room_overhead_light:
+  name: "Anna's Room Overhead Light"
+back_stairs_lights:
+  name: Back Stairs Lights
+bathroom_bath_light:
+  name: Bathroom Bath Light
+bathroom_vanity_lights:
+  name: Bathroom Vanity Lights
+dog_run:
+  name: Dog Run
+downstairs_fireplace:
+  name: Downstairs Fireplace
+downstairs_playroom_lights:
+  name: Downstairs Playroom Lights
+entry_way_chandelier:
+  name: Entry Way Chandelier
+family_room_lamp:
+  name: Family Room Lamp
+front_porch_lights:
+  name: Front Port Lights
+front_stairs_lights:
+  name: Front Stairs Lights
+garage_lights:
+  name: Garage Ligths
+guest_bedroom_lights:
+  name: Guest Bedroom Lights
+kids_hall_lights:
+  name: Kids Hall Lights
+kitchen_island_lights:
+  name: Kitchen Island Lights
+kitchen_lights:
+  name: Kitchen Lights
+kitchen_nook_lights:
+  name: Kitchen Nook Lights
+laundry_room_lights:
+  name: Laundry Room Lights
+master_fireplace:
+  name: Master Fireplace
+master_hall_lights:
+  name: Master Hall Lights
+master_lights:
+  name: Master Lights
+master_toilet_fan:
+  name: Master Toilet Fan
+master_toilet_light:
+  name: Master Toilet Lights
+office_lamp:
+  name: Office Lamp
+outside_pantry_light:
+  name: Outside Pantry Light
+outside_powder_lights:
+  name: Outside Powder Lights
+outside_shower_light:
+  name: Outside Shower Light
+patio_lights:
+  name: Patio Lights
+powder_room_fan:
+  name: Powder Room Fan
+powder_room_lights:
+  name: Powder Room Lights
+shower_fan:
+  name: Shower Fan
+shower_light:
+  name: SHower Light

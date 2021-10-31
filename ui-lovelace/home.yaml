@@ -3,6 +3,7 @@ path: default_view
 visible:
   - user: 550d61f3e9914a8c9b18cd8ed14eaa02
   - user: 86dcb1b99d524cd398b6dfb4139401ac
+  - user: 213fa44c3e624267802d6047fb4da17a
 badges: []
 cards:
   - !include /config/ui-lovelace/floorplan_cards.yaml
@@ -48,7 +49,7 @@ cards:
         name: Laundry
         tap_action:
           action: toggle
-      - entity: light.0302020370039fcc4e6a
+      - entity: light.family_room_light
         icon: mdi:lightbulb
         name: Family Room
         tap_action:
@@ -88,7 +89,7 @@ cards:
         name: Playroom
         tap_action:
           action: toggle
-      - entity: light.403747275002910a032c
+      - entity: light.office_light
         icon: mdi:lightbulb
         name: Office Light
         tap_action:
@@ -279,3 +280,9 @@ cards:
     aggregate_func: max
     entities:
       - sensor.master_bathroom_humidity
+  - type: custom:mini-graph-card
+    points_per_hour: 4
+    hours_to_show: 24
+    aggregate_func: min
+    entities:
+      - sensor.master_bedroom_bed_presence

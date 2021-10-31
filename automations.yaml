@@ -66,10 +66,20 @@
     device_id: 8c22ac95adf287b795831ca2d91a0ffa
     entity_id: switch.bathroom_bath_light
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.bathroom_bath_light_why_off
+    data:
+      value: 'Bathroom Lights: Turn off with no motion (shower/toilet lights off)'
   - type: turn_off
     device_id: 8c22ac95adf287b795831ca2d91a0ffa
     entity_id: switch.bathroom_vanity_lights
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.bathroom_vanity_lights_why_off
+    data:
+      value: 'Bathroom Lights: Turn off with no motion (shower/toilet lights off)'
   mode: single
 - id: '1621202178175'
   alias: 'Bathroom Lights: Turn on with motion'
@@ -84,18 +94,34 @@
   - choose:
     - conditions:
       - condition: time
-        after: 05:30
+        after: 05:30:00
         before: '22:00:00'
+      - condition: state
+        entity_id: input_boolean.master_bed_matt
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.master_bed_julie
+        state: 'off'
       sequence:
       - type: turn_on
         device_id: 8c22ac95adf287b795831ca2d91a0ffa
         entity_id: switch.bathroom_vanity_lights
         domain: switch
+      - service: input_text.set_value
+        target:
+          entity_id: input_text.bathroom_vanity_lights_why_on
+        data:
+          value: 'Bathroom Lights: Turn on with motion'
     default:
     - type: turn_on
       device_id: 8c22ac95adf287b795831ca2d91a0ffa
       entity_id: switch.bathroom_bath_light
       domain: switch
+    - service: input_text.set_value
+      target:
+        entity_id: input_text.bathroom_bath_light_why_on
+      data:
+        value: 'Bathroom Lights: Turn on with motion'
   mode: single
 - id: '1621807402601'
   alias: Energy saver (everyone away)
@@ -179,24 +205,46 @@
     entity_id: climate.downstairs_hall
     type: set_preset_mode
     preset_mode: Home
+  - condition: numeric_state
+    entity_id: sun.sun
+    attribute: elevation
+    below: '6'
   - type: turn_on
     device_id: 5492be1f2756861ce86ce4fdb69479ef
     entity_id: switch.garage_lights
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.garage_lights_why_on
+    data:
+      value: Energy saver (welcome home)
   - type: turn_on
     device_id: b023bd3813f402bfeeaca70e7a3faf40
     entity_id: switch.kitchen_lights
     domain: switch
-  - condition: sun
-    after: sunset
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.kitchen_lights_why_on
+    data:
+      value: Energy saver (welcome home)
   - type: turn_on
     device_id: 5d4e4fef57e28bcb2e4dc43f9fac3fd8
     entity_id: switch.front_porch_lights
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.front_porch_lights_why_on
+    data:
+      value: Energy saver (welcome home)
   - type: turn_on
     device_id: e2e7303676b14841303b54a684eec67b
     entity_id: switch.laundry_room_lights
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.laundry_room_lights_why_on
+    data:
+      value: Energy saver (welcome home)
   mode: single
 - id: '1621946919450'
   alias: 'Bathroom Lights:  Turn off lights after 25 min  (shower light on)'
@@ -218,26 +266,56 @@
     device_id: 8c22ac95adf287b795831ca2d91a0ffa
     entity_id: switch.bathroom_vanity_lights
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.bathroom_vanity_lights_why_off
+    data:
+      value: 'Bathroom Lights:  Turn off lights after 25 min  (shower light on)'
   - type: turn_off
     device_id: 8c22ac95adf287b795831ca2d91a0ffa
     entity_id: switch.bathroom_bath_light
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.bathroom_bath_light_why_off
+    data:
+      value: 'Bathroom Lights:  Turn off lights after 25 min  (shower light on)'
   - type: turn_off
     device_id: 6aa62bb4294ac780d9e6ef46f8c339cb
     entity_id: switch.shower_light
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.shower_light_why_off
+    data:
+      value: 'Bathroom Lights:  Turn off lights after 25 min  (shower light on)'
   - type: turn_off
     device_id: 8763cd4d5cc472d279fefd6910d3d62f
     entity_id: switch.outside_shower_light
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.outside_shower_light_why_off
+    data:
+      value: 'Bathroom Lights:  Turn off lights after 25 min  (shower light on)'
   - type: turn_off
     device_id: b29548f0b2914a3ab0e8282219832abe
     entity_id: switch.master_toilet_light
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.master_toilet_light_why_off
+    data:
+      value: 'Bathroom Lights:  Turn off lights after 25 min  (shower light on)'
   - type: turn_off
     device_id: b29548f0b2914a3ab0e8282219832abe
     entity_id: switch.master_toilet_fan
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.master_toilet_fan_why_off
+    data:
+      value: 'Bathroom Lights:  Turn off lights after 25 min  (shower light on)'
   mode: single
 - id: '1622393469890'
   alias: 'Shower:  Turn on light with humidity change'
@@ -246,6 +324,9 @@
   - platform: numeric_state
     entity_id: sensor.master_bathroom_humidity_stats
     attribute: change
+    above: '1'
+  - platform: numeric_state
+    entity_id: sensor.master_bathroom_temperature
     above: '1'
   condition:
   - condition: or
@@ -265,10 +346,20 @@
     device_id: 6aa62bb4294ac780d9e6ef46f8c339cb
     entity_id: switch.shower_light
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.shower_light_why_on
+    data:
+      value: 'Shower:  Turn on light with humidity change'
   - type: turn_on
     device_id: 8763cd4d5cc472d279fefd6910d3d62f
     entity_id: switch.outside_shower_light
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.outside_shower_light_why_on
+    data:
+      value: 'Shower:  Turn on light with humidity change'
   mode: single
 - id: '1622394202989'
   alias: 'Shower Fan: Turn on over 70% humidity'
@@ -283,6 +374,11 @@
     device_id: 6aa62bb4294ac780d9e6ef46f8c339cb
     entity_id: switch.shower_fan
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.shower_fan_why_on
+    data:
+      value: 'Shower Fan: Turn on over 70% humidity'
   mode: single
 - id: '1622394308291'
   alias: 'Shower Fan: Turn off under 65% humidity'
@@ -297,6 +393,11 @@
     device_id: 6aa62bb4294ac780d9e6ef46f8c339cb
     entity_id: switch.shower_fan
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.shower_fan_why_off
+    data:
+      value: 'Shower Fan: Turn off under 65% humidity'
   mode: single
 - id: '1622433479281'
   alias: 'Anna''s Room:  Turn off when Anna leaves'
@@ -312,10 +413,20 @@
     device_id: d8c1e1f1292a82d5ff174bbec10f80a5
     entity_id: switch.annas_room_closet_light
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.annas_room_closet_light_why_off
+    data:
+      value: 'Anna''s Room:  Turn off when Anna leaves'
   - type: turn_off
     device_id: d8c1e1f1292a82d5ff174bbec10f80a5
     entity_id: switch.annas_room_overhead_light
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.annas_room_overhead_light_why_off
+    data:
+      value: 'Anna''s Room:  Turn off when Anna leaves'
   mode: single
 - id: '1622442649933'
   alias: 'Master Hall: Turn lights on when leaving bedroom'
@@ -331,14 +442,43 @@
     attribute: elevation
     below: '6'
   action:
-  - type: turn_on
-    device_id: 4e01fd4c9483873139846b8172548fb9
-    entity_id: switch.master_hall_lights
-    domain: switch
-  - type: turn_on
-    device_id: 4e01fd4c9483873139846b8172548fb9
-    entity_id: switch.front_stairs_lights
-    domain: switch
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_boolean.master_bed_matt
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.master_bed_julie
+        state: 'off'
+      sequence:
+      - type: turn_on
+        device_id: 4e01fd4c9483873139846b8172548fb9
+        entity_id: switch.front_stairs_lights
+        domain: switch
+      - service: input_text.set_value
+        target:
+          entity_id: input_text.front_stairs_lights_why_on
+        data:
+          value: 'Master Hall: Turn lights on when leaving bedroom'
+      - type: turn_on
+        device_id: 4e01fd4c9483873139846b8172548fb9
+        entity_id: switch.master_hall_lights
+        domain: switch
+      - service: input_text.set_value
+        target:
+          entity_id: input_text.master_hall_lights_why_on
+        data:
+          value: 'Master Hall: Turn lights on when leaving bedroom'
+    default:
+    - type: turn_on
+      device_id: 4e01fd4c9483873139846b8172548fb9
+      entity_id: switch.front_stairs_lights
+      domain: switch
+    - service: input_text.set_value
+      target:
+        entity_id: input_text.front_stairs_lights_why_on
+      data:
+        value: 'Master Hall: Turn lights on when leaving bedroom'
   mode: single
 - id: '1622445897320'
   alias: 'Master Hall: Turn off lights after 3 minutes (no motion)'
@@ -349,12 +489,35 @@
     from: 'on'
     to: 'off'
     for: 00:03:00
-  condition: []
+  - platform: state
+    entity_id: binary_sensor.hallway_motion
+    from: 'on'
+    to: 'off'
+    for: 00:03:00
+  - platform: state
+    entity_id: binary_sensor.back_stairs_motion
+    from: 'on'
+    to: 'off'
+    for: 00:03:00
+  condition:
+  - condition: state
+    entity_id: binary_sensor.back_stairs_motion
+    state: 'off'
+    for:
+      hours: 0
+      minutes: 3
+      seconds: 0
+      milliseconds: 0
   action:
   - type: turn_off
     device_id: 4e01fd4c9483873139846b8172548fb9
     entity_id: switch.master_hall_lights
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.master_hall_lights_why_off
+    data:
+      value: 'Master Hall: Turn off lights after 3 minutes (no motion)'
   - choose:
     - conditions:
       - condition: state
@@ -365,6 +528,17 @@
         device_id: 4e01fd4c9483873139846b8172548fb9
         entity_id: switch.master_hall_lights
         domain: switch
+      - type: turn_off
+        device_id: 4e01fd4c9483873139846b8172548fb9
+        entity_id: switch.front_stairs_lights
+        domain: switch
+      - service: input_text.set_value
+        target:
+          entity_id:
+          - input_text.master_hall_lights_why_off
+          - input_text.front_stairs_lights
+        data:
+          value: 'Master Hall: Turn off lights after 3 minutes (no motion)'
     default: []
   mode: single
 - id: '1622445935864'
@@ -382,10 +556,20 @@
     device_id: 01234a8756742395a61c02fe8328d31c
     entity_id: switch.back_stairs_lights
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.back_stairs_lights_why_off
+    data:
+      value: 'Back Stairs: Turn off lights after 3 minutes (no motion)'
   - type: turn_off
     device_id: 01234a8756742395a61c02fe8328d31c
     entity_id: switch.kids_hall_lights
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.kids_hall_lights_why_off
+    data:
+      value: 'Back Stairs: Turn off lights after 3 minutes (no motion)'
   mode: single
 - id: '1622445994560'
   alias: 'Back Stairs: Turn lights on with upstairs motion'
@@ -405,14 +589,29 @@
     device_id: 01234a8756742395a61c02fe8328d31c
     entity_id: switch.back_stairs_lights
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.back_stairs_lights_why_on
+    data:
+      value: 'Back Stairs: Turn lights on with upstairs motion'
   - type: turn_on
     device_id: 01234a8756742395a61c02fe8328d31c
     entity_id: switch.kids_hall_lights
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.kids_hall_lights_why_on
+    data:
+      value: 'Back Stairs: Turn lights on with upstairs motion'
   - type: turn_on
     device_id: 4e01fd4c9483873139846b8172548fb9
     entity_id: switch.master_hall_lights
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.master_hall_lights_why_on
+    data:
+      value: 'Back Stairs: Turn lights on with upstairs motion'
   mode: single
 - id: '1623539585816'
   alias: 'Announcement: Someone is almost home'
@@ -471,10 +670,20 @@
     device_id: 52a568acd1f3b04f9214c056c506d39b
     entity_id: switch.office_lamp
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.office_lamp_why_on
+    data:
+      value: 'Office: Turn on lights with motion'
   - type: turn_on
     device_id: 169499903865fa71bffd19ca577476a8
-    entity_id: light.403747275002910a032c
+    entity_id: light.office_light
     domain: light
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.office_light_why_on
+    data:
+      value: 'Office: Turn on lights with motion'
   mode: single
 - id: '1624688248904'
   alias: 'Office:  Turn off lights with no motion (30 min)'
@@ -498,12 +707,22 @@
       milliseconds: 0
   - type: turn_off
     device_id: 169499903865fa71bffd19ca577476a8
-    entity_id: light.403747275002910a032c
+    entity_id: light.office_light
     domain: light
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.office_light_why_off
+    data:
+      value: 'Office:  Turn off lights with no motion (30 min)'
   - type: turn_off
     device_id: 52a568acd1f3b04f9214c056c506d39b
     entity_id: switch.office_lamp
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.office_lamp_why_off
+    data:
+      value: 'Office:  Turn off lights with no motion (30 min)'
   mode: restart
 - id: '1624690742681'
   alias: 'Family Room Lamp: Turn on when family room lights go on'
@@ -512,7 +731,7 @@
   - platform: device
     type: turned_on
     device_id: 7ac4495f01bc553282c24d44578c5679
-    entity_id: light.0302020370039fcc4e6a
+    entity_id: light.family_room_light
     domain: light
   condition: []
   action:
@@ -520,13 +739,18 @@
     device_id: 43bc5cb46bb4e1cb3d49c8e2ae9f605e
     entity_id: switch.family_room_lamp
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.family_room_lamp_why_on
+    data:
+      value: 'Family Room Lamp: Turn on when family room lights go on'
   mode: single
 - id: '1624690821908'
   alias: 'Family Room Lamp: Turn off when family room lights go off'
   description: ''
   trigger:
   - platform: state
-    entity_id: light.0302020370039fcc4e6a
+    entity_id: light.family_room_light
     from: 'on'
     to: 'off'
   condition: []
@@ -535,6 +759,11 @@
     device_id: 43bc5cb46bb4e1cb3d49c8e2ae9f605e
     entity_id: switch.family_room_lamp
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.family_room_lamp_why_off
+    data:
+      value: 'Family Room Lamp: Turn off when family room lights go off'
   mode: single
 - id: '1624772169485'
   alias: 'Dog Run: Turn on light when open door'
@@ -554,6 +783,11 @@
     device_id: 2883dfd4ee7d32b6069bc33aa9d8f6b5
     entity_id: switch.dog_run
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.dog_run_why_on
+    data:
+      value: 'Dog Run: Turn on light when open door'
   mode: single
 - id: '1624772327433'
   alias: 'Dog Run: Turn off light if door closed for 5 min'
@@ -570,6 +804,11 @@
     device_id: 2883dfd4ee7d32b6069bc33aa9d8f6b5
     entity_id: switch.dog_run
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.dog_run_why_off
+    data:
+      value: 'Dog Run: Turn off light if door closed for 5 min'
   mode: single
 - id: '1624816312621'
   alias: 'Garage Door:  Warning garage door is open'
@@ -611,14 +850,43 @@
     attribute: elevation
     below: '6'
   action:
-  - type: turn_on
-    device_id: 4e01fd4c9483873139846b8172548fb9
-    entity_id: switch.front_stairs_lights
-    domain: switch
-  - type: turn_on
-    device_id: 4e01fd4c9483873139846b8172548fb9
-    entity_id: switch.master_hall_lights
-    domain: switch
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_boolean.master_bed_matt
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.master_bed_julie
+        state: 'off'
+      sequence:
+      - type: turn_on
+        device_id: 4e01fd4c9483873139846b8172548fb9
+        entity_id: switch.front_stairs_lights
+        domain: switch
+      - service: input_text.set_value
+        target:
+          entity_id: input_text.front_stairs_lights_why_on
+        data:
+          value: 'Front Stairs: Turn lights on with motion'
+      - type: turn_on
+        device_id: 4e01fd4c9483873139846b8172548fb9
+        entity_id: switch.master_hall_lights
+        domain: switch
+      - service: input_text.set_value
+        target:
+          entity_id: input_text.master_hall_lights_why_on
+        data:
+          value: 'Front Stairs: Turn lights on with motion'
+    default:
+    - type: turn_on
+      device_id: 4e01fd4c9483873139846b8172548fb9
+      entity_id: switch.front_stairs_lights
+      domain: switch
+    - service: input_text.set_value
+      target:
+        entity_id: input_text.front_stairs_lights_why_on
+      data:
+        value: 'Front Stairs: Turn lights on with motion'
   mode: single
 - id: '1625287362380'
   alias: 'Front Stairs: Turn off lights after 5 minutes (no motion)'
@@ -639,6 +907,13 @@
     device_id: 4e01fd4c9483873139846b8172548fb9
     entity_id: switch.master_hall_lights
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.front_stairs_lights_why_off
+      - input_text.master_hall_lights_why_off
+    data:
+      value: 'Front Stairs: Turn off lights after 5 minutes (no motion)'
   mode: single
 - id: '1625478716821'
   alias: 'Announcement:  Left door open'
@@ -663,7 +938,7 @@
     entity_id: binary_sensor.outside_garage_door
     id: door to the dog run
     to: 'on'
-    for: '{{ states(''input_datetime.delay_short'') }}'
+    for: '{{ states(''input_datetime.delay_medium'') }}'
   condition: []
   action:
   - service: notify.alexa_media_kitchen
@@ -694,6 +969,12 @@
     device_id: 5492be1f2756861ce86ce4fdb69479ef
     entity_id: switch.garage_lights
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.garage_lights_why_on
+    data:
+      value: 'Garage Lights:  Turn lights on when open door'
   mode: single
 - id: '1630120595975'
   alias: 'Garage Lights:  Turn lights off when close inner door after 10 min'
@@ -718,13 +999,19 @@
     device_id: 5492be1f2756861ce86ce4fdb69479ef
     entity_id: switch.garage_lights
     domain: switch
-  mode: single
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.garage_lights_why_off
+    data:
+      value: 'Garage Lights:  Turn lights off when close inner door after 10 min'
+  mode: restart
 - id: '1630219116871'
   alias: 'Guest Bedroom: Turn off after 20 minutes'
   description: ''
   trigger:
   - platform: device
-    type: turned_off
+    type: turned_on
     device_id: c32cc10983532262a768e043288f286f
     entity_id: switch.guest_bedroom_lights
     domain: switch
@@ -739,6 +1026,12 @@
     device_id: c32cc10983532262a768e043288f286f
     entity_id: switch.guest_bedroom_lights
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.guest_bedroom_lights_why_off
+    data:
+      value: 'Guest Bedroom: Turn off after 20 minutes'
   mode: single
 - id: '1630335471307'
   alias: 'Kitchen Lights: Turn on with downstairs motion'
@@ -772,9 +1065,15 @@
     device_id: b023bd3813f402bfeeaca70e7a3faf40
     entity_id: switch.kitchen_lights
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.kitchen_lights_why_on
+    data:
+      value: 'Kitchen Lights: Turn on with downstairs motion'
   mode: single
 - id: '1630335734736'
-  alias: 'Kitchen Lights: Turn off with no activity'
+  alias: 'Kitchen Lights: Turn off some lights with no activity'
   description: ''
   trigger:
   - type: not_occupied
@@ -786,19 +1085,33 @@
   action:
   - type: turn_off
     device_id: b023bd3813f402bfeeaca70e7a3faf40
-    entity_id: switch.kitchen_lights
-    domain: switch
-  - type: turn_off
-    device_id: b023bd3813f402bfeeaca70e7a3faf40
     entity_id: switch.kitchen_island_lights
     domain: switch
   - type: turn_off
     device_id: f17ecafc667c65cc84d742080faf7d3a
     entity_id: switch.kitchen_nook_lights
     domain: switch
+  - type: turn_off
+    device_id: cf3821306021aef41fb6387b6b0a76e1
+    entity_id: switch.outside_pantry_light
+    domain: switch
+  - type: turn_off
+    device_id: 544bb27d0b76922e27d1056796669a1d
+    entity_id: switch.outside_powder_lights
+    domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.kitchen_island_lights_why_off
+      - input_text.kitchen_nook_lights_why_off
+      - input_text.outside_pantry_light_why_off
+      - input_text.outside_powder_lights_why_off
+    data:
+      value: 'Kitchen Lights: Turn off some lights with no activity'
   mode: single
 - id: '1630384855022'
-  alias: 'Bathroom Lights:  Turn off lights after 10 min  (toilet light on)'
+  alias: 'Bathroom Lights:  Turn off lights after 10 min  (shower and toilet lights
+    off)'
   description: ''
   trigger:
   - platform: state
@@ -813,7 +1126,7 @@
     entity_id: switch.shower_light
     domain: switch
   - condition: device
-    type: is_on
+    type: is_off
     device_id: b29548f0b2914a3ab0e8282219832abe
     entity_id: switch.master_toilet_light
     domain: switch
@@ -838,7 +1151,17 @@
     device_id: 8763cd4d5cc472d279fefd6910d3d62f
     entity_id: switch.outside_shower_light
     domain: switch
-  mode: single
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.bathroom_vanity_lights_why_off
+      - input_text.bathroom_bath_light_why_off
+      - input_text.master_toilet_fan_why_off
+      - input_text.outside_shower_light_why_off
+    data:
+      value: 'Bathroom Lights:  Turn off lights after 10 min  (shower and toilet lights
+        off)'
+  mode: restart
 - id: '1630386574121'
   alias: 'Front Porch: Turn off after 30 min'
   description: ''
@@ -859,7 +1182,13 @@
     device_id: 5d4e4fef57e28bcb2e4dc43f9fac3fd8
     entity_id: switch.front_porch_lights
     domain: switch
-  mode: single
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.front_porch_lights_why_off
+    data:
+      value: 'Front Porch: Turn off after 30 min'
+  mode: restart
 - id: '1630504836253'
   alias: 'Office: Turn on desk lamp when turn on lights'
   description: ''
@@ -867,7 +1196,7 @@
   - platform: device
     type: turned_on
     device_id: 169499903865fa71bffd19ca577476a8
-    entity_id: light.403747275002910a032c
+    entity_id: light.office_light
     domain: light
   condition: []
   action:
@@ -875,6 +1204,12 @@
     device_id: 52a568acd1f3b04f9214c056c506d39b
     entity_id: switch.office_lamp
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.office_lamp_why_on
+    data:
+      value: 'Office: Turn on desk lamp when turn on lights'
   mode: single
 - id: '1630504880049'
   alias: 'Office: Turn off desk lamp when turn off lights'
@@ -883,7 +1218,7 @@
   - platform: device
     type: turned_off
     device_id: 169499903865fa71bffd19ca577476a8
-    entity_id: light.403747275002910a032c
+    entity_id: light.office_light
     domain: light
   condition: []
   action:
@@ -891,6 +1226,12 @@
     device_id: 52a568acd1f3b04f9214c056c506d39b
     entity_id: switch.office_lamp
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.office_lamp_why_off
+    data:
+      value: 'Office: Turn off desk lamp when turn off lights'
   mode: single
 - id: '1630874638609'
   alias: 'Downstairs Playroom: Turn lights on when printing'
@@ -906,6 +1247,12 @@
     device_id: 6bc7532e181ba4dbd99a3e6210aaceb2
     entity_id: switch.downstairs_playroom_lights
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.downstairs_playroom_lights_why_on
+    data:
+      value: 'Downstairs Playroom: Turn lights on when printing'
   mode: single
 - id: '1630874697138'
   alias: 'Downstairs Playroom: Turn lights off after 15 min (after printing)'
@@ -926,13 +1273,23 @@
     device_id: 6bc7532e181ba4dbd99a3e6210aaceb2
     entity_id: switch.downstairs_playroom_lights
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.downstairs_playroom_lights_why_off
+    data:
+      value: 'Downstairs Playroom: Turn lights off after 15 min (after printing)'
   mode: single
 - id: '1630897914749'
-  alias: 'Powder Room: Turn lights on when cross door (with lights off)'
+  alias: 'Powder Room: Turn lights on when when detect motion (with lights off)'
   description: ''
   trigger:
   - platform: state
-    entity_id: binary_sensor.powder_room_motion
+    entity_id: binary_sensor.outside_powder_room_motion
+    from: 'off'
+    to: 'on'
+  - platform: state
+    entity_id: binary_sensor.inside_powder_room_motion
     from: 'off'
     to: 'on'
   condition:
@@ -941,18 +1298,56 @@
     device_id: 473ea148622c80694fb8d21c55c157c9
     entity_id: switch.powder_room_lights
     domain: switch
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
   action:
   - type: turn_on
     device_id: 473ea148622c80694fb8d21c55c157c9
     entity_id: switch.powder_room_lights
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.powder_room_lights_why_on
+    data:
+      value: 'Powder Room: Turn lights on when detect motion (with lights off)'
   mode: single
 - id: '1630898092493'
-  alias: 'Powder Room:  Turn lights off after 5 min (no motion - ceiling sensor)'
+  alias: 'Powder Room:  Set timer to 15 min with inside motion'
   description: ''
   trigger:
   - platform: state
-    entity_id: binary_sensor.powder_room_motion
+    entity_id: binary_sensor.inside_powder_room_motion
+    from: 'on'
+    to: 'off'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  condition:
+  - condition: device
+    type: is_on
+    device_id: 473ea148622c80694fb8d21c55c157c9
+    entity_id: switch.powder_room_lights
+    domain: switch
+  action:
+  - service: timer.start
+    data:
+      duration: 00:15:00
+    target:
+      entity_id: timer.powder_room_lights
+  mode: queued
+  max: 10
+- id: '1630898236737'
+  alias: 'Powder Room Fan:  Start after 5 min '
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.inside_powder_room_motion
     from: 'on'
     to: 'off'
     for:
@@ -962,31 +1357,24 @@
       milliseconds: 0
   condition: []
   action:
-  - type: turn_off
-    device_id: 473ea148622c80694fb8d21c55c157c9
-    entity_id: switch.powder_room_lights
-    domain: switch
-  mode: single
-- id: '1630898236737'
-  alias: 'Powder Room Fan:  Start after 5 min '
-  description: ''
-  trigger:
-  - platform: device
-    type: turned_on
-    device_id: 473ea148622c80694fb8d21c55c157c9
-    entity_id: switch.powder_room_lights
-    domain: switch
-    for:
-      hours: 0
-      minutes: 5
-      seconds: 0
-      milliseconds: 0
-  condition: []
-  action:
-  - type: turn_on
-    device_id: 473ea148622c80694fb8d21c55c157c9
-    entity_id: switch.powder_room_fan
-    domain: switch
+  - choose:
+    - conditions:
+      - condition: device
+        type: is_on
+        device_id: 473ea148622c80694fb8d21c55c157c9
+        entity_id: switch.powder_room_lights
+        domain: switch
+      sequence:
+      - type: turn_on
+        device_id: 473ea148622c80694fb8d21c55c157c9
+        entity_id: switch.powder_room_fan
+        domain: switch
+      - service: input_text.set_value
+        target:
+          entity_id: input_text.powder_room_fan_why_on
+        data:
+          value: 'Powder Room Fan:  Start after 5 min'
+    default: []
   mode: single
 - id: '1630898271870'
   alias: 'Powder Room Fan:  Stop after 15 min'
@@ -1008,6 +1396,12 @@
     device_id: 473ea148622c80694fb8d21c55c157c9
     entity_id: switch.powder_room_fan
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.powder_room_fan_why_off
+    data:
+      value: 'Powder Room Fan:  Stop after 15 min'
   mode: single
 - id: '1630899612413'
   alias: 'Back Stairs: Turn on lights going upstairs'
@@ -1023,6 +1417,17 @@
     device_id: 01234a8756742395a61c02fe8328d31c
     entity_id: switch.back_stairs_lights
     domain: switch
+  - type: turn_on
+    device_id: 01234a8756742395a61c02fe8328d31c
+    entity_id: switch.kids_hall_lights
+    domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.back_stairs_lights_why_on
+      - input_text.kids_hall_lights_why_on
+    data:
+      value: 'Back Stairs: Turn on lights going upstairs'
   mode: single
 - id: '1630939208532'
   alias: 'Kitchen Nook: Turn lights on at dinner time'
@@ -1041,31 +1446,12 @@
     device_id: f17ecafc667c65cc84d742080faf7d3a
     entity_id: switch.kitchen_nook_lights
     domain: switch
-  mode: single
-- id: '1631335243931'
-  alias: 'Powder Room:  Turn lights off when cross door (with lights on)'
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: binary_sensor.powder_room_motion
-    from: 'on'
-    to: 'off'
-  condition:
-  - condition: device
-    type: is_on
-    device_id: 473ea148622c80694fb8d21c55c157c9
-    entity_id: switch.powder_room_lights
-    domain: switch
-    for:
-      hours: 0
-      minutes: 0
-      seconds: 30
-      milliseconds: 0
-  action:
-  - type: turn_off
-    device_id: 473ea148622c80694fb8d21c55c157c9
-    entity_id: switch.powder_room_lights
-    domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.kitchen_nook_lights_why_on
+    data:
+      value: 'Kitchen Nook: Turn lights on at dinner time'
   mode: single
 - id: '1631337652266'
   alias: 'Laundry Room: Turn lights on when cross door (with lights off)'
@@ -1085,11 +1471,22 @@
     device_id: e2e7303676b14841303b54a684eec67b
     entity_id: switch.laundry_room_lights
     domain: switch
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
   action:
   - type: turn_on
     device_id: e2e7303676b14841303b54a684eec67b
     entity_id: switch.laundry_room_lights
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.laundry_room_lights_why_on
+    data:
+      value: 'Laundry Room: Turn lights on when cross door (with lights off)'
   mode: single
 - id: '1631337770025'
   alias: 'Laundry Room:  Turn lights off when cross door (with lights on)'
@@ -1115,6 +1512,12 @@
     device_id: e2e7303676b14841303b54a684eec67b
     entity_id: switch.laundry_room_lights
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.laundry_room_lights_why_off
+    data:
+      value: 'Laundry Room:  Turn lights off when cross door (with lights on)'
   mode: single
 - id: '1631338789077'
   alias: 'Master Toilet: Turn lights on when cross door (with lights off) '
@@ -1130,11 +1533,22 @@
     device_id: b29548f0b2914a3ab0e8282219832abe
     entity_id: switch.master_toilet_light
     domain: switch
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
   action:
   - type: turn_on
     device_id: b29548f0b2914a3ab0e8282219832abe
     entity_id: switch.master_toilet_light
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.master_toilet_light_why_on
+    data:
+      value: 'Master Toilet: Turn lights on when cross door (with lights off) '
   mode: single
 - id: '1631338883566'
   alias: 'Master Toilet:  Turn lights off when cross door (with lights on)'
@@ -1153,13 +1567,19 @@
     for:
       hours: 0
       minutes: 0
-      seconds: 30
+      seconds: 0
       milliseconds: 0
   action:
   - type: turn_off
     device_id: b29548f0b2914a3ab0e8282219832abe
     entity_id: switch.master_toilet_light
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.master_toilet_light_why_off
+    data:
+      value: 'Master Toilet:  Turn lights off when cross door (with lights on)'
   mode: single
 - id: '1631338963389'
   alias: 'Master Toilet Fan:  Start after 5 min'
@@ -1181,6 +1601,12 @@
     device_id: b29548f0b2914a3ab0e8282219832abe
     entity_id: switch.master_toilet_fan
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.master_toilet_fan_why_on
+    data:
+      value: 'Master Toilet Fan:  Start after 5 min'
   mode: single
 - id: '1631339009669'
   alias: 'Master Toilet Fan:  Stop after 15 min'
@@ -1202,6 +1628,12 @@
     device_id: b29548f0b2914a3ab0e8282219832abe
     entity_id: switch.master_toilet_fan
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.master_toilet_fan_why_off
+    data:
+      value: 'Master Toilet Fan:  Stop after 15 min'
   mode: single
 - id: '1631366690167'
   alias: 'Fallback:  Turn lights off if motion sensor fails'
@@ -1217,6 +1649,7 @@
       minutes: 30
       seconds: 0
       milliseconds: 0
+    id: Kids Hall
   - platform: device
     type: turned_on
     device_id: 01234a8756742395a61c02fe8328d31c
@@ -1227,6 +1660,7 @@
       minutes: 30
       seconds: 0
       milliseconds: 0
+    id: Back Stairs
   - platform: device
     type: turned_on
     device_id: 2883dfd4ee7d32b6069bc33aa9d8f6b5
@@ -1237,6 +1671,7 @@
       minutes: 30
       seconds: 0
       milliseconds: 0
+    id: Dog Run
   - platform: device
     type: turned_on
     device_id: 5d4e4fef57e28bcb2e4dc43f9fac3fd8
@@ -1247,6 +1682,7 @@
       minutes: 30
       seconds: 0
       milliseconds: 0
+    id: Entry Way
   - platform: device
     type: turned_on
     device_id: 4e01fd4c9483873139846b8172548fb9
@@ -1257,6 +1693,7 @@
       minutes: 30
       seconds: 0
       milliseconds: 0
+    id: Front Stairs
   - platform: device
     type: turned_on
     device_id: 4e01fd4c9483873139846b8172548fb9
@@ -1267,21 +1704,18 @@
       minutes: 30
       seconds: 0
       milliseconds: 0
+    id: Master Hall
   - platform: device
     type: turned_on
     device_id: 5492be1f2756861ce86ce4fdb69479ef
     entity_id: switch.garage_lights
-    domain: switch
-  - platform: device
-    type: turned_on
-    device_id: c32cc10983532262a768e043288f286f
-    entity_id: switch.guest_bedroom_lights
     domain: switch
     for:
       hours: 0
       minutes: 30
       seconds: 0
       milliseconds: 0
+    id: Garage Lights
   - platform: device
     type: turned_on
     device_id: e2e7303676b14841303b54a684eec67b
@@ -1292,6 +1726,7 @@
       minutes: 30
       seconds: 0
       milliseconds: 0
+    id: Laundry Room
   - platform: device
     type: turned_on
     device_id: b29548f0b2914a3ab0e8282219832abe
@@ -1302,43 +1737,41 @@
       minutes: 30
       seconds: 0
       milliseconds: 0
+    id: Master Toilet
   - platform: device
     type: turned_on
     device_id: cf3821306021aef41fb6387b6b0a76e1
     entity_id: switch.outside_pantry_light
-    domain: switch
-  - platform: device
-    type: turned_on
-    device_id: 473ea148622c80694fb8d21c55c157c9
-    entity_id: switch.powder_room_lights
     domain: switch
     for:
       hours: 0
       minutes: 30
       seconds: 0
       milliseconds: 0
+    id: Outside Pantry
   condition: []
   action:
-  - service: light.turn_off
+  - service: switch.turn_off
     target:
       entity_id: '{{ trigger.entity_id }}'
-  - service: system_log.write
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - '{{ "input_text." + trigger.entity_id[7:] + "_why_off" }}'
     data:
-      level: warning
-      message: Motion sensor failed to thrn off {{ trigger.entity_id }}
-  mode: single
+      value: 'Fallback:  Turn lights off if motion sensor fails'
+  mode: parallel
+  max: 25
 - id: '1631971513138'
   alias: 'Log: Lights turned on/off manually'
   description: ''
   trigger:
   - platform: state
-    entity_id: light.0302020370039fcc4e6a, light.403747275002910a032c, switch.annas_room_closet_light,
-      switch.annas_room_overhead_light, switch.back_stairs_lights, switch.bathroom_bath_light,
-      switch.bathroom_vanity_lights, switch.dog_run, switch.downstairs_fireplace,
-      switch.downstairs_playroom_lights, switch.entry_way_chandelier, switch.family_room_lamp,
-      switch.front_porch_lights, switch.front_stairs_lights, switch.garage_lights,
-      switch.guest_bedroom_lights, switch.kids_hall_lights, switch.kitchen_island_lights,
-      switch.kitchen_lights, switch.kitchen_nook_lights, switch.laundry_room_lights,
+    entity_id: switch.back_stairs_lights, switch.bathroom_bath_light, switch.bathroom_vanity_lights,
+      switch.dog_run, switch.downstairs_fireplace, switch.downstairs_playroom_lights,
+      switch.entry_way_chandelier, switch.front_porch_lights, switch.front_stairs_lights,
+      switch.garage_lights, switch.guest_bedroom_lights, switch.kids_hall_lights,
+      switch.kitchen_island_lights, switch.kitchen_nook_lights, switch.laundry_room_lights,
       switch.master_fireplace, switch.master_hall_lights, switch.master_lights, switch.master_toilet_fan,
       switch.master_toilet_light, switch.office_lamp, switch.outside_pantry_light,
       switch.outside_powder_lights, switch.outside_shower_light, switch.patio_lights,
@@ -1347,6 +1780,22 @@
   - condition: template
     value_template: '{{ trigger.to_state.context.parent_id is none }}'
   action:
+  - service: input_text.set_value
+    target:
+      entity_id: >
+        {% if trigger.to_state.state == "on" %}
+          {% set entity = "input_text." + trigger.to_state.entity_id[7:] + "_why_on" %} 
+        {% else %}
+          {% set entity = "input_text." + trigger.to_state.entity_id[7:] + "_why_off" %}
+        {% endif %}
+        {{ entity }}
+    data:
+      value: >
+        {% if trigger.to_state.state == "on" %}
+          Lights turned on manually
+        {% else %}
+          Lights turned off manually
+        {% endif %}
   - service: system_log.write
     data:
       message: Device '{{ trigger.to_state.name }}' was manually turned '{{ trigger.to_state.state
@@ -1354,7 +1803,7 @@
       level: warning
   mode: queued
   variables:
-    entities: light.0302020370039fcc4e6a,light.403747275002910a032c,switch.anna_s_room_do_not_disturb_switch,
+    entities: light.office_light,light.family_room_light,switch.anna_s_room_do_not_disturb_switch,
       switch.anna_s_room_repeat_switch, switch.anna_s_room_shuffle_switch, switch.annas_room_closet_light,
       switch.annas_room_overhead_light, switch.back_stairs_lights, switch.bathroom_bath_light,
       switch.bathroom_vanity_lights, switch.dog_run, switch.downstairs_fireplace,
@@ -1374,51 +1823,48 @@
       switch.tesla_climate, switch.wyze_notifications
   max: 10
 - id: '1632711561209'
-  alias: "Bed Sensor: Set Presence in Master Bed"
+  alias: 'Bed Sensor: Set Presence in Master Bed'
   description: ''
   trigger:
   - platform: mqtt
-    topic: "home-assistant/sensors/nodeMCU1"
+    topic: home-assistant/sensors/nodeMCU1
   action:
   - choose:
-    # Neither Matt and Julie in bed
     - conditions:
-        - condition: template
-          value_template: "{{ trigger.payload_json['pressure'] < 100 }}"
+      - condition: template
+        value_template: '{{ trigger.payload_json[''pressure''] < 200 }}'
       sequence:
-        - service: input_boolean.turn_off
-          target:
-            entity_id: input_boolean.master_bed_julie, input_boolean.master_bed_matt
-    # Matt in bed
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.master_bed_julie, input_boolean.master_bed_matt
     - conditions:
-        - condition: template
-          value_template: "{{ trigger.payload_json['pressure'] > 50 and trigger.payload_json['pressure'] < 300 }}"
+      - condition: template
+        value_template: '{{ trigger.payload_json[''pressure''] > 200 and trigger.payload_json[''pressure'']
+          < 300 }}'
       sequence:
-        - service: input_boolean.turn_on
-          target:
-            entity_id: input_boolean.master_bed_matt
-        - service: input_boolean.turn_off
-          target:
-            entity_id: input_boolean.master_bed_julie
-    # Julie in bed
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.master_bed_matt
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.master_bed_julie
     - conditions:
-        - condition: template
-          value_template: "{{ trigger.payload_json['pressure'] > 300 and trigger.payload_json['pressure'] < 650 }}"
+      - condition: template
+        value_template: '{{ trigger.payload_json[''pressure''] > 300 }}'
       sequence:
-        - service: input_boolean.turn_on
-          target:
-            entity_id: input_boolean.master_bed_julie
-        - service: input_boolean.turn_off
-          target:
-            entity_id: input_boolean.master_bed_matt
-    # Both Matt and Julie in bed
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.master_bed_julie
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.master_bed_matt
     - conditions:
-        - condition: template
-          value_template: "{{ trigger.payload_json['pressure'] > 650 }}"
+      - condition: template
+        value_template: '{{ trigger.payload_json[''pressure''] > 610 }}'
       sequence:
-        - service: input_boolean.turn_on
-          target:
-            entity_id: input_boolean.master_bed_julie, input_boolean.master_bed_matt
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.master_bed_julie, input_boolean.master_bed_matt
 - id: '1632799149721'
   alias: 'Front Porch: Turn on light when open door'
   description: ''
@@ -1437,6 +1883,12 @@
     device_id: 5d4e4fef57e28bcb2e4dc43f9fac3fd8
     entity_id: switch.front_porch_lights
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.front_porch_lights_why_on
+    data:
+      value: 'Front Porch: Turn on light when open door'
   mode: single
 - id: '1632801156824'
   alias: 'Log:  Retry for "Motion sensor failed to turn off" warning'
@@ -1468,12 +1920,23 @@
     device_id: f17ecafc667c65cc84d742080faf7d3a
     entity_id: switch.patio_lights
     domain: switch
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+      milliseconds: 0
   condition: []
   action:
   - type: turn_off
     device_id: f17ecafc667c65cc84d742080faf7d3a
     entity_id: switch.patio_lights
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.patio_lights_why_off
+    data:
+      value: 'Back Patio: Turn off after 30 min'
   mode: single
 - id: '1633441051995'
   alias: 'Fireplaces: Turn off at 1am '
@@ -1491,6 +1954,13 @@
     device_id: 894bb86f8d542d016d773a9c3f30358d
     entity_id: switch.master_fireplace
     domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.downstairs_fireplace_why_off
+      - input_text.master_fireplace_why_off
+    data:
+      value: 'Fireplaces: Turn off at 1am '
   mode: single
 - id: '1633578192167'
   alias: 'Announcement: Reminder for Anna when she gets home'
@@ -1523,4 +1993,220 @@
         type: announce
         method: speak
       message: Anna, don't forget to take care of your face
+  mode: single
+- id: '1633962675356'
+  alias: 'Master Bedroom:  Turn on lights when enter bedroom if nobody is in bed'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.master_bedroom_motion
+    to: 'on'
+  condition:
+  - condition: and
+    conditions:
+    - condition: state
+      entity_id: input_boolean.master_bed_matt
+      state: 'off'
+    - condition: state
+      entity_id: input_boolean.master_bed_julie
+      state: 'off'
+    - condition: numeric_state
+      entity_id: sun.sun
+      below: '6'
+      attribute: elevation
+  action:
+  - type: turn_on
+    device_id: 016281f1ed29da39c80a51d863425fa7
+    entity_id: switch.master_lights
+    domain: switch
+  - type: turn_on
+    device_id: 8c22ac95adf287b795831ca2d91a0ffa
+    entity_id: switch.bathroom_bath_light
+    domain: switch
+  - type: turn_on
+    device_id: 8c22ac95adf287b795831ca2d91a0ffa
+    entity_id: switch.bathroom_vanity_lights
+    domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.master_lights_why_on
+      - input_text.bathroom_bath_light_why_on
+      - input_text.bathroom_vanity_lights_why_on
+    data:
+      value: 'Master Bedroom:  Turn on lights when enter bedroom if nobody is in bed'
+  mode: single
+- id: '1633962965126'
+  alias: 'Master Bedroom: Turn off after 20 minutes (if bathroom lights are off)'
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: 016281f1ed29da39c80a51d863425fa7
+    entity_id: switch.master_lights
+    domain: switch
+    for:
+      hours: 0
+      minutes: 20
+      seconds: 0
+      milliseconds: 0
+  condition:
+  - condition: device
+    type: is_off
+    device_id: 8c22ac95adf287b795831ca2d91a0ffa
+    entity_id: switch.bathroom_bath_light
+    domain: switch
+  - condition: device
+    type: is_off
+    device_id: 8c22ac95adf287b795831ca2d91a0ffa
+    entity_id: switch.bathroom_vanity_lights
+    domain: switch
+  action:
+  - type: turn_off
+    device_id: 016281f1ed29da39c80a51d863425fa7
+    entity_id: switch.master_lights
+    domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.master_lights_why_off
+    data:
+      value: 'Master Bedroom: Turn off after 20 minutes (if bathroom lights are off)'
+  mode: single
+- id: '1633964924890'
+  alias: 'Master Bedroom: Turn off when bathroom lights go off'
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_off
+    device_id: 8c22ac95adf287b795831ca2d91a0ffa
+    entity_id: switch.bathroom_bath_light
+    domain: switch
+  - platform: device
+    type: turned_off
+    device_id: 8c22ac95adf287b795831ca2d91a0ffa
+    entity_id: switch.bathroom_vanity_lights
+    domain: switch
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 016281f1ed29da39c80a51d863425fa7
+    entity_id: switch.master_lights
+    domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.master_lights_why_off
+    data:
+      value: 'Master Bedroom: Turn off when bathroom lights go off'
+  mode: single
+- id: '1633965273131'
+  alias: 'Master Bedroom: Turn lights off after getting in bed (after 5 min)'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.master_bed_matt
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+      milliseconds: 0
+  - platform: state
+    entity_id: input_boolean.master_bed_julie
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+      milliseconds: 0
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 016281f1ed29da39c80a51d863425fa7
+    entity_id: switch.master_lights
+    domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.master_lights_why_off
+    data:
+      value: 'Master Bedroom: Turn lights off after getting in bed (after 5 min)'
+  mode: single
+- id: '1634013219637'
+  alias: 'Front Porch: Turn light on for garbage night'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.inside_garage_door
+    from: 'off'
+    to: 'on'
+  condition:
+  - condition: numeric_state
+    entity_id: sun.sun
+    attribute: elevation
+    below: '6'
+  - condition: state
+    entity_id: sensor.garbage
+    state: '1'
+  - condition: time
+    after: '17:00:00'
+  action:
+  - type: turn_on
+    device_id: 5d4e4fef57e28bcb2e4dc43f9fac3fd8
+    entity_id: switch.front_porch_lights
+    domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.front_porch_lights_why_on
+    data:
+      value: 'Front Porch: Turn light on for garbage night'
+  mode: single
+- id: '1635658361858'
+  alias: 'Powder Room:  Set timer to 2 min with outside motion'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.outside_powder_room_motion
+    from: 'on'
+    to: 'off'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  condition:
+  - condition: device
+    type: is_on
+    device_id: 473ea148622c80694fb8d21c55c157c9
+    entity_id: switch.powder_room_lights
+    domain: switch
+  action:
+  - service: timer.start
+    data:
+      duration: 00:02:00
+    target:
+      entity_id: timer.powder_room_lights
+  mode: queued
+  max: 10
+- id: '1635658540259'
+  alias: 'Powder Room:  Turn off lights when timer finishes'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: timer.finished
+    event_data:
+      entity_id: timer.powder_room_lights
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 473ea148622c80694fb8d21c55c157c9
+    entity_id: switch.powder_room_lights
+    domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.powder_room_lights_why_off
+    data:
+      value: 'Powder Room:  Turn off lights when timer finishes'
   mode: single

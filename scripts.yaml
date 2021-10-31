@@ -272,8 +272,8 @@ turn_off_all_lights:
     entity_id: switch.dog_run
     domain: switch
   - type: turn_off
-    device_id: 7ac4495f01bc553282c24d44578c5679
-    entity_id: light.0302020370039fcc4e6a
+    device_id: c362ba03de83b010e0d006e7b92ed6b7
+    entity_id: light.family_room_light
     domain: light
   - type: turn_off
     device_id: f7d71653250c2a8a414fbd4fb25ca8ff
@@ -284,8 +284,8 @@ turn_off_all_lights:
     entity_id: switch.office_lamp
     domain: switch
   - type: turn_off
-    device_id: 169499903865fa71bffd19ca577476a8
-    entity_id: light.403747275002910a032c
+    device_id: 573b4882b5e4456f2929fbccd5369a1b
+    entity_id: light.office_light
     domain: light
   - type: turn_off
     device_id: 01234a8756742395a61c02fe8328d31c

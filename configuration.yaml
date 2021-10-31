@@ -8,6 +8,9 @@ default_config:
 #    async_upnp_client: debug
 #    async_upnp_client.traffic: debug
 
+# Add support for templating in lovelace
+lovelace_gen:
+
 # Add support for multiple-entity-row 
 lovelace:
   mode: yaml
@@ -25,6 +28,8 @@ lovelace:
     - url: /hacsfiles/lovelace-multiple-entity-row/multiple-entity-row.js
       type: module
     - url: /hacsfiles/lovelace-template-entity-row/template-entity-row.js
+      type: module
+    - url: /hacsfiles/timer-bar-card/timer-bar-card.js
       type: module
 
 # Envisalink Alarm Panel
@@ -209,12 +214,26 @@ binary_sensor:
 - platform: mqtt
   qos: 1
   state_topic: "home-assistant/sensors/17137"
-  name: "Powder Room Motion"
+  name: "Outside Powder Room Motion"
   value_template: >
     {% if value_json is defined and value_json.id == 17137 %}
       {{ value_json.cmd }}
     {% endif %}
   payload_on: 172
+  availability_topic: "home-assistant/sensors/status"
+  payload_available: "online"
+  payload_not_available: "offline"
+  off_delay: 5
+  device_class: motion
+- platform: mqtt
+  qos: 1
+  state_topic: "home-assistant/sensors/21469"
+  name: "Inside Powder Room Motion"
+  value_template: >
+    {% if value_json is defined and value_json.id == 21469 %}
+      {{ value_json.cmd }}
+    {% endif %}
+  payload_on: 188
   availability_topic: "home-assistant/sensors/status"
   payload_available: "online"
   payload_not_available: "offline"
@@ -289,6 +308,10 @@ sensor:
   entity_id: sensor.master_bathroom_humidity
   name: "Master Bathroom Humidity Stats"
   max_age: 00:05
+- platform: statistics
+  entity_id: sensor.master_bedroom_bed_presence
+  name: "Master Bedroom Bed Presence Stats"
+  max_age: 00:05
 
 # Text to speech
 tts:
@@ -307,6 +330,10 @@ homeassistant:
       friendly_name: Trunk
     'binary_sensor.tesla_*_parking_brake_sensor':
       friendly_name: Parking Brake
+
+# Setup input variables for all entitites
+input_text: !include input_text.yaml
+timer: !include timer.yaml
 
 # Includes
 group: !include groups.yaml

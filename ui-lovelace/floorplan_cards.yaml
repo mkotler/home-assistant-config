@@ -3,8 +3,14 @@
     - type: picture-elements
       elements:
         - type: state-icon
-          icon: mdi:lightbulb
+          icon_template: mdi:lightbulb
           entity: switch.shower_light
+          # style_template: >-
+            # {
+            #  "top": "30.3%",
+            #  "left": "94.5%",
+            #  "--mdc-icon-size": {{ "15px" if page.pathname == "lovelace/default_view" else "30px" }}
+            # }
           style:
             top: 30.3%
             left: 94.5%
@@ -176,7 +182,7 @@
             '--mdc-icon-size': 15px
         - type: state-icon
           icon: mdi:lightbulb
-          entity: light.0302020370039fcc4e6a
+          entity: light.family_room_light
           color: rgb(245,239,66)
           style:
             top: 30%
@@ -261,7 +267,7 @@
             '--mdc-icon-size': 15px
         - type: state-icon
           icon: mdi:lightbulb
-          entity: light.403747275002910a032c
+          entity: light.office_light
           color: rgb(245,239,66)
           style:
             top: 45%
@@ -324,7 +330,7 @@
             '--mdc-icon-size': 10px
         - type: state-icon
           icon: mdi:minus
-          entity: binary_sensor.powder_room_motion
+          entity: binary_sensor.outside_powder_room_motion
           style:
             top: 32%
             left: 49%
