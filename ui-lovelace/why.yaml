@@ -2,18 +2,6 @@ title: Why
 path: debugging
 badges: []
 cards:
-  - type: entities
-    entities:
-      - entity: input_datetime.delay_short
-        type: custom:multiple-entity-row
-        format: time
-      - entity: input_datetime.delay_medium
-        type: custom:multiple-entity-row
-        format: time
-      - entity: input_datetime.delay_long
-        type: custom:multiple-entity-row
-        format: time
-    title: Delays
   - type: custom:auto-entities
     card:
       type: entities
@@ -26,20 +14,29 @@ cards:
             type: custom:template-entity-row
             secondary: '{{ states("input_text." + config.entity[7:] + "_why_on") }}'
             toggle: true
+        - entity_id: switch.*_lamp*
+          state: 'on'
+          options:
+            type: custom:template-entity-row
+            secondary: '{{ states("input_text." + config.entity[7:] + "_why_on") }}'
+            toggle: true
         - entity_id: light.*
           state: 'on'
           options:
             type: custom:template-entity-row
             secondary: '{{ states("input_text." + config.entity[6:] + "_why_on") }}'
             toggle: true
-        - entity_id: timer.*
+        - entity_id: timer.*_off
           state: 'active'
+          options:
+            type: custom:timer-bar-card
+        - entity_id: timer.*_off
+          state: 'paused'
           options:
             type: custom:timer-bar-card
       exclude: []
     sort:
-      method: last_updated
-      reverse: true
+      method: name
   - type: custom:auto-entities
     card:
       type: entities
@@ -52,22 +49,30 @@ cards:
             type: custom:template-entity-row
             secondary: '{{ states("input_text." + config.entity[7:] + "_why_off") }}'
             toggle: true
+        - entity_id: switch.*_lamp*
+          state: 'off'
+          options:
+            type: custom:template-entity-row
+            secondary: '{{ states("input_text." + config.entity[7:] + "_why_off") }}'
+            toggle: true
         - entity_id: light.*
           state: 'off'
           options:
             type: custom:template-entity-row
             secondary: '{{ states("input_text." + config.entity[6:] + "_why_off") }}'
             toggle: true
+        - entity_id: timer.*_on
+          state: 'active'
+          options:
+            type: custom:timer-bar-card
+        - entity_id: timer.*_on
+          state: 'paused'
+          options:
+            type: custom:timer-bar-card
+
       exclude: []
     sort:
-      method: last_updated
-      reverse: true
-  - type: entities
-    title: Powder Room Light
-    entities: 
-      - entity: timer.powder_room_lights
-        type: custom:timer-bar-card
-      - entity: switch.powder_room_lights
+      method: name
   - type: custom:auto-entities
     card:
       type: entities

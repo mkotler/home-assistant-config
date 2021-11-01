@@ -19,7 +19,7 @@ turn_off_lights_on_restart:
       sequence:
       - type: turn_off
         device_id: 2883dfd4ee7d32b6069bc33aa9d8f6b5
-        entity_id: switch.dog_run
+        entity_id: switch.dog_run_light
         domain: switch
     default: []
   - choose:
@@ -329,7 +329,7 @@ turn_off_all_lights:
     domain: switch
   - type: turn_off
     device_id: 5d4e4fef57e28bcb2e4dc43f9fac3fd8
-    entity_id: switch.entry_way_chandelier
+    entity_id: switch.entry_way_light
     domain: switch
   - type: turn_off
     device_id: e2e7303676b14841303b54a684eec67b

@@ -6,10 +6,10 @@ annas_room_overhead_light_why_on:
 back_stairs_lights_why_on:
 bathroom_bath_light_why_on:
 bathroom_vanity_lights_why_on:
-dog_run_why_on:
+dog_run_light_why_on:
 downstairs_fireplace_why_on:
 downstairs_playroom_lights_why_on:
-entry_way_chandelier_why_on:
+entry_way_light_why_on:
 family_room_lamp_why_on:
 front_porch_lights_why_on:
 front_stairs_lights_why_on:
@@ -42,10 +42,10 @@ annas_room_overhead_light_why_off:
 back_stairs_lights_why_off:
 bathroom_bath_light_why_off:
 bathroom_vanity_lights_why_off:
-dog_run_why_off:
+dog_run_light_why_off:
 downstairs_fireplace_why_off:
 downstairs_playroom_lights_why_off:
-entry_way_chandelier_why_off:
+entry_way_light_why_off:
 family_room_lamp_why_off:
 front_porch_lights_why_off:
 front_stairs_lights_why_off:

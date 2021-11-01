@@ -232,7 +232,7 @@
             '--mdc-icon-size': 15px
         - type: state-icon
           icon: mdi:ceiling-light
-          entity: switch.entry_way_chandelier
+          entity: switch.entry_way_light
           style:
             top: 75%
             left: 60.5%
@@ -302,7 +302,7 @@
             transform: rotate(90deg)
         - type: state-icon
           icon: mdi:lightbulb
-          entity: switch.dog_run
+          entity: switch.dog_run_light
           style:
             top: 69%
             left: 6%

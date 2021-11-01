@@ -99,7 +99,7 @@ cards:
         name: Office Lamp
         tap_action:
           action: toggle
-      - entity: switch.entry_way_chandelier
+      - entity: switch.entry_way_light
         icon: mdi:ceiling-light
         name: Entry Way
         tap_action:
@@ -115,7 +115,7 @@ cards:
       - entity: switch.garage_lights
         tap_action:
           action: toggle
-      - entity: switch.dog_run
+      - entity: switch.dog_run_light
         tap_action:
           action: toggle
       - entity: cover.garage_door
