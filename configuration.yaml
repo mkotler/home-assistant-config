@@ -139,7 +139,8 @@ binary_sensor:
   availability_topic: "home-assistant/sensors/status"
   payload_available: "online"
   payload_not_available: "offline"
-  off_delay: 5
+  force_update: true
+  off_delay: 1
   device_class: motion
 - platform: mqtt
   qos: 1
@@ -153,7 +154,8 @@ binary_sensor:
   availability_topic: "home-assistant/sensors/status"
   payload_available: "online"
   payload_not_available: "offline"
-  off_delay: 5
+  force_update: true
+  off_delay: 1
   device_class: motion
 - platform: mqtt
   qos: 1
@@ -167,7 +169,8 @@ binary_sensor:
   availability_topic: "home-assistant/sensors/status"
   payload_available: "online"
   payload_not_available: "offline"
-  off_delay: 5
+  force_update: true
+  off_delay: 1
   device_class: motion
 - platform: mqtt
   qos: 1
@@ -181,7 +184,8 @@ binary_sensor:
   availability_topic: "home-assistant/sensors/status"
   payload_available: "online"
   payload_not_available: "offline"
-  off_delay: 5
+  force_update: true
+  off_delay: 1
   device_class: motion
 - platform: mqtt
   qos: 1
@@ -195,7 +199,8 @@ binary_sensor:
   availability_topic: "home-assistant/sensors/status"
   payload_available: "online"
   payload_not_available: "offline"
-  off_delay: 5
+  force_update: true
+  off_delay: 1
   device_class: motion
 - platform: mqtt
   qos: 1
@@ -209,7 +214,8 @@ binary_sensor:
   availability_topic: "home-assistant/sensors/status"
   payload_available: "online"
   payload_not_available: "offline"
-  off_delay: 5
+  force_update: true
+  off_delay: 1
   device_class: motion
 - platform: mqtt
   qos: 1
@@ -223,7 +229,8 @@ binary_sensor:
   availability_topic: "home-assistant/sensors/status"
   payload_available: "online"
   payload_not_available: "offline"
-  off_delay: 5
+  force_update: true
+  off_delay: 1
   device_class: motion
 - platform: mqtt
   qos: 1
@@ -237,7 +244,8 @@ binary_sensor:
   availability_topic: "home-assistant/sensors/status"
   payload_available: "online"
   payload_not_available: "offline"
-  off_delay: 5
+  force_update: true
+  off_delay: 1
   device_class: motion
 - platform: mqtt
   qos: 1
@@ -251,7 +259,53 @@ binary_sensor:
   availability_topic: "home-assistant/sensors/status"
   payload_available: "online"
   payload_not_available: "offline"
-  off_delay: 5
+  force_update: true
+  off_delay: 1
+  device_class: motion
+- platform: mqtt
+  qos: 1
+  state_topic: "home-assistant/sensors/2012701"
+  name: "Kitchen Desk Motion"
+  value_template: >
+    {% if value_json is defined and value_json.id == 2012701 %}
+      {{ value_json.cmd }}
+    {% endif %}
+  payload_on: 1
+  availability_topic: "home-assistant/sensors/status"
+  payload_available: "online"
+  payload_not_available: "offline"
+  force_update: true
+  off_delay: 1
+  device_class: motion
+- platform: mqtt
+  qos: 1
+  state_topic: "home-assistant/sensors/5932"
+  name: "Downstairs Playroom Motion"
+  value_template: >
+    {% if value_json is defined and value_json.id == 5932 %}
+      {{ value_json.cmd }}
+    {% endif %}
+  payload_on: 28
+  availability_topic: "home-assistant/sensors/status"
+  payload_available: "online"
+  payload_not_available: "offline"
+  force_update: true
+  off_delay: 1
+  device_class: motion
+- platform: mqtt
+  qos: 1
+  state_topic: "home-assistant/sensors/7255"
+  name: "Garage Motion"
+  value_template: >
+    {% if value_json is defined and value_json.id == 7255 %}
+      {{ value_json.cmd }}
+    {% endif %}
+  payload_on: 172
+  availability_topic: "home-assistant/sensors/status"
+  payload_available: "online"
+  payload_not_available: "offline"
+  force_update: true
+  off_delay: 1
   device_class: motion
 
 sensor:

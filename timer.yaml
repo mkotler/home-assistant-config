@@ -11,7 +11,7 @@ back_stairs_lights_off:
 bathroom_bath_light_off:
   name: Bath Light (Off)
 bathroom_vanity_lights_off:
-  name: Bathroom Vanity Lights (Off)
+  name: Vanity Lights (Off)
 dog_run_light_off:
   name: Dog Run (Off)
 downstairs_fireplace_off:
@@ -68,3 +68,7 @@ shower_fan_off:
   name: Shower Fan (Off)
 shower_light_off:
   name: Shower Light (Off)
+powder_room_fan_on:
+  name: Powder Room Fan (On)
+master_toilet_fan_on:
+  name: Master Toilet Fan (On)

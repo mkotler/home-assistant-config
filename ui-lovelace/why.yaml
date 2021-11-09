@@ -20,6 +20,12 @@ cards:
             type: custom:template-entity-row
             secondary: '{{ states("input_text." + config.entity[7:] + "_why_on") }}'
             toggle: true
+        - entity_id: switch.*_fan
+          state: 'on'
+          options:
+            type: custom:template-entity-row
+            secondary: '{{ states("input_text." + config.entity[7:] + "_why_on") }}'
+            toggle: true       
         - entity_id: light.*
           state: 'on'
           options:
@@ -55,6 +61,12 @@ cards:
             type: custom:template-entity-row
             secondary: '{{ states("input_text." + config.entity[7:] + "_why_off") }}'
             toggle: true
+        - entity_id: switch.*_fan
+          state: 'off'
+          options:
+            type: custom:template-entity-row
+            secondary: '{{ states("input_text." + config.entity[7:] + "_why_off") }}'
+            toggle: true  
         - entity_id: light.*
           state: 'off'
           options:
@@ -76,7 +88,7 @@ cards:
   - type: custom:auto-entities
     card:
       type: entities
-      title: Recent Automations
+      title: Recent Automations (30 min)
       show_header_toggle: false
     filter:
       include:
@@ -95,7 +107,7 @@ cards:
                 "navigation_path": "/config/script/trace/{{ state_attr(config.entity, 'id') }}"
               }
         - domain: script
-          last_triggered: < 5
+          last_triggered: < 30
           options:
             type: custom:template-entity-row
             active: '{{ (state_attr(config.entity, ''current'') | int) > 0 }}'
@@ -126,7 +138,7 @@ cards:
                 "navigation_path": "/config/automation/trace/{{ state_attr(config.entity, 'id') }}"
               }
         - domain: automation
-          last_triggered: < 5
+          last_triggered: < 30
           options:
             type: custom:template-entity-row
             active: '{{ (state_attr(config.entity, ''current'') | int) > 0 }}'
