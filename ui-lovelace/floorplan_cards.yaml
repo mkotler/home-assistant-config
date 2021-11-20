@@ -137,17 +137,28 @@
             '--mdc-icon-size': 33px
         - type: state-icon
           icon: mdi:bed
-          entity: input_boolean.master_bed_matt
+          entity: input_number.master_in_bed
           style:
-            top: 17%
+            top: 29.5%
             left: 40%
             '--mdc-icon-size': 15px
-        - type: state-icon
-          icon: mdi:bed
-          entity: input_boolean.master_bed_julie
+        - type: state-label
+          entity: input_number.master_in_bed
           style:
-            top: 28%
-            left: 40%
+            top: 29.5%
+            left: 49%
+            '--mdc-icon-size': 15px
+        - type: state-icon
+          icon_template: >
+            {% set icon = "mdi:bed" %}
+            {% if ( states("input_number.master_in_bed")|int >=2) %}
+              {% set icon = "mdi:bunk-bed" %}
+            {% endif %}
+            {{ icon }}
+          entity: input_number.master_in_bed
+          style: 
+            top: 23%
+            left: 38%
             '--mdc-icon-size': 15px
       image: /local/floorplan/upstairs.png
     - type: picture-elements

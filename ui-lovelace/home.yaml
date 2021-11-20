@@ -25,6 +25,11 @@ cards:
           action: toggle
         entity: script.turn_off_kids_lights
         name: Kids
+      - type: button
+        tap_action:
+          action: toggle
+        entity: input_boolean.guestroom_in_use
+        name: Guestroom In Use
     columns: 4
   - type: glance
     columns: 4

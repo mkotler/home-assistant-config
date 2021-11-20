@@ -388,6 +388,25 @@ homeassistant:
 # Setup input variables for all entitites
 input_text: !include input_text.yaml
 timer: !include timer.yaml
+input_boolean: 
+  guestroom_in_use:
+    name: "Guestroom In Use"
+input_number:
+  master_in_bed:
+    name: "Count in Master Bed"
+    initial: 0
+    min: 0
+    max: 2
+  office_motion_count:
+    name: "Office Motion Count"
+    initial: 0
+    min: 0
+    max: 10
+  null_input:
+    name: "Null Input"
+    initial: 0
+    min: 0
+    max: 10
 
 # Includes
 group: !include groups.yaml
