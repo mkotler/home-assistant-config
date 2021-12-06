@@ -1737,7 +1737,7 @@
   action:
   - service: "{% set lights = [\"timer.family_room_light_off\", \"timer.family_room_light_on\"\
       , \"timer.office_light_off\", \"timer.office_light_on\"] %}\n{% if trigger.event.data.entity_id\
-      \ == \"timer.timer_null\" %}\n  {% set domain = \"input_boolean\" %}\n{% elif\
+      \ == \"timer.null_timer\" %}\n  {% set domain = \"input_boolean\" %}\n{% elif\
       \ trigger.event.data.entity_id in lights %}\n  {% set domain = \"light\" %}\n\
       {% else %}\n  {% set domain = \"switch\" %}\n{% endif %}\n{% if trigger.event.data.entity_id[-2:]\
       \ == \"on\" %} \n  {% set service = domain + \".turn_on\" %}\n{% else %}\n \
