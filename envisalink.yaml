@@ -1,0 +1,61 @@
+host: !secret honeywell_host
+panel_type: "HONEYWELL"
+user_name: !secret honeywell_user
+password: !secret honeywell_password
+port: 4025
+evl_version: 4
+keepalive_interval: 60
+zonedump_interval: 30
+timeout: 10
+zones:
+  1:
+    name: "Front Door"
+    type: "opening"
+  2:
+    name: "Inside Garage Door"
+    type: "opening"
+  3:
+    name: "Front Entry Motion"
+    type: "motion"
+  4:
+    name: "Kitchen Nook Motion"
+    type: "motion"
+  5:
+    name: "Kitchen Sliding Door"
+    type: "opening"
+  6:
+    name: "Outside Garage Door"
+    type: "opening"
+  9:
+    name: "Laundry Room Window"
+    type: "opening"
+  10:
+    name: "Play Room Left Window"
+    type: "opening"
+  11:
+    name: "Play Room Right Window"
+    type: "opening"
+  12: 
+    name: "Kitchen Sink Window"
+    type: "opening"
+  13:
+    name: "Kitchen Nook Window"
+    type: "opening"
+  14:
+    name: "Family Room Left Window"
+    type: "opening"
+  15:
+    name: "Family Room Right Window"
+    type: "opening"
+  16:
+    name: "Office Left Window"
+    type: "opening"
+  17:
+    name: "Office Right Window"
+    type: "opening"
+  18:
+    name: "Smoke Detector Upstairs"
+    type: "smoke"
+partitions:
+  1:
+    name: "Home Alarm"

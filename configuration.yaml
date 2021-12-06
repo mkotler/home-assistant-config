@@ -1,17 +1,60 @@
 # Configure a default setup of Home Assistant (frontend, api, etc)
 default_config:
 
+homeassistant:
+  packages:
+    mqtt_sensors: !include mqtt_sensors.yaml
+  # Tesla integration
+  customize_glob:
+    'lock.tesla_*_door_lock':
+      friendly_name: Doors
+    'lock.tesla_*_charger_door_lock':
+      friendly_name: Charger Door
+    'lock.tesla_*_frunk_lock':
+      friendly_name: Frunk
+    'lock.tesla_*_trunk_lock':
+      friendly_name: Trunk
+    'binary_sensor.tesla_*_parking_brake_sensor':
+      friendly_name: Parking Brake
+
 # Debugging
-#logger:
-#  logs:
-#    homeassistant.components.upnp: debug
-#    async_upnp_client: debug
-#    async_upnp_client.traffic: debug
+logger:
+  default: warning
+
+# Setup input variables for all entitites
+input_text: !include input_text.yaml
+timer: !include timer.yaml
+input_boolean: 
+  guestroom_in_use:
+    name: "Guestroom In Use"
+  dining_room_in_use:
+    name: "Dining Room In Use"
+  null_boolean:
+    name: "Null Boolean"
+input_number:
+  master_in_bed:
+    name: "Count in Master Bed"
+    initial: 0
+    min: 0
+    max: 2
+  office_motion_count:
+    name: "Office Motion Count"
+    initial: 0
+    min: 0
+    max: 10
+  parents_home:
+    name: "Count of Parents at Home"
+    initial: 0
+    min: 0
+    max: 2
+  null_number:
+    name: "Null Number"
+    initial: 0
+    min: 0
+    max: 10
 
 # Add support for templating in lovelace
 lovelace_gen:
-
-# Add support for multiple-entity-row 
 lovelace:
   mode: yaml
   resources:
@@ -33,68 +76,7 @@ lovelace:
       type: module
 
 # Envisalink Alarm Panel
-envisalink:
-  host: !secret honeywell_host
-  panel_type: "HONEYWELL"
-  user_name: !secret honeywell_user
-  password: !secret honeywell_password
-  port: 4025
-  evl_version: 4
-  keepalive_interval: 60
-  zonedump_interval: 30
-  timeout: 10
-  zones:
-    1:
-      name: "Front Door"
-      type: "opening"
-    2:
-      name: "Inside Garage Door"
-      type: "opening"
-    3:
-      name: "Front Entry Motion"
-      type: "motion"
-    4:
-      name: "Kitchen Nook Motion"
-      type: "motion"
-    5:
-      name: "Kitchen Sliding Door"
-      type: "opening"
-    6:
-      name: "Outside Garage Door"
-      type: "opening"
-    9:
-      name: "Laundry Room Window"
-      type: "opening"
-    10:
-      name: "Play Room Left Window"
-      type: "opening"
-    11:
-      name: "Play Room Right Window"
-      type: "opening"
-    12: 
-      name: "Kitchen Sink Window"
-      type: "opening"
-    13:
-      name: "Kitchen Nook Window"
-      type: "opening"
-    14:
-      name: "Family Room Left Window"
-      type: "opening"
-    15:
-      name: "Family Room Right Window"
-      type: "opening"
-    16:
-      name: "Office Left Window"
-      type: "opening"
-    17:
-      name: "Office Right Window"
-      type: "opening"
-    18:
-      name: "Smoke Detector Upstairs"
-      type: "smoke"
-  partitions:
-    1:
-      name: "Home Alarm"
+envisalink: !include envisalink.yaml
 
 # Alexa integration with Philips Hue emulated bridge  
 emulated_hue:
@@ -122,291 +104,35 @@ switch:
           data:
             entity_id: climate.matt_s_tesla_hvac_climate_system
 
-# MQTT & Sensors
-mqtt:
-  broker: !secret mqtt_broker
-
-binary_sensor:  
-- platform: mqtt
-  qos: 1
-  state_topic: "home-assistant/sensors/25410"
-  name: "Master Bathroom Motion"
-  value_template: >
-    {% if value_json is defined and value_json.id == 25410 %}
-      {{ value_json.cmd }}
-    {% endif %}
-  payload_on: 156
-  availability_topic: "home-assistant/sensors/status"
-  payload_available: "online"
-  payload_not_available: "offline"
-  force_update: true
-  off_delay: 1
-  device_class: motion
-- platform: mqtt
-  qos: 1
-  state_topic: "home-assistant/sensors/3171229"
-  name: "Toilet Motion"
-  value_template: >
-    {% if value_json is defined and value_json.id == 3171229 %}
-      {{ value_json.cmd }}
-    {% endif %}
-  payload_on: 1
-  availability_topic: "home-assistant/sensors/status"
-  payload_available: "online"
-  payload_not_available: "offline"
-  force_update: true
-  off_delay: 1
-  device_class: motion
-- platform: mqtt
-  qos: 1
-  state_topic: "home-assistant/sensors/4814"
-  name: "Hallway Motion"
-  value_template: >
-    {% if value_json is defined and value_json.id == 4814 %}
-      {{ value_json.cmd }}
-    {% endif %}
-  payload_on: 204
-  availability_topic: "home-assistant/sensors/status"
-  payload_available: "online"
-  payload_not_available: "offline"
-  force_update: true
-  off_delay: 1
-  device_class: motion
-- platform: mqtt
-  qos: 1
-  state_topic: "home-assistant/sensors/20078"
-  name: "Back Stairs Motion"
-  value_template: >
-    {% if value_json is defined and value_json.id == 20078 %}
-      {{ value_json.cmd }}
-    {% endif %}
-  payload_on: 28
-  availability_topic: "home-assistant/sensors/status"
-  payload_available: "online"
-  payload_not_available: "offline"
-  force_update: true
-  off_delay: 1
-  device_class: motion
-- platform: mqtt
-  qos: 1
-  state_topic: "home-assistant/sensors/2074077"
-  name: "Master Bedroom Motion"
-  value_template: >
-    {% if value_json is defined and value_json.id == 2074077 %}
-      {{ value_json.cmd }}
-    {% endif %}
-  payload_on: 1
-  availability_topic: "home-assistant/sensors/status"
-  payload_available: "online"
-  payload_not_available: "offline"
-  force_update: true
-  off_delay: 1
-  device_class: motion
-- platform: mqtt
-  qos: 1
-  state_topic: "home-assistant/sensors/25771"
-  name: "Office Motion"
-  value_template: >
-    {% if value_json is defined and value_json.id == 25771 %}
-      {{ value_json.cmd }}
-    {% endif %}
-  payload_on: 92
-  availability_topic: "home-assistant/sensors/status"
-  payload_available: "online"
-  payload_not_available: "offline"
-  force_update: true
-  off_delay: 1
-  device_class: motion
-- platform: mqtt
-  qos: 1
-  state_topic: "home-assistant/sensors/17137"
-  name: "Outside Powder Room Motion"
-  value_template: >
-    {% if value_json is defined and value_json.id == 17137 %}
-      {{ value_json.cmd }}
-    {% endif %}
-  payload_on: 172
-  availability_topic: "home-assistant/sensors/status"
-  payload_available: "online"
-  payload_not_available: "offline"
-  force_update: true
-  off_delay: 1
-  device_class: motion
-- platform: mqtt
-  qos: 1
-  state_topic: "home-assistant/sensors/21469"
-  name: "Inside Powder Room Motion"
-  value_template: >
-    {% if value_json is defined and value_json.id == 21469 %}
-      {{ value_json.cmd }}
-    {% endif %}
-  payload_on: 188
-  availability_topic: "home-assistant/sensors/status"
-  payload_available: "online"
-  payload_not_available: "offline"
-  force_update: true
-  off_delay: 1
-  device_class: motion
-- platform: mqtt
-  qos: 1
-  state_topic: "home-assistant/sensors/2267069"
-  name: "Laundry Room Motion"
-  value_template: >
-    {% if value_json is defined and value_json.id == 2267069 %}
-      {{ value_json.cmd }}
-    {% endif %}
-  payload_on: 1
-  availability_topic: "home-assistant/sensors/status"
-  payload_available: "online"
-  payload_not_available: "offline"
-  force_update: true
-  off_delay: 1
-  device_class: motion
-- platform: mqtt
-  qos: 1
-  state_topic: "home-assistant/sensors/2012701"
-  name: "Kitchen Desk Motion"
-  value_template: >
-    {% if value_json is defined and value_json.id == 2012701 %}
-      {{ value_json.cmd }}
-    {% endif %}
-  payload_on: 1
-  availability_topic: "home-assistant/sensors/status"
-  payload_available: "online"
-  payload_not_available: "offline"
-  force_update: true
-  off_delay: 1
-  device_class: motion
-- platform: mqtt
-  qos: 1
-  state_topic: "home-assistant/sensors/5932"
-  name: "Downstairs Playroom Motion"
-  value_template: >
-    {% if value_json is defined and value_json.id == 5932 %}
-      {{ value_json.cmd }}
-    {% endif %}
-  payload_on: 28
-  availability_topic: "home-assistant/sensors/status"
-  payload_available: "online"
-  payload_not_available: "offline"
-  force_update: true
-  off_delay: 1
-  device_class: motion
-- platform: mqtt
-  qos: 1
-  state_topic: "home-assistant/sensors/7255"
-  name: "Garage Motion"
-  value_template: >
-    {% if value_json is defined and value_json.id == 7255 %}
-      {{ value_json.cmd }}
-    {% endif %}
-  payload_on: 172
-  availability_topic: "home-assistant/sensors/status"
-  payload_available: "online"
-  payload_not_available: "offline"
-  force_update: true
-  off_delay: 1
-  device_class: motion
-
 sensor:
-- platform: mqtt
-  state_topic: "home-assistant/sensors/2966"
-  device_class: temperature
-  name: "Master Bathroom Temperature"
-  value_template: >
-    {% if value_json is defined and value_json.id == 2966 and value_json.temperature_C != '' %}
-      {{ value_json.temperature_C }}
-    {% endif %}
-  unit_of_measurement: '°C'
-- platform: mqtt
-  state_topic: "home-assistant/sensors/2966"
-  device_class: humidity
-  name: "Master Bathroom Humidity"
-  value_template: >
-    {% if value_json is defined and value_json.id == 2966 and value_json.humidity != '' %}
-      {{ value_json.humidity }}
-    {% endif %}
-  unit_of_measurement: '%'
-- platform: mqtt
-  name: "Laptop Idle Time"
-  state_topic: "home-assistant/computers/9000"
-  value_template: >
-    {% if value_json is defined and value_json.id == 9000 and value_json.idle_minutes != '' %}
-      {{ value_json.idle_minutes }}
-    {% endif %}
-  unit_of_measurement: 'min'
-  json_attributes_topic: "home-assistant/computers/9000"
-- platform: mqtt
-  name: "Desktop Idle Time"
-  state_topic: "home-assistant/computers/9001"
-  value_template: >
-    {% if value_json is defined and value_json.id == 9001 and value_json.idle_minutes != '' %}
-      {{ value_json.idle_minutes }}
-    {% endif %}
-  unit_of_measurement: 'min'
-  json_attributes_topic: "home-assistant/computers/9001"
-- platform: mqtt
-  state_topic: "home-assistant/sensors/nodeMCU1"
-  name: "Master Bedroom Bed Presence"
-  value_template: >
-    {% if value_json is defined and value_json.id == 8001 and value_json.pressure != '' %}
-      {{ value_json.pressure }}
-    {% endif %}
+# Format sensor for lovelace
+- platform: template
+  sensors:
+    master_in_bed:
+      friendly_name: "Count in Bed (Int)"
+      value_template: "{{ states('input_number.master_in_bed')|int }}"
 
-# Add history to temp and humidity sensors
+# Monitor system performance
+- platform: systemmonitor
+  resources:
+    - type: memory_use_percent
+    - type: disk_use_percent
+    - type: swap_use_percent
+    - type: load_1m
+    - type: load_5m
+    - type: load_15m
+
+# Add history to temp, humidity, and system monitor sensors
 - platform: statistics
-  entity_id: sensor.master_bathroom_temperature
-  name: "Master Bathroom Temperature Stats"
-  max_age: 00:05
+  entity_id: sensor.aqara_weather_temperature
+  name: "Master Bathroom Temperature Stats (Aqara)"
 - platform: statistics
-  entity_id: sensor.master_bathroom_humidity
-  name: "Master Bathroom Humidity Stats"
-  max_age: 00:05
-- platform: statistics
-  entity_id: sensor.master_bedroom_bed_presence
-  name: "Master Bedroom Bed Presence Stats"
-  max_age: 00:05
+  entity_id: sensor.aqara_weather_humidity
+  name: "Master Bathroom Humidity Stats (Aqara)"
 
 # Text to speech
 tts:
   - platform: google_translate
-
-# Tesla integration
-homeassistant:
-  customize_glob:
-    'lock.tesla_*_door_lock':
-      friendly_name: Doors
-    'lock.tesla_*_charger_door_lock':
-      friendly_name: Charger Door
-    'lock.tesla_*_frunk_lock':
-      friendly_name: Frunk
-    'lock.tesla_*_trunk_lock':
-      friendly_name: Trunk
-    'binary_sensor.tesla_*_parking_brake_sensor':
-      friendly_name: Parking Brake
-
-# Setup input variables for all entitites
-input_text: !include input_text.yaml
-timer: !include timer.yaml
-input_boolean: 
-  guestroom_in_use:
-    name: "Guestroom In Use"
-input_number:
-  master_in_bed:
-    name: "Count in Master Bed"
-    initial: 0
-    min: 0
-    max: 2
-  office_motion_count:
-    name: "Office Motion Count"
-    initial: 0
-    min: 0
-    max: 10
-  null_input:
-    name: "Null Input"
-    initial: 0
-    min: 0
-    max: 10
 
 # Includes
 group: !include groups.yaml

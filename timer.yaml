@@ -74,3 +74,5 @@ master_toilet_fan_on:
   name: Master Toilet Fan (On)
 rtl_433_problem:
   name: MQTT RTL Problem
+null_timer:
+  name: Null Timer

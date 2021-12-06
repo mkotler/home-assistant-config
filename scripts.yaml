@@ -269,10 +269,10 @@ turn_off_all_lights:
   sequence:
   - type: turn_off
     device_id: 2883dfd4ee7d32b6069bc33aa9d8f6b5
-    entity_id: switch.dog_run
+    entity_id: switch.dog_run_light
     domain: switch
   - type: turn_off
-    device_id: c362ba03de83b010e0d006e7b92ed6b7
+    device_id: 19bb98b06940d043ed1bb0152485f0c7
     entity_id: light.family_room_light
     domain: light
   - type: turn_off
@@ -284,7 +284,7 @@ turn_off_all_lights:
     entity_id: switch.office_lamp
     domain: switch
   - type: turn_off
-    device_id: 573b4882b5e4456f2929fbccd5369a1b
+    device_id: 21d2904ab5e4e63611f6304cbdbcf15b
     entity_id: light.office_light
     domain: light
   - type: turn_off
@@ -386,10 +386,6 @@ turn_off_all_upstairs_lights_except_kids:
     entity_id: switch.master_lights
     domain: switch
   - type: turn_off
-    device_id: c32cc10983532262a768e043288f286f
-    entity_id: switch.guest_bedroom_lights
-    domain: switch
-  - type: turn_off
     device_id: b29548f0b2914a3ab0e8282219832abe
     entity_id: switch.master_toilet_light
     domain: switch
@@ -401,6 +397,17 @@ turn_off_all_upstairs_lights_except_kids:
     device_id: 4e01fd4c9483873139846b8172548fb9
     entity_id: switch.front_stairs_lights
     domain: switch
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_boolean.guestroom_in_use
+        state: 'off'
+      sequence:
+      - type: turn_off
+        device_id: c32cc10983532262a768e043288f286f
+        entity_id: switch.guest_bedroom_lights
+        domain: switch
+    default: []
   mode: single
   icon: mdi:lightbulb
 turn_off_kids_lights:
@@ -416,3 +423,14 @@ turn_off_kids_lights:
     domain: switch
   mode: single
   icon: mdi:lightbulb
+find_matts_phone:
+  alias: Find Matt’s Phone
+  sequence:
+  - service: notify.mobile_app_matts_iphone
+    data:
+      message: Home Assistant is searching for Matt’s phone
+      data:
+        push:
+          interruption-level: time-sensitive
+  mode: single
+  icon: hass:phone

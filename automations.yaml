@@ -28,7 +28,7 @@
     event: shutdown
   condition: []
   action:
-  - service: notify.notify
+  - service: notify.mobile_app_matts_iphone
     data:
       message: HomeAssistant is shutting down!
   mode: single
@@ -40,7 +40,7 @@
     event: start
   condition: []
   action:
-  - service: notify.notify
+  - service: notify.mobile_app_matts_iphone
     data:
       message: HomeAsistant restarted!
   - service: script.turn_off_lights_on_restart
@@ -152,10 +152,11 @@
           \ }}\n"
     - service: input_text.set_value
       target:
-        entity_id: "{% set entities = \"\" %}\n{% if states(\"timer.bathroom_bath_light_off\"\
-          ) == \"active\" %} \n  {% set entities = entities + \"input_text.bathroom_bath_light_why_off,\"\
-          \ %}\n{% endif %}\n{% if states(\"timer.master_toilet_light_off\") == \"\
-          active\" %} \n  {% set entities = entities + \"input_text.master_toilet_light_why_off,\"\
+        entity_id: "{% set entities = \"input_text.null_text\" %}\n{% if states(\"\
+          timer.bathroom_bath_light_off\") == \"active\" %} \n  {% set entities =\
+          \ entities + \"input_text.bathroom_bath_light_why_off,\" %}\n{% endif %}\n\
+          {% if states(\"timer.master_toilet_light_off\") == \"active\" %} \n  {%\
+          \ set entities = entities + \"input_text.master_toilet_light_why_off,\"\
           \ %}\n{% endif %}\n{% if states(\"timer.outside_shower_light_off\") == \"\
           active\" %} \n  {% set entities = entities + \"input_text.outside_shower_light_why_off,\"\
           \ %}\n{% endif %}\n{% if states(\"timer.shower_light_off\") == \"active\"\
@@ -219,6 +220,9 @@
     - condition: state
       entity_id: device_tracker.life360_matt
       state: not_home
+    - condition: state
+      entity_id: input_boolean.guesteoom_in_use
+      state: 'off'
   action:
   - device_id: 42ab0e799b3a0660d840520e3e64f283
     domain: climate
@@ -360,7 +364,7 @@
     attribute: change
     above: '1'
   - platform: numeric_state
-    entity_id: sensor.master_bathroom_temperature
+    entity_id: sensor.master_bathroom_temperature_stats
     above: '1'
   condition:
   - condition: or
@@ -739,14 +743,14 @@
           value: 'Dog Run: Turn on light when open door'
       - service: timer.cancel
         target:
-          entity_id: "{% if states(\"timer.dog_run_light_off\") == \"active\" %}\n\
-            \  {% set timer = \"timer.dog_run_light_off\" %}\n{% endif %}\n{{ timer\
-            \ }}\n"
+          entity_id: "{% set timer = \"timer.null_timer\" %}\n{% if states(\"timer.dog_run_light_off\"\
+            ) == \"active\" %}\n  {% set timer = \"timer.dog_run_light_off\" %}\n\
+            {% endif %}\n{{ timer }}\n"
       - service: timer.pause
         target:
-          entity_id: "{% if states(\"timer.garage_lights_off\") == \"active\" %}\n\
-            \  {% set timer = \"timer.garage_lights_off\" %}\n{% endif %}\n{{ timer\
-            \ }}\n"
+          entity_id: "{% set timer = \"timer.null_timer\" %}\n{% if states(\"timer.garage_lights_off\"\
+            ) == \"active\" %}\n  {% set timer = \"timer.garage_lights_off\" %}\n\
+            {% endif %}\n{{ timer }}\n"
   - choose:
     - conditions:
       - condition: state
@@ -848,7 +852,7 @@
   - service: timer.start
     target:
       entity_id: "{% set entities = \"timer.front_stairs_lights_off\" %}\n{% if states(\"\
-        timer.master_hall_lights_off\") == \"active\" %}\n  {% set entitities = entitities\
+        timer.master_hall_lights_off\") == \"active\" %}\n  {% set entities = entities\
         \ + \", timer.master_hall_lights_off\" %}\n{% endif %}\n{{ entities }}\n"
     data:
       duration: 00:03:00
@@ -915,8 +919,8 @@
     to: 'on'
   - platform: state
     entity_id: binary_sensor.outside_garage_door
-    from: 'on'
-    to: 'off'
+    from: 'off'
+    to: 'on'
   condition: []
   action:
   - service: switch.turn_on
@@ -1095,7 +1099,8 @@
       - input_text.powder_room_lights_why_on
     data:
       value: 'Powder Room: Turn lights on when detect motion (with lights off)'
-  mode: single
+  mode: queued
+  max: 10
 - id: '1630898092493'
   alias: 'Powder Room:  Set timer to 15 min with inside motion and fan timer to 5
     min'
@@ -1314,7 +1319,7 @@
   action:
   - service: timer.start
     target:
-      entity_id: "{% set entities = \"\" %}\n{% if states(\"timer.bathroom_vanity_lights_off\"\
+      entity_id: "{% set entities = \"timer.null_timer\" %}\n{% if states(\"timer.bathroom_vanity_lights_off\"\
         ) == \"active\" %} \n  {% set entities = \"timer.bathroom_vanity_lights_off,\"\
         \ %}\n{% endif %} \n{% if states(\"timer.bathroom_bath_light_off\") == \"\
         active\" %} \n  {% set entities = entities + \"timer.bathroom_bath_light_off,\"\
@@ -1328,7 +1333,7 @@
         {% endif %}\n{{ entities }}\n"
   - service: input_text.set_value
     target:
-      entity_id: "{% set entities = \"\" %}\n{% if states(\"timer.bathroom_vanity_lights_off\"\
+      entity_id: "{% set entities = \"input_text.null_text\" %}\n{% if states(\"timer.bathroom_vanity_lights_off\"\
         ) == \"active\" %} \n  {% set entities = \"input_text.bathroom_vanity_lights_why_off,\"\
         \ %}\n{% endif %} \n{% if states(\"timer.bathroom_bath_light_off\") == \"\
         active\" %}\n  {% set entities = entities + \"input_text.bathroom_bath_light_why_off,\"\
@@ -1437,20 +1442,20 @@
       value: Lights turned on manually
   - service: input_text.set_value
     target:
-      entity_id: "{% set entity = \"\" %} {% set entities = [\"switch.master_fireplace\"\
-        , \"switch.downstairs_fireplace\", \"switch.back_stairs_lights\", \"switch.bathroom_bath_light\"\
-        , \"switch.bathroom_vanity_lights\", \"switch.dog_run_light\", \"switch.downstairs_playroom_lights\"\
-        , \"switch.entry_way_light\", \"switch.front_porch_lights\", \"switch.front_stairs_lights\"\
-        , \"switch.garage_lights\", \"switch.guest_bedroom_lights\", \"switch.kids_hall_lights\"\
-        , \"switch.master_hall_lights\", \"switch.master_lights\", \"switch.master_toilet_fan\"\
-        , \"switch.master_toilet_light\", \"switch.outside_pantry_light\", \"switch.outside_powder_lights\"\
-        , \"switch.outside_shower_light\", \"switch.patio_lights\", \"switch.powder_room_fan\"\
-        , \"switch.shower_fan\", \"switch.shower_light\", \"switch.kitchen_nook_lights\"\
-        , \"switch.laundry_room_lights\"] %} {% set ignore = [\"switch.annas_room_closet_light\"\
-        , \"switch.annas_room_overhead_light\", \"switch.family_room_lamp\", \"switch.office_lamp\"\
-        ] %} {% if trigger.entity_id in entities %}\n  {% set entity = \"input_text.\"\
-        \ + trigger.to_state.entity_id[7:] + \"_why_off\" %}\n{% endif %}  {{ entity\
-        \ }}\n"
+      entity_id: "{% set entity = \"input_text.null_text\" %} {% set entities = [\"\
+        switch.master_fireplace\", \"switch.downstairs_fireplace\", \"switch.back_stairs_lights\"\
+        , \"switch.bathroom_bath_light\", \"switch.bathroom_vanity_lights\", \"switch.dog_run_light\"\
+        , \"switch.downstairs_playroom_lights\", \"switch.entry_way_light\", \"switch.front_porch_lights\"\
+        , \"switch.front_stairs_lights\", \"switch.garage_lights\", \"switch.guest_bedroom_lights\"\
+        , \"switch.kids_hall_lights\", \"switch.master_hall_lights\", \"switch.master_lights\"\
+        , \"switch.master_toilet_fan\", \"switch.master_toilet_light\", \"switch.outside_pantry_light\"\
+        , \"switch.outside_powder_lights\", \"switch.outside_shower_light\", \"switch.patio_lights\"\
+        , \"switch.powder_room_fan\", \"switch.shower_fan\", \"switch.shower_light\"\
+        , \"switch.kitchen_nook_lights\", \"switch.laundry_room_lights\"] %} {% set\
+        \ ignore = [\"switch.annas_room_closet_light\", \"switch.annas_room_overhead_light\"\
+        , \"switch.family_room_lamp\", \"switch.office_lamp\"] %} {% if trigger.entity_id\
+        \ in entities %}\n  {% set entity = \"input_text.\" + trigger.to_state.entity_id[7:]\
+        \ + \"_why_off\" %}\n{% endif %}  {{ entity }}\n"
     data:
       value: 'Manual: Timer expired'
   - service: timer.start
@@ -1465,14 +1470,15 @@
         , \"switch.guest_bedroom_lights\", \"switch.outside_pantry_light\", \"switch.outside_powder_lights\"\
         , \"switch.patio_lights\", \"switch.shower_fan\",  \"switch.kitchen_nook_lights\"\
         , \"switch.laundry_room_lights\"] %}\n{% set entities_60min = [\"switch.kitchen_island_lights\"\
-        ,        \"switch.kitchen_lights\", \"switch.master_fireplace\", \"switch.downstairs_fireplace\"\
-        ] %}\n{% set ignore = [\"light.office_light\", \"light.family_room_light\"\
-        , \"switch.annas_room_closet_light\", \"switch.annas_room_overhead_light\"\
+        ,        \"switch.kitchen_lights\"] %}\n{% set entities_120min = [\"switch.master_fireplace\"\
+        , \"switch.downstairs_fireplace\"] %}\n{% set ignore = [\"light.office_light\"\
+        , \"light.family_room_light\", \"switch.annas_room_closet_light\", \"switch.annas_room_overhead_light\"\
         , \"switch.family_room_lamp\", \"switch.kitchen_island_lights\", \"switch.kitchen_lights\"\
         , \"switch.office_lamp\", \"switch.powder_room_lights\"] %}\n{% if trigger.entity_id\
         \ in entities_15min %}\n  {% set duration = \"00:15:00\" %}\n{% elif trigger.entity_id\
         \ in entities_30min %}\n  {% set duration = \"00:30:00\" %}\n{% elif trigger.entity_id\
-        \ in entities_60min %}\n  {% set duration = \"01:00:00\" %}\n{% else %}\n\
+        \ in entities_60min %}\n  {% set duration = \"01:00:00\" %}\n{% elif trigger.entity_id\
+        \ in entities_120min %}\n  {% set duration = \"02:00:00\" %}\n{% else %}\n\
         \  {% set duration = \"00:00:00\" %}\n{% endif %} {{ duration }}\n"
     target:
       entity_id: "{% set entities = [\"switch.master_fireplace\", \"switch.downstairs_fireplace\"\
@@ -1485,9 +1491,10 @@
         , \"switch.patio_lights\", \"switch.powder_room_fan\", \"switch.shower_fan\"\
         , \"switch.shower_light\", \"switch.kitchen_nook_lights\", \"switch.laundry_room_lights\"\
         ] %} {% set ignore = [\"switch.annas_room_closet_light\", \"switch.annas_room_overhead_light\"\
-        , \"switch.family_room_lamp\", \"switch.office_lamp\"] %}\n{% if trigger.entity_id\
-        \ in entities %}\n  {% set entity = \"timer.\" + trigger.entity_id[7:] + \"\
-        _off\" %}\n{% endif %} {{ entity }}\n"
+        , \"switch.family_room_lamp\", \"switch.office_lamp\"] %}\n{% set entity =\
+        \ \"timer.null_timer\" %} {% if trigger.entity_id in entities %}\n  {% set\
+        \ entity = \"timer.\" + trigger.entity_id[7:] + \"_off\" %}\n{% endif %} {{\
+        \ entity }}\n"
   mode: parallel
   max: 25
 - id: '1632711561209'
@@ -1526,6 +1533,8 @@
           value: 2
         target:
           entity_id: input_number.master_in_bed
+  mode: queued
+  max: 10
 - id: '1632799149721'
   alias: 'Front Porch: Turn on light when open door and off after 15 min'
   description: ''
@@ -1600,10 +1609,6 @@
     - condition: state
       entity_id: input_number.master_in_bed
       state: '0.0'
-    - condition: numeric_state
-      entity_id: sun.sun
-      below: '6'
-      attribute: elevation
     - condition: device
       type: is_on
       device_id: 4e01fd4c9483873139846b8172548fb9
@@ -1732,26 +1737,28 @@
   action:
   - service: "{% set lights = [\"timer.family_room_light_off\", \"timer.family_room_light_on\"\
       , \"timer.office_light_off\", \"timer.office_light_on\"] %}\n{% if trigger.event.data.entity_id\
-      \ in lights %}\n  {% set domain = \"light\" %}\n{% else %}\n  {% set domain\
-      \ = \"switch\" %}\n{% endif %}\n{% if trigger.event.data.entity_id[-2:] == \"\
-      on\" %} \n  {% set service = domain + \".turn_on\" %}\n{% else %}\n  {% set\
-      \ service = domain + \".turn_off\" %}\n{% endif %}\n{{ service }}\n"
+      \ == \"timer.timer_null\" %}\n  {% set domain = \"input_boolean\" %}\n{% elif\
+      \ trigger.event.data.entity_id in lights %}\n  {% set domain = \"light\" %}\n\
+      {% else %}\n  {% set domain = \"switch\" %}\n{% endif %}\n{% if trigger.event.data.entity_id[-2:]\
+      \ == \"on\" %} \n  {% set service = domain + \".turn_on\" %}\n{% else %}\n \
+      \ {% set service = domain + \".turn_off\" %}\n{% endif %}\n{{ service }}\n"
     target:
-      entity_id: "{% set lights = [\"timer.family_room_light_off\", \"timer.family_room_light_on\"\
-        , \"timer.office_light_off\", \"timer.office_light_on\"] %}\n{% if trigger.event.data.entity_id\
-        \ in lights %}\n  {% set domain = \"light\" %}\n{% else %}\n  {% set domain\
-        \ = \"switch\" %}\n{% endif %}\n{% if trigger.event.data.entity_id[-2:] ==\
-        \ \"on\" %} \n  {% set target = domain + \".\" + trigger.event.data.entity_id[6:-3]\
-        \ %}\n{% elif trigger.event.data.entity_id[-3:] == \"off\" %}\n  {% set target\
-        \ = domain + \".\" + trigger.event.data.entity_id[6:-4] %}\n{% endif %}\n\
-        {{ target }}\n"
+      entity_id: "{% set target = \"input_boolean.null_boolean\" %}  {% set lights\
+        \ = [\"timer.family_room_light_off\", \"timer.family_room_light_on\", \"timer.office_light_off\"\
+        , \"timer.office_light_on\"] %}\n{% if trigger.event.data.entity_id in lights\
+        \ %}\n  {% set domain = \"light\" %}\n{% else %}\n  {% set domain = \"switch\"\
+        \ %}\n{% endif %}\n{% if trigger.event.data.entity_id[-2:] == \"on\" %} \n\
+        \  {% set target = domain + \".\" + trigger.event.data.entity_id[6:-3] %}\n\
+        {% elif trigger.event.data.entity_id[-3:] == \"off\" %}\n  {% set target =\
+        \ domain + \".\" + trigger.event.data.entity_id[6:-4] %}\n{% endif %}\n{{\
+        \ target }}\n"
   - service: input_number.set_value
     data:
       value: 0
     target:
-      entity_id: "{% set entity = \"input_number.null_input\" %} {% if trigger.event.data.entity_id\
+      entity_id: "{% set entity = \"input_number.null_number\" %}  {% if trigger.event.data.entity_id\
         \ == \"timer.office_light_off\" %}\n    {% set entity = \"input_number.office_motion_count\"\
-        \ %}\n{% endif %} {{ entity }}\n"
+        \ %}\n{% endif %}  {{ entity }}\n"
   mode: parallel
   max: 25
 - id: '1635738239928'
@@ -1784,11 +1791,11 @@
   action:
   - service: input_text.set_value
     target:
-      entity_id: "{% set lights = [\"light.office_light\", \"light.family_room_light\"\
-        ] %}\n{% if trigger.entity_id in lights %}\n  {% set entity = \"input_text.\"\
-        \ + trigger.to_state.entity_id[6:] + \"_why_off\" %}\n{% else %}\n  {% set\
-        \ entity = \"input_text.\" + trigger.to_state.entity_id[7:] + \"_why_off\"\
-        \ %}\n{% endif %} \n{{ entity }}\n"
+      entity_id: "{% set entity = \"input_text.null_text\" %}\n{% set lights = [\"\
+        light.office_light\", \"light.family_room_light\"] %}\n{% if trigger.entity_id\
+        \ in lights %}\n  {% set entity = \"input_text.\" + trigger.to_state.entity_id[6:]\
+        \ + \"_why_off\" %}\n{% else %}\n  {% set entity = \"input_text.\" + trigger.to_state.entity_id[7:]\
+        \ + \"_why_off\" %}\n{% endif %} \n{{ entity }}\n"
     data:
       value: Turned off manually
   - service: timer.cancel
@@ -1799,7 +1806,7 @@
         _off\" }}\n{% endif %}\n"
   - service: input_number.set_value
     target:
-      entity_id: "{% set entity = \"input_number.null_input\" %} {% if trigger.entity_id\
+      entity_id: "{% set entity = \"input_number.null_number\" %} {% if trigger.entity_id\
         \ == \"light.office_light\" or trigger.entity_id == \"switch.office_lamp\"\
         \ %}\n    {% set entity = \"input_number.office_motion_count\" %}\n{% endif\
         \ %} {{ entity }}\n"
@@ -1817,7 +1824,8 @@
   condition: []
   action:
   - service: timer.start
-    data: {}
+    data:
+      duration: 00:15:00
     target:
       entity_id: timer.garage_lights_off
   - service: input_text.set_value
@@ -2089,36 +2097,8 @@
         \ %}\n{% endif %} {{ entities }}\n"
     data:
       value: 'Bathroom Lights: Shorten timer when get in bed or leave bedroom'
-  mode: single
-- id: '1636834793235'
-  alias: 'MQTT: Reset problem detection timer if receive signal'
-  description: ''
-  trigger:
-  - platform: mqtt
-    topic: home-assistant/sensors/2966
-  condition: []
-  action:
-  - service: timer.start
-    data:
-      duration: 00:15:00
-    target:
-      entity_id: timer.rtl_433_problem
-  mode: single
-- id: '1636835208605'
-  alias: 'Timer: Notify if MQTT problem timer expires'
-  description: ''
-  trigger:
-  - platform: event
-    event_type: timer.finished
-    event_data:
-      entity_id: timer.rtl_433_problem
-  condition: []
-  action:
-  - service: notify.notify
-    data:
-      message: 'Warning:  There may  be a problem with the home sensors.  Is the RTL
-        service running? Or is there a problem with the shower sensor?'
-  mode: single
+  mode: queued
+  max: 10
 - id: '1636838125230'
   alias: 'Guestroom: Pause active timers if guestroom in use'
   description: ''
@@ -2154,4 +2134,405 @@
         \ \"home\" %}\n  {% set value = value + 1 %}\n{% endif %} {% if states(\"\
         device_tracker.life365_julie_kotler\") == \"home\" %}\n  {% set value = value\
         \ + 1 %}\n{% endif %} {{ value }}\n"
+  mode: single
+- id: '1637764886302'
+  alias: 'Dining Room:  Setup lights for dinner in dining room'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.dining_room_in_use
+    to: 'on'
+    from: 'off'
+  condition: []
+  action:
+  - service: switch.turn_on
+    target:
+      entity_id:
+      - switch.entry_way_light
+      - switch.outside_powder_lights
+      - switch.outside_pantry_light
+      - switch.front_stairs_lights
+  - service: timer.pause
+    target:
+      entity_id:
+      - timer.entry_way_light_off
+      - timer.outside_powder_lights_off
+      - timer.outside_pantry_light_off
+      - timer.front_stairs_lights_off
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.entry_way_light_why_on
+      - input_text.outside_powder_lights_why_on
+      - input_text.outside_pantry_light_why_on
+      - input_text.front_stairs_lights_why_on
+    data:
+      value: 'Dining Room:  Turned lights on for dining room event'
+  mode: single
+- id: '1637765856365'
+  alias: 'Dining Room:  Turns lights off after event'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.dining_room_in_use
+    to: 'off'
+    from: 'on'
+  condition: []
+  action:
+  - service: switch.turn_off
+    target:
+      entity_id:
+      - switch.entry_way_light
+      - switch.outside_powder_lights
+      - switch.outside_pantry_light
+      - switch.front_stairs_lights
+  - service: timer.cancel
+    target:
+      entity_id:
+      - timer.entry_way_light_off
+      - timer.outside_powder_lights_off
+      - timer.outside_pantry_light_off
+      - timer.front_stairs_lights_off
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.entry_way_light_why_off
+      - input_text.outside_powder_lights_why_off
+      - input_text.outside_pantry_light_why_off
+      - input_text.front_stairs_lights_why_off
+    data:
+      value: 'Dining Room:  Turned lights off after dining room event'
+  mode: single
+- id: '1637766954463'
+  alias: 'Dining Room: Pause timers that restart if dining room in use'
+  description: ''
+  trigger:
+  - platform: event
+    event_type: timer.started
+    event_data:
+      entity_id: timer.entry_way_light_off
+  - platform: event
+    event_type: timer.started
+    event_data:
+      entity_id: timer.outside_powder_lights_off
+  - platform: event
+    event_type: timer.started
+    event_data:
+      entity_id: timer.outside_pantry_light_off
+  - platform: event
+    event_type: timer.started
+    event_data:
+      entity_id: timer.front_stairs_lights_off
+  condition:
+  - condition: state
+    entity_id: input_boolean.dining_room_in_use
+    state: 'on'
+  action:
+  - service: timer.pause
+    target:
+      entity_id:
+      - timer.entry_way_light_off
+      - timer.outside_powder_lights_off
+      - timer.outside_pantry_light_off
+      - timer.front_stairs_lights_off
+  mode: single
+- id: '1637978212246'
+  alias: 'Office (Aqara): Turn on lights with motion'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.lumi_lumi_sensor_motion_aq2_occupancy
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - type: turn_on
+    device_id: 52a568acd1f3b04f9214c056c506d39b
+    entity_id: switch.office_lamp
+    domain: switch
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.office_lamp_why_on
+    data:
+      value: 'Office: Turn on lights with Aqara motion'
+  - type: turn_on
+    device_id: 21d2904ab5e4e63611f6304cbdbcf15b
+    entity_id: light.office_light
+    domain: light
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.office_light_why_on
+    data:
+      value: 'Office: Turn on lights with Aqara motion'
+  mode: single
+- id: '1637978284330'
+  alias: 'Office (Aqara): Turn off lights with no motion'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.lumi_lumi_sensor_motion_aq2_occupancy
+    from: 'on'
+    to: 'off'
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 52a568acd1f3b04f9214c056c506d39b
+    entity_id: switch.office_lamp
+    domain: switch
+  - service: input_text.set_value
+    data:
+      value: 'Office: Turn off lights when Aqara motion clears'
+    target:
+      entity_id: input_text.office_light_why_off
+  - type: turn_off
+    device_id: 21d2904ab5e4e63611f6304cbdbcf15b
+    entity_id: light.office_light
+    domain: light
+  - service: input_text.set_value
+    data:
+      value: 'Office: Turn off lights when Aqara motion clears'
+    target:
+      entity_id: input_text.office_lamp_why_off
+  mode: single
+- id: '1637978707230'
+  alias: 'Shower (Aqara):  Turn on light with increase in humidity/temperature'
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.master_bathroom_humidity_stats_aqara
+    attribute: change
+    above: '1'
+  - platform: numeric_state
+    entity_id: sensor.master_bathroom_temperature_stats_aqara
+    above: '1'
+  condition:
+  - condition: or
+    conditions:
+    - condition: device
+      type: is_on
+      device_id: 8c22ac95adf287b795831ca2d91a0ffa
+      entity_id: switch.bathroom_vanity_lights
+      domain: switch
+    - condition: device
+      type: is_on
+      device_id: 8c22ac95adf287b795831ca2d91a0ffa
+      entity_id: switch.bathroom_bath_light
+      domain: switch
+  action:
+  - service: switch.turn_on
+    target:
+      entity_id:
+      - switch.shower_light
+      - switch.outside_shower_light
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.shower_light_why_on
+      - input_text.outside_shower_light_why_on
+    data:
+      value: 'Shower:  Turn on light with humidity or temperature change (Aqara)'
+  - service: timer.start
+    data:
+      duration: 00:20:00
+    target:
+      entity_id:
+      - timer.outside_shower_light_off
+      - timer.shower_light_off
+  - service: input_text.set_value
+    target:
+      entity_id:
+      - input_text.shower_light_why_off
+      - input_text.outside_shower_light_why_off
+    data:
+      value: 'Shower: 20 min timer expired (Aqara)'
+  mode: queued
+  max: 10
+- id: '1638059972413'
+  alias: 'Bedroom:  Toggle individual lamp on single button press'
+  description: ''
+  trigger:
+  - device_id: 478fe285a6ad8d83694828db93087130
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: remote_button_short_press
+    id: Matt
+  - device_id: 8a9adfdefb9e9937dd8007f41553f90a
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: remote_button_short_press
+    id: Julie
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: Matt
+      sequence:
+      - type: toggle
+        device_id: 76c8408f221cf14367785b05facdd4a2
+        entity_id: light.matt_bedside_lamp
+        domain: light
+    - conditions:
+      - condition: trigger
+        id: Julie
+      sequence:
+      - type: toggle
+        device_id: 86c0ee3d478271d8d61b30f77fd26c3e
+        entity_id: light.julie_bedside_lamp
+        domain: light
+    default: []
+  mode: single
+- id: '1638064239246'
+  alias: 'Bedroom:  Toggle both lamps on double button press'
+  description: ''
+  trigger:
+  - device_id: 478fe285a6ad8d83694828db93087130
+    domain: zha
+    platform: device
+    type: remote_button_double_press
+    subtype: remote_button_double_press
+    id: Matt
+  - device_id: 8a9adfdefb9e9937dd8007f41553f90a
+    domain: zha
+    platform: device
+    type: remote_button_double_press
+    subtype: remote_button_double_press
+    id: Julie
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: device
+        type: is_off
+        device_id: 76c8408f221cf14367785b05facdd4a2
+        entity_id: light.matt_bedside_lamp
+        domain: light
+      - condition: device
+        type: is_off
+        device_id: 86c0ee3d478271d8d61b30f77fd26c3e
+        entity_id: light.julie_bedside_lamp
+        domain: light
+      sequence:
+      - type: turn_on
+        device_id: 76c8408f221cf14367785b05facdd4a2
+        entity_id: light.matt_bedside_lamp
+        domain: light
+      - type: turn_on
+        device_id: 86c0ee3d478271d8d61b30f77fd26c3e
+        entity_id: light.julie_bedside_lamp
+        domain: light
+    - conditions:
+      - condition: device
+        type: is_on
+        device_id: 76c8408f221cf14367785b05facdd4a2
+        entity_id: light.matt_bedside_lamp
+        domain: light
+      - condition: device
+        type: is_on
+        device_id: 86c0ee3d478271d8d61b30f77fd26c3e
+        entity_id: light.julie_bedside_lamp
+        domain: light
+      sequence:
+      - type: turn_off
+        device_id: 76c8408f221cf14367785b05facdd4a2
+        entity_id: light.matt_bedside_lamp
+        domain: light
+      - type: turn_off
+        device_id: 86c0ee3d478271d8d61b30f77fd26c3e
+        entity_id: light.julie_bedside_lamp
+        domain: light
+    - conditions:
+      - condition: trigger
+        id: Matt
+      sequence:
+      - type: toggle
+        device_id: 86c0ee3d478271d8d61b30f77fd26c3e
+        entity_id: light.julie_bedside_lamp
+        domain: light
+    - conditions:
+      - condition: trigger
+        id: Julie
+      sequence:
+      - type: toggle
+        device_id: 76c8408f221cf14367785b05facdd4a2
+        entity_id: light.matt_bedside_lamp
+        domain: light
+    default: []
+  mode: single
+- id: '1638065083446'
+  alias: 'Bedroom:  Turn off all lights (except kids and guestroom if occupied) on
+    long press '
+  description: ''
+  trigger:
+  - device_id: 478fe285a6ad8d83694828db93087130
+    domain: zha
+    platform: device
+    type: remote_button_long_release
+    subtype: remote_button_long_release
+  - device_id: 8a9adfdefb9e9937dd8007f41553f90a
+    domain: zha
+    platform: device
+    type: remote_button_long_release
+    subtype: remote_button_long_release
+  condition: []
+  action:
+  - service: script.turn_off_all_lights
+  - service: script.turn_off_all_upstairs_lights_except_kids
+  mode: single
+- id: '1638070397791'
+  alias: 'Kitchen Table: Turn lights on with vibration and start 30 min timer'
+  description: ''
+  trigger:
+  - type: vibration
+    platform: device
+    device_id: 58e1d8275ccd044dabd31df83ecfb8d1
+    entity_id: binary_sensor.kitchen_table_vibration
+    domain: binary_sensor
+  condition: []
+  action:
+  - type: turn_on
+    device_id: f17ecafc667c65cc84d742080faf7d3a
+    entity_id: switch.kitchen_nook_lights
+    domain: switch
+  - service: timer.start
+    data:
+      duration: 00:30:00
+    target:
+      entity_id: timer.kitchen_nook_lights_off
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.kitchen_nook_lights_why_off
+    data:
+      value: 'Kitchen Table:  Turn off after 30 min vibration timer'
+  - service: input_text.set_value
+    target:
+      entity_id: input_text.kitchen_nook_lights_why_on
+    data:
+      value: 'Kitchen Table: Turn lights on with vibration'
+  mode: single
+- id: '1638508599908'
+  alias: 'Water Heater: Notify of water presence'
+  description: ''
+  trigger:
+  - type: moist
+    platform: device
+    device_id: 8c948c3a63b78afe67a307b92d8f85d2
+    entity_id: binary_sensor.water_leak_sensor
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: notify.mobile_app_matts_iphone
+    data:
+      message: 'WARNING: Water Heater Leak Detected!'
+      data:
+        push:
+          interruption-level: critical
+  - service: notify.alexa_media_everywhere
+    data:
+      message: 'WARNING:  A water leak has been detected.  Check the water heater.'
+      data:
+        type: announce
+        method: speak
   mode: single

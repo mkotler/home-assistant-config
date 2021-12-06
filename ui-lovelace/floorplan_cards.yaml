@@ -136,30 +136,57 @@
             left: 88%
             '--mdc-icon-size': 33px
         - type: state-icon
-          icon: mdi:bed
-          entity: input_number.master_in_bed
+          icon: mdi:lamp
+          entity: light.matt_bedside_lamp
           style:
-            top: 29.5%
-            left: 40%
-            '--mdc-icon-size': 15px
-        - type: state-label
-          entity: input_number.master_in_bed
-          style:
-            top: 29.5%
-            left: 49%
+            top: 16.5%
+            left: 37.5%
             '--mdc-icon-size': 15px
         - type: state-icon
-          icon_template: >
-            {% set icon = "mdi:bed" %}
-            {% if ( states("input_number.master_in_bed")|int >=2) %}
-              {% set icon = "mdi:bunk-bed" %}
-            {% endif %}
-            {{ icon }}
-          entity: input_number.master_in_bed
-          style: 
-            top: 23%
-            left: 38%
+          icon: mdi:lamp
+          entity: light.julie_bedside_lamp
+          style:
+            top: 29.5%
+            left: 37.5%
             '--mdc-icon-size': 15px
+        - type: conditional
+          conditions:
+            - entity: input_number.master_in_bed
+              state: "0.0"
+          elements:
+            - type: state-icon
+              icon: mdi:bed
+              entity: input_number.master_in_bed
+              style:
+                top: 23%
+                left: 37.5%
+                '--mdc-icon-size': 15px
+        - type: conditional
+          conditions:
+            - entity: input_number.master_in_bed
+              state: "1.0"
+          elements:
+            - type: state-icon
+              icon: mdi:bed
+              entity: input_number.master_in_bed
+              style:
+                top: 23%
+                left: 37.5%
+                "--paper-item-icon-color": "#FDD835"
+                '--mdc-icon-size': 15px
+        - type: conditional
+          conditions:
+            - entity: input_number.master_in_bed
+              state: "2.0"
+          elements:
+            - type: state-icon
+              icon: mdi:bunk-bed
+              entity: input_number.master_in_bed
+              style:
+                top: 23%
+                left: 37.5%
+                "--paper-item-icon-color": "#FDD835"
+                '--mdc-icon-size': 15px
       image: /local/floorplan/upstairs.png
     - type: picture-elements
       elements:
