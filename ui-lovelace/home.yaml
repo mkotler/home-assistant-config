@@ -133,12 +133,20 @@ cards:
           action: toggle
     title: Garage
   - type: glance
-    columns: 3
+    columns: 4
     entities:
       - entity: switch.master_lights
         name: Master Bedroom
         tap_action:
           action: toggle
+      - entity: light.matt_bedside_lamp
+        name: Matt Lamp
+        tap_action:
+            action: toggle
+      - entity: light.julie_bedside_lamp
+        name: Julie Lamp
+        tap_action:
+            action: toggle
       - entity: switch.master_fireplace
         name: Fireplace
         tap_action:

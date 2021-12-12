@@ -68,11 +68,13 @@ shower_fan_off:
   name: Shower Fan (Off)
 shower_light_off:
   name: Shower Light (Off)
+julie_bedside_lamp_off:
+  name: Julie Bedside Lamp (Off)
+matt_bedside_lamp_off:
+  name: Matt Bedside Lamp (Off)
 powder_room_fan_on:
   name: Powder Room Fan (On)
 master_toilet_fan_on:
   name: Master Toilet Fan (On)
-rtl_433_problem:
-  name: MQTT RTL Problem
 null_timer:
   name: Null Timer

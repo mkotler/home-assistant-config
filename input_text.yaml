@@ -34,6 +34,8 @@ powder_room_fan_why_on:
 powder_room_lights_why_on:
 shower_fan_why_on:
 shower_light_why_on:
+julie_bedside_lamp_why_on:
+matt_bedside_lamp_why_on:
 # variables to track why devices turn OFF
 office_light_why_off:
 family_room_light_why_off:
@@ -70,5 +72,7 @@ powder_room_fan_why_off:
 powder_room_lights_why_off:
 shower_fan_why_off:
 shower_light_why_off:
+julie_bedside_lamp_why_off:
+matt_bedside_lamp_why_off:
 # null 
 null_text:

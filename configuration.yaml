@@ -121,6 +121,7 @@ sensor:
     - type: load_1m
     - type: load_5m
     - type: load_15m
+    - type: processor_use
 
 # Add history to temp, humidity, and system monitor sensors
 - platform: statistics

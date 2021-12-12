@@ -42,3 +42,23 @@ cards:
       - sensor.load_1m
       - sensor.load_5m
       - sensor.load_15m
+  - type: custom:mini-graph-card
+    points_per_hour: 4
+    aggregate_func: max
+    entities:
+      - sensor.processor_use
+  - type: custom:mini-graph-card
+    points_per_hour: 4
+    aggregate_func: max
+    entities:
+      - sensor.speedtest_download
+  - type: custom:mini-graph-card
+    points_per_hour: 4
+    aggregate_func: max
+    entities:
+      - sensor.speedtest_ping
+  - type: custom:mini-graph-card
+    points_per_hour: 4
+    aggregate_func: max
+    entities:
+      - sensor.speedtest_upload
