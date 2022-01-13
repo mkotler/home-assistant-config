@@ -78,3 +78,5 @@ master_toilet_fan_on:
   name: Master Toilet Fan (On)
 null_timer:
   name: Null Timer
+rtl_timer:
+  name: RTL Status Timer

@@ -1,0 +1,27 @@
+#######################################################################################################################
+## Package - Movie Night Switch
+#######################################################################################################################
+
+# Create switch to turn on Movie Night with Alexa
+switch:
+  - platform: template
+    switches:
+      movie_night:
+        friendly_name: "Movie Night Switch"
+        icon_template: mdi:movie-open
+        value_template: "{{ is_state('input_boolean.movie_night', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          data:
+            entity_id: input_boolean.movie_night
+        turn_off:
+          service: input_boolean.turn_off
+          data:
+            entity_id: input_boolean.movie_night
+
+# Alexa integration with Philips Hue emulated bridge
+emulated_hue:
+  entities:
+    switch.movie_night:
+      name: "Movie Night Switch"
+      hidden: false

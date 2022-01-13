@@ -267,136 +267,22 @@ downstairs_tv_power_off:
   mode: single
 turn_off_all_lights:
   sequence:
-  - type: turn_off
-    device_id: 2883dfd4ee7d32b6069bc33aa9d8f6b5
-    entity_id: switch.dog_run_light
-    domain: switch
-  - type: turn_off
-    device_id: 19bb98b06940d043ed1bb0152485f0c7
-    entity_id: light.family_room_light
-    domain: light
-  - type: turn_off
-    device_id: f7d71653250c2a8a414fbd4fb25ca8ff
-    entity_id: switch.downstairs_fireplace
-    domain: switch
-  - type: turn_off
-    device_id: 52a568acd1f3b04f9214c056c506d39b
-    entity_id: switch.office_lamp
-    domain: switch
-  - type: turn_off
-    device_id: 21d2904ab5e4e63611f6304cbdbcf15b
-    entity_id: light.office_light
-    domain: light
-  - type: turn_off
-    device_id: 01234a8756742395a61c02fe8328d31c
-    entity_id: switch.back_stairs_lights
-    domain: switch
-  - type: turn_off
-    device_id: 4e01fd4c9483873139846b8172548fb9
-    entity_id: switch.front_stairs_lights
-    domain: switch
-  - type: turn_off
-    device_id: 5492be1f2756861ce86ce4fdb69479ef
-    entity_id: switch.garage_lights
-    domain: switch
-  - type: turn_off
-    device_id: cf3821306021aef41fb6387b6b0a76e1
-    entity_id: switch.outside_pantry_light
-    domain: switch
-  - type: turn_off
-    device_id: b023bd3813f402bfeeaca70e7a3faf40
-    entity_id: switch.kitchen_lights
-    domain: switch
-  - type: turn_off
-    device_id: b023bd3813f402bfeeaca70e7a3faf40
-    entity_id: switch.kitchen_island_lights
-    domain: switch
-  - type: turn_off
-    device_id: f17ecafc667c65cc84d742080faf7d3a
-    entity_id: switch.kitchen_nook_lights
-    domain: switch
-  - type: turn_off
-    device_id: f17ecafc667c65cc84d742080faf7d3a
-    entity_id: switch.patio_lights
-    domain: switch
-  - type: turn_off
-    device_id: 473ea148622c80694fb8d21c55c157c9
-    entity_id: switch.powder_room_fan
-    domain: switch
-  - type: turn_off
-    device_id: 473ea148622c80694fb8d21c55c157c9
-    entity_id: switch.powder_room_lights
-    domain: switch
-  - type: turn_off
-    device_id: 5d4e4fef57e28bcb2e4dc43f9fac3fd8
-    entity_id: switch.entry_way_light
-    domain: switch
-  - type: turn_off
-    device_id: e2e7303676b14841303b54a684eec67b
-    entity_id: switch.laundry_room_lights
-    domain: switch
-  - type: turn_off
-    device_id: 6bc7532e181ba4dbd99a3e6210aaceb2
-    entity_id: switch.downstairs_playroom_lights
-    domain: switch
-  - type: turn_off
-    device_id: 544bb27d0b76922e27d1056796669a1d
-    entity_id: switch.outside_powder_lights
-    domain: switch
-  - type: turn_off
-    device_id: 5d4e4fef57e28bcb2e4dc43f9fac3fd8
-    entity_id: switch.front_porch_lights
-    domain: switch
+  - service: homeassistant.turn_off
+    target:
+      entity_id: group.downstairs
+  - service: timer.cancel
+    target:
+      entity_id: "{% set var = namespace(timer=\"\") %} {% for entity in state_attr('group.downstairs','entity_id')\
+        \ %}\n  {% set parts = entity.split('.') %}\n  {% set var.timer = var.timer\
+        \ + \"timer.\" + parts[1] + \"_off\" %}\n  {% if not loop.last %}\n    {%\
+        \ set var.timer = var.timer + \", \" %}\n  {% endif %}\n{% endfor %} {{ var.timer\
+        \ }}\n"
   mode: single
   alias: Turn off all downstairs lights
   icon: mdi:lightbulb
 turn_off_all_upstairs_lights_except_kids:
   alias: Turn off all upstairs lights (except kids)
   sequence:
-  - type: turn_off
-    device_id: 8c22ac95adf287b795831ca2d91a0ffa
-    entity_id: switch.bathroom_bath_light
-    domain: switch
-  - type: turn_off
-    device_id: 8c22ac95adf287b795831ca2d91a0ffa
-    entity_id: switch.bathroom_vanity_lights
-    domain: switch
-  - type: turn_off
-    device_id: 6aa62bb4294ac780d9e6ef46f8c339cb
-    entity_id: switch.shower_light
-    domain: switch
-  - type: turn_off
-    device_id: 894bb86f8d542d016d773a9c3f30358d
-    entity_id: switch.master_fireplace
-    domain: switch
-  - type: turn_off
-    device_id: 01234a8756742395a61c02fe8328d31c
-    entity_id: switch.kids_hall_lights
-    domain: switch
-  - type: turn_off
-    device_id: 4e01fd4c9483873139846b8172548fb9
-    entity_id: switch.master_hall_lights
-    domain: switch
-  - type: turn_off
-    device_id: 8763cd4d5cc472d279fefd6910d3d62f
-    entity_id: switch.outside_shower_light
-    domain: switch
-  - type: turn_off
-    device_id: 016281f1ed29da39c80a51d863425fa7
-    entity_id: switch.master_lights
-    domain: switch
-  - type: turn_off
-    device_id: b29548f0b2914a3ab0e8282219832abe
-    entity_id: switch.master_toilet_light
-    domain: switch
-  - type: turn_off
-    device_id: b29548f0b2914a3ab0e8282219832abe
-    entity_id: switch.master_toilet_fan
-    domain: switch
-  - type: turn_off
-    device_id: 4e01fd4c9483873139846b8172548fb9
-    entity_id: switch.front_stairs_lights
-    domain: switch
   - choose:
     - conditions:
       - condition: state
@@ -407,20 +293,35 @@ turn_off_all_upstairs_lights_except_kids:
         device_id: c32cc10983532262a768e043288f286f
         entity_id: switch.guest_bedroom_lights
         domain: switch
+      - service: timer.cancel
+        target:
+          entity_id: timer.guest_bedroom_lights_off
     default: []
+  - service: homeassistant.turn_off
+    target:
+      entity_id: group.upstairs_master_and_halls
+  - service: timer.cancel
+    target:
+      entity_id: "{% set var = namespace(timer=\"\") %} {% for entity in state_attr('group.upstairs_master_and_halls','entity_id')\
+        \ %}\n  {% set parts = entity.split('.') %}\n  {% set var.timer = var.timer\
+        \ + \"timer.\" + parts[1] + \"_off\" %}\n  {% if not loop.last %}\n    {%\
+        \ set var.timer = var.timer + \", \" %}\n  {% endif %}\n{% endfor %} {{ var.timer\
+        \ }}\n"
   mode: single
   icon: mdi:lightbulb
 turn_off_kids_lights:
   alias: Turn off all kids lights
   sequence:
-  - type: turn_off
-    device_id: d8c1e1f1292a82d5ff174bbec10f80a5
-    entity_id: switch.annas_room_closet_light
-    domain: switch
-  - type: turn_off
-    device_id: d8c1e1f1292a82d5ff174bbec10f80a5
-    entity_id: switch.annas_room_overhead_light
-    domain: switch
+  - service: homeassistant.turn_off
+    target:
+      entity_id: group.upstairs_kids
+  - service: timer.cancel
+    target:
+      entity_id: "{% set var = namespace(timer=\"\") %} {% for entity in state_attr('group.upstairs_kids','entity_id')\
+        \ %}\n  {% set parts = entity.split('.') %}\n  {% set var.timer = var.timer\
+        \ + \"timer.\" + parts[1] + \"_off\" %}\n  {% if not loop.last %}\n    {%\
+        \ set var.timer = var.timer + \", \" %}\n  {% endif %}\n{% endfor %} {{ var.timer\
+        \ }}\n"
   mode: single
   icon: mdi:lightbulb
 find_matts_phone:
@@ -484,6 +385,16 @@ reset_system_on_restart:
   - choose:
     - conditions:
       - condition: state
+        entity_id: binary_sensor.office_motion_occupancy
+        state: 'on'
+      sequence:
+      - service: timer.pause
+        target:
+          entity_id: timer.office_light_off
+    default: []
+  - choose:
+    - conditions:
+      - condition: state
         entity_id: cover.garage_door
         state: open
         for: 00:00:00
@@ -492,4 +403,9 @@ reset_system_on_restart:
         data:
           message: 'Warning: The garage door is open'
     default: []
+  - service: timer.start
+    data:
+      duration: 00:01:30
+    target:
+      entity_id: timer.rtl_timer
   mode: single

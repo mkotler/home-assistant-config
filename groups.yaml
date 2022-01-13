@@ -1,3 +1,4 @@
+# Enitities used to set timers when manual switches
 entities_15min:
   name: 15 Minute Entities
   entities:
@@ -50,5 +51,59 @@ entities_notimer:
   entities:
     - switch.annas_room_closet_light
     - switch.annas_room_overhead_light
-    - switch.office_lamp 
+    - switch.office_lamp
     - switch.family_room_lamp
+
+# Groups to turn on/off lights with scripts
+downstairs:
+  name: Downstairs
+  entities:
+    - switch.back_stairs_lights
+    - switch.front_stairs_lights
+    - switch.powder_room_lights
+    - switch.garage_lights
+    - switch.dog_run_light
+    - switch.powder_room_lights
+    - switch.powder_room_fan
+    - switch.downstairs_playroom_lights
+    - switch.entry_way_light
+    - switch.front_porch_lights
+    - switch.outside_pantry_light
+    - switch.outside_powder_lights
+    - switch.patio_lights
+    - switch.kitchen_nook_lights
+    - switch.laundry_room_lights
+    - light.office_light
+    - switch.kitchen_island_lights
+    - switch.kitchen_lights
+    - switch.kitchen_nook_lights
+    - light.family_room_light
+    - switch.downstairs_fireplace
+    - switch.office_lamp
+    - switch.family_room_lamp
+upstairs_master_and_halls:
+  name: Master and Halls
+  entities:
+    - switch.back_stairs_lights
+    - switch.front_stairs_lights
+    - switch.kids_hall_lights
+    - switch.master_hall_lights
+    - switch.master_lights
+    - switch.master_toilet_fan
+    - switch.master_toilet_light
+    - switch.outside_shower_light
+    - switch.bathroom_bath_light
+    - switch.bathroom_vanity_lights
+    - switch.shower_fan
+    - switch.shower_light
+    - switch.master_fireplace
+upstairs_kids:
+  name: Kids Rooms
+  entities:
+    - switch.annas_room_closet_light
+    - switch.annas_room_overhead_light
+upstairs_master_lamps:
+  name: Master Lamps
+  entities:
+    - light.julie_bedside_lamp
+    - light.matt_bedside_lamp

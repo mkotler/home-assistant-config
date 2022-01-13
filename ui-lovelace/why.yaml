@@ -5,39 +5,62 @@ cards:
   - type: custom:auto-entities
     card:
       type: entities
-      title: Lights On 
+      title: Unavailable
+    show_empty: false
+    filter:
+      include:
+        - entity_id: "*"
+          state: "unavailable"
+        - entity_id: "*"
+          state: "unknown"
+      exclude:
+        - entity_id: "button.*_ota_update"
+        - entity_id: "button.*_reboot"
+        - entity_id: "button.tesla*"
+        - entity_id: "sensor.*alexa*"
+        - entity_id: "switch.*alexa*"
+        - entity_id: "sensor.toyota*_window"
+        - entity_id: "sensor.toyota_hood"
+        - entity_id: "sensor.toyota_moonroof"
+        - entity_id: "media_player.toyota_alexa"
+    sort:
+      method: name
+  - type: custom:auto-entities
+    card:
+      type: entities
+      title: Lights On
     filter:
       include:
         - entity_id: switch.*_light*
-          state: 'on'
+          state: "on"
           options:
             type: custom:template-entity-row
             secondary: '{{ states("input_text." + config.entity[7:] + "_why_on") }}'
             toggle: true
         - entity_id: switch.*_lamp*
-          state: 'on'
+          state: "on"
           options:
             type: custom:template-entity-row
             secondary: '{{ states("input_text." + config.entity[7:] + "_why_on") }}'
             toggle: true
         - entity_id: switch.*_fan
-          state: 'on'
+          state: "on"
           options:
             type: custom:template-entity-row
             secondary: '{{ states("input_text." + config.entity[7:] + "_why_on") }}'
-            toggle: true       
+            toggle: true
         - entity_id: light.*
-          state: 'on'
+          state: "on"
           options:
             type: custom:template-entity-row
             secondary: '{{ states("input_text." + config.entity[6:] + "_why_on") }}'
             toggle: true
         - entity_id: timer.*_off
-          state: 'active'
+          state: "active"
           options:
             type: custom:timer-bar-card
         - entity_id: timer.*_off
-          state: 'paused'
+          state: "paused"
           options:
             type: custom:timer-bar-card
       exclude: []
@@ -46,39 +69,39 @@ cards:
   - type: custom:auto-entities
     card:
       type: entities
-      title: Lights Off 
+      title: Lights Off
     filter:
       include:
         - entity_id: switch.*_light*
-          state: 'off'
+          state: "off"
           options:
             type: custom:template-entity-row
             secondary: '{{ states("input_text." + config.entity[7:] + "_why_off") }}'
             toggle: true
         - entity_id: switch.*_lamp*
-          state: 'off'
+          state: "off"
           options:
             type: custom:template-entity-row
             secondary: '{{ states("input_text." + config.entity[7:] + "_why_off") }}'
             toggle: true
         - entity_id: switch.*_fan
-          state: 'off'
+          state: "off"
           options:
             type: custom:template-entity-row
             secondary: '{{ states("input_text." + config.entity[7:] + "_why_off") }}'
-            toggle: true  
+            toggle: true
         - entity_id: light.*
-          state: 'off'
+          state: "off"
           options:
             type: custom:template-entity-row
             secondary: '{{ states("input_text." + config.entity[6:] + "_why_off") }}'
             toggle: true
         - entity_id: timer.*_on
-          state: 'active'
+          state: "active"
           options:
             type: custom:timer-bar-card
         - entity_id: timer.*_on
-          state: 'paused'
+          state: "paused"
           options:
             type: custom:timer-bar-card
 
@@ -99,8 +122,8 @@ cards:
           options:
             type: custom:template-entity-row
             active: true
-            secondary: '{{ relative_time(state_attr(config.entity, ''last_triggered'')) }} ago'
-            state: '{{ state_attr(config.entity, ''current'') }} Running'
+            secondary: "{{ relative_time(state_attr(config.entity, 'last_triggered')) }} ago"
+            state: "{{ state_attr(config.entity, 'current') }} Running"
             hold_action: |
               {
                 "action": "navigate",
@@ -110,7 +133,7 @@ cards:
           last_triggered: < 30
           options:
             type: custom:template-entity-row
-            active: '{{ (state_attr(config.entity, ''current'') | int(0)) > 0 }}'
+            active: "{{ (state_attr(config.entity, 'current') | int(0)) > 0 }}"
             secondary: |
               {%- if state_attr(config.entity, 'last_triggered') -%}
                 {{ relative_time(state_attr(config.entity, 'last_triggered')) }} ago
@@ -130,8 +153,8 @@ cards:
           options:
             type: custom:template-entity-row
             active: true
-            secondary: '{{ relative_time(state_attr(config.entity, ''last_triggered'')) }} ago'
-            state: '{{ state_attr(config.entity, ''current'') }} Running'
+            secondary: "{{ relative_time(state_attr(config.entity, 'last_triggered')) }} ago"
+            state: "{{ state_attr(config.entity, 'current') }} Running"
             hold_action: |
               {
                 "action": "navigate",
@@ -141,7 +164,7 @@ cards:
           last_triggered: < 30
           options:
             type: custom:template-entity-row
-            active: '{{ (state_attr(config.entity, ''current'') | int(0)) > 0 }}'
+            active: "{{ (state_attr(config.entity, 'current') | int(0)) > 0 }}"
             secondary: |
               {%- if state_attr(config.entity, 'last_triggered') -%}
                 {{ relative_time(state_attr(config.entity, 'last_triggered')) }} ago

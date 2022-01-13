@@ -1,0 +1,131 @@
+#######################################################################################################################
+## Package - Unavailable Entities Sensor
+## Count and list entities with a state of unavailable, unknown, or none (null)
+#######################################################################################################################
+
+# REQUIRED this is the template sensor
+template:
+  - trigger:
+      - platform: time_pattern
+        minutes: "/1"
+    sensor:
+      - unique_id: unavailable_entities
+        name: "Unavailable Entities"
+        unit_of_measurement: entities
+        state: >
+          {% if state_attr('sensor.unavailable_entities','entities') != none %}
+            {{ state_attr('sensor.unavailable_entities','entities')|count }}
+          {% else %}
+            0
+          {% endif %}
+        attributes:
+          entities: >
+            {{ states
+              |rejectattr('domain','eq','group')
+              |rejectattr('entity_id','in',state_attr('group.ignored_entities','entity_id'))
+              |selectattr('state','in',['unavailable','unknown','none'])|map(attribute='entity_id')|list }}
+# REQUIRED - Add any entities you do not with to monitor in this group.
+# IMPORTANT - This group MUST exist even if empty for sensor template to render.
+group:
+  ignored_entities:
+    entities:
+      - sensor.unavailable_entities # prevent template loop warnings?
+      - binary_sensor.updater # always unknown after restart
+      # button.*_ota_update
+      - button.anna_s_room_ota_update
+      - button.bathroom_ota_update
+      - button.downstairs_fireplace_ota_update
+      - button.kids_hallway_ota_update
+      - button.master_fireplace_ota_update
+      - button.master_hallway_ota_update
+      - button.outside_pantry_ota_update
+      - button.outside_powder_room_ota_update
+      - button.shelly1_8caab56e2c18_ota_update
+      - button.shelly1_8caab56e7b5b_ota_update
+      - button.shelly1_e8db84d36cc7_ota_update
+      - button.shelly1_e8db84d3c77b_ota_update
+      - button.shelly1_e8db84d46c27_ota_update
+      - button.shelly1l_e8db84aac8f7_ota_update
+      - button.shelly1l_e8db84aba4d9_ota_update
+      - button.shellyix3_e8db84d6e72f_ota_update
+      - button.shellyswitch25_483fda8d2271_ota_update
+      - button.shellyswitch25_8caab55d85cf_ota_update
+      - button.shellyswitch25_8caab55f9690_ota_update
+      - button.shellyswitch25_e8db84d2ee1f_ota_update
+      - button.shellyswitch25_e8db84d6f276_ota_update
+      - button.shellyswitch25_e8db84d6f3c8_ota_update
+      - button.shellyswitch25_e8db84d6f3dc_ota_update
+      - button.shower_ota_update
+      # button.*_reboot
+      - button.anna_s_room_reboot
+      - button.bathroom_reboot
+      - button.downstairs_fireplace_reboot
+      - button.kids_hallway_reboot
+      - button.master_fireplace_reboot
+      - button.master_hallway_reboot
+      - button.outside_pantry_reboot
+      - button.outside_powder_room_reboot
+      - button.shelly1_8caab56e2c18_reboot
+      - button.shelly1_8caab56e7b5b_reboot
+      - button.shelly1_e8db84d36cc7_reboot
+      - button.shelly1_e8db84d3c77b_reboot
+      - button.shelly1_e8db84d46c27_reboot
+      - button.shelly1l_e8db84aac8f7_reboot
+      - button.shelly1l_e8db84aba4d9_reboot
+      - button.shellyix3_e8db84d6e72f_reboot
+      - button.shellyswitch25_483fda8d2271_reboot
+      - button.shellyswitch25_8caab55d85cf_reboot
+      - button.shellyswitch25_8caab55f9690_reboot
+      - button.shellyswitch25_e8db84d2ee1f_reboot
+      - button.shellyswitch25_e8db84d6f276_reboot
+      - button.shellyswitch25_e8db84d6f3c8_reboot
+      - button.shellyswitch25_e8db84d6f3dc_reboot
+      - button.shower_reboot
+      # button.tesla* and sensor.toyota*
+      - button.tesla_flash_lights
+      - button.tesla_horn
+      - sensor.toyota_driver_side_rear_window
+      - sensor.toyota_driver_side_window
+      - sensor.toyota_passenger_side_rear_window
+      - sensor.toyota_passenger_side_window
+      - sensor.toyota_hood
+      - sensor.toyota_moonroof
+      # sensor.*alexa*
+      - sensor.anna_alexa_next_alarm
+      - sensor.anna_alexa_next_reminder
+      - sensor.anna_alexa_next_timer
+      - sensor.kitchen_alexa_next_alarm
+      - sensor.kitchen_alexa_next_reminder
+      - sensor.kitchen_alexa_next_timer
+      - sensor.master_bathroom_alexa_next_alarm
+      - sensor.master_bathroom_alexa_next_reminder
+      - sensor.master_bathroom_alexa_next_timer
+      - sensor.this_device_alexa_next_alarm
+      - sensor.this_device_alexa_next_reminder
+      - sensor.this_device_alexa_next_timer
+      - sensor.toyota_alexa_next_alarm
+      - sensor.toyota_alexa_next_timer
+      # switch.*alexa*
+      - switch.all_alexas_do_not_disturb_switch
+      - switch.all_alexas_repeat_switch
+      - switch.all_alexas_shuffle_switch
+      - switch.anna_alexa_do_not_disturb_switch
+      - switch.anna_alexa_repeat_switch
+      - switch.anna_alexa_shuffle_switch
+      - switch.kitchen_alexa_do_not_disturb_switch
+      - switch.kitchen_alexa_repeat_switch
+      - switch.kitchen_alexa_shuffle_switch
+      - switch.master_bathroom_alexa_do_not_disturb_switch
+      - switch.master_bathroom_alexa_repeat_switch
+      - switch.master_bathroom_alexa_shuffle_switch
+      - switch.this_device_alexa_do_not_disturb_switch
+      - switch.toyota_alexa_do_not_disturb_switch
+      - switch.toyota_alexa_repeat_switch
+      - switch.toyota_alexa_shuffle_switch
+      # Toyota media player
+      - media_player.toyota_alexa
+# OPTIONAL - filter template loop warnings from the Home Assistant log.
+# logger:
+#  filters:
+#    homeassistant.components.template.template_entity:
+#      - 'Template loop detected while processing event'

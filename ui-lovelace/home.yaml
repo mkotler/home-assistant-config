@@ -28,6 +28,11 @@ cards:
       - type: button
         tap_action:
           action: toggle
+        entity: input_boolean.movie_night
+        name: Movie Night
+      - type: button
+        tap_action:
+          action: toggle
         entity: input_boolean.guestroom_in_use
         name: Guestroom In Use
       - type: button
@@ -142,11 +147,11 @@ cards:
       - entity: light.matt_bedside_lamp
         name: Matt Lamp
         tap_action:
-            action: toggle
+          action: toggle
       - entity: light.julie_bedside_lamp
         name: Julie Lamp
         tap_action:
-            action: toggle
+          action: toggle
       - entity: switch.master_fireplace
         name: Fireplace
         tap_action:
@@ -252,7 +257,7 @@ cards:
   - type: weather-forecast
     entity: weather.downstairs_hall
     show_forecast: true
-    name: ' '
+    name: " "
   - type: custom:sun-card
   - type: thermostat
     entity: climate.downstairs_hall
@@ -264,13 +269,13 @@ cards:
         name: Climate
         tap_action:
           action: toggle
-      - entity: lock.matt_s_tesla_door_lock
+      - entity: lock.tesla_door_lock
         name: Doors
-      - entity: lock.matt_s_tesla_trunk_lock
+      - entity: lock.tesla_trunk_lock
         name: Trunk
-      - entity: lock.matt_s_tesla_frunk_lock
+      - entity: lock.tesla_frunk_lock
         name: Frunk
-      - entity: binary_sensor.matt_s_tesla_charger_sensor
+      - entity: binary_sensor.tesla_charger_sensor
         name: Charging
     title: Tesla
     state_color: true

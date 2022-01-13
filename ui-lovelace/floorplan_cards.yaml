@@ -263,6 +263,13 @@
             '--mdc-icon-size': 15px
         - type: state-icon
           icon: mdi:lightbulb
+          entity: switch.outside_pantry_light
+          style:
+            top: 42.5%
+            left: 31%
+            '--mdc-icon-size': 15px
+        - type: state-icon
+          icon: mdi:lightbulb
           entity: switch.front_stairs_lights
           style:
             top: 55%

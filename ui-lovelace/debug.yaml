@@ -4,15 +4,29 @@ badges: []
 cards:
   # Graph system monitor values
   - type: custom:mini-graph-card
-    points_per_hour: 2
+    points_per_hour: 4
+    hours_to_show: 24
     aggregate_func: max
     entities:
       - sensor.master_bathroom_temperature
   - type: custom:mini-graph-card
-    points_per_hour: 2
+    points_per_hour: 4
+    hours_to_show: 24
     aggregate_func: max
     entities:
       - sensor.master_bathroom_humidity
+  - type: custom:mini-graph-card
+    points_per_hour: 4
+    hours_to_show: 24
+    aggregate_func: max
+    entities:
+      - sensor.master_shower_temperature
+  - type: custom:mini-graph-card
+    points_per_hour: 4
+    hours_to_show: 24
+    aggregate_func: max
+    entities:
+      - sensor.master_shower_humidity
   - type: custom:mini-graph-card
     points_per_hour: 4
     hours_to_show: 24
@@ -62,3 +76,17 @@ cards:
     aggregate_func: max
     entities:
       - sensor.speedtest_upload
+  - type: custom:mini-graph-card
+    points_per_hour: 12
+    aggregate_func: max
+    entities:
+      - sensor.unavailable_entities
+  - type: custom:mini-graph-card
+    points_per_hour: 12
+    aggregate_func: min
+    entities:
+      - sensor.shelly1_e8db84d46c27_link_rate
+      - sensor.shelly1_e8db84d6bda5_link_rate
+      - sensor.shelly1_e8db84d70b7b_link_rate
+      - sensor.shelly1l_e8db84aac8f7_link_rate
+      - sensor.shellyswitch25_8caab55f9690_link_rate

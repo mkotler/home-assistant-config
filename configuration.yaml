@@ -4,31 +4,71 @@ default_config:
 homeassistant:
   packages:
     mqtt_sensors: !include mqtt_sensors.yaml
-  # Tesla integration
-  customize_glob:
-    'lock.tesla_*_door_lock':
-      friendly_name: Doors
-    'lock.tesla_*_charger_door_lock':
-      friendly_name: Charger Door
-    'lock.tesla_*_frunk_lock':
-      friendly_name: Frunk
-    'lock.tesla_*_trunk_lock':
-      friendly_name: Trunk
-    'binary_sensor.tesla_*_parking_brake_sensor':
-      friendly_name: Parking Brake
+    unavailable_entities: !include unavailable_entities.yaml
+    tesla: !include tesla.yaml
+    movie_night: !include movie_night.yaml
 
 # Debugging
 logger:
   default: warning
+  filters:
+    # Netgear: Warning given when auth cookie expires (every 30 min), re-login successful
+    pynetgear:
+      - "Unauthorized response, let's login and retry...$"
+    # Unable to prevent an empty string from being logged, so filtering it out
+    homeassistant.components.system_log.external:
+      - "Unavailable entities:$"
+
+system_log:
+  fire_event: true
+
+# Customized left navigation
+panel_custom:
+  - name: ha_server_con
+    sidebar_title: "Server Controls"
+    sidebar_icon: mdi:server
+    js_url: /api/hassio/app/entrypoint.js
+    url_path: "config/server_control"
+    embed_iframe: true
+    require_admin: true
+    config:
+      ingress: core_configurator
+  - name: ha_integ
+    sidebar_title: Integrations
+    sidebar_icon: mdi:devices
+    js_url: /api/hassio/app/entrypoint.js
+    url_path: "config/integrations"
+    embed_iframe: true
+    require_admin: true
+    config:
+      ingress: core_configurator
+  - name: ha_auto
+    sidebar_title: Automations
+    sidebar_icon: mdi:robot
+    js_url: /api/hassio/app/entrypoint.js
+    url_path: "config/automation"
+    embed_iframe: true
+    require_admin: true
+    config:
+      ingress: core_configurator
+  - name: ha_addon
+    sidebar_title: Add-ons
+    sidebar_icon: mdi:home-assistant
+    js_url: /api/hassio/app/entrypoint.js
+    url_path: "hassio/dashboard"
+    embed_iframe: true
+    require_admin: true
 
 # Setup input variables for all entitites
 input_text: !include input_text.yaml
 timer: !include timer.yaml
-input_boolean: 
+input_boolean:
   guestroom_in_use:
     name: "Guestroom In Use"
   dining_room_in_use:
     name: "Dining Room In Use"
+  movie_night:
+    name: "Movie Night"
   null_boolean:
     name: "Null Boolean"
 input_number:
@@ -78,58 +118,45 @@ lovelace:
 # Envisalink Alarm Panel
 envisalink: !include envisalink.yaml
 
-# Alexa integration with Philips Hue emulated bridge  
+# Alexa integration with Philips Hue emulated bridge
+# Used by several packages (e.g., tesla, movie_night)
 emulated_hue:
   listen_port: 80
   expose_by_default: false
-  entities:
-    switch.tesla_climate:
-      name: "Tesla climate switch"
-      hidden: false
-
-# Create switch to turn on Tesla climate with Alexa
-switch:
-  - platform: template
-    switches:
-      tesla_climate:
-        friendly_name: "Tesla climate switch"
-        icon_template: mdi:car-seat-heater
-        value_template: "{{ is_state('climate.matt_s_tesla_hvac_climate_system', 'heat_cool') }}"
-        turn_on:
-          service: climate.turn_on
-          data:
-            entity_id: climate.matt_s_tesla_hvac_climate_system
-        turn_off:
-          service: climate.turn_off
-          data:
-            entity_id: climate.matt_s_tesla_hvac_climate_system
 
 sensor:
-# Format sensor for lovelace
-- platform: template
-  sensors:
-    master_in_bed:
-      friendly_name: "Count in Bed (Int)"
-      value_template: "{{ states('input_number.master_in_bed')|int }}"
+  # Format sensor for lovelace
+  - platform: template
+    sensors:
+      master_in_bed:
+        friendly_name: "Count in Bed (Int)"
+        value_template: "{{ states('input_number.master_in_bed')|int }}"
 
-# Monitor system performance
-- platform: systemmonitor
-  resources:
-    - type: memory_use_percent
-    - type: disk_use_percent
-    - type: swap_use_percent
-    - type: load_1m
-    - type: load_5m
-    - type: load_15m
-    - type: processor_use
+  # Monitor system performance
+  - platform: systemmonitor
+    resources:
+      - type: memory_use_percent
+      - type: disk_use_percent
+      - type: swap_use_percent
+      - type: load_1m
+      - type: load_5m
+      - type: load_15m
+      - type: processor_use
 
-# Add history to temp, humidity, and system monitor sensors
-- platform: statistics
-  entity_id: sensor.aqara_weather_temperature
-  name: "Master Bathroom Temperature Stats (Aqara)"
-- platform: statistics
-  entity_id: sensor.aqara_weather_humidity
-  name: "Master Bathroom Humidity Stats (Aqara)"
+binary_sensor:
+  # Add trend to aqara temp and humidity sensors
+  - platform: trend
+    sensors:
+      master_bathroom_temp_rising_aqara:
+        entity_id: sensor.master_shower_temperature
+        sample_duration: 300
+        max_samples: 50
+        min_gradient: 0.0008
+      master_bathroom_humidity_rising_aqara:
+        entity_id: sensor.master_shower_humidity
+        sample_duration: 300
+        max_samples: 50
+        min_gradient: 0.0008
 
 # Text to speech
 tts:
