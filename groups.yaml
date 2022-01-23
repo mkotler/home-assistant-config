@@ -34,9 +34,6 @@ entities_30min:
     - light.julie_bedside_lamp
     - light.matt_bedside_lamp
     - switch.shower_light
-entities_60min:
-  name: 60 Minute Entities
-  entities:
     - switch.kitchen_island_lights
     - switch.kitchen_lights
     - switch.kitchen_nook_lights

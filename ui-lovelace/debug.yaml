@@ -4,17 +4,37 @@ badges: []
 cards:
   # Graph system monitor values
   - type: custom:mini-graph-card
-    points_per_hour: 4
-    hours_to_show: 24
+    #points_per_hour: 4
+    #hours_to_show: 24
+    points_per_hour: 60
+    hours_to_show: 1
     aggregate_func: max
     entities:
-      - sensor.master_bathroom_temperature
+      - sensor.dryer_temperature
   - type: custom:mini-graph-card
-    points_per_hour: 4
-    hours_to_show: 24
+    #points_per_hour: 4
+    #hours_to_show: 24
+    points_per_hour: 60
+    hours_to_show: 1
     aggregate_func: max
     entities:
-      - sensor.master_bathroom_humidity
+      - sensor.dryer_humidity
+  - type: custom:mini-graph-card
+    #points_per_hour: 12
+    #hours_to_show: 24
+    points_per_hour: 60
+    hours_to_show: 1
+    aggregate_func: max
+    entities:
+      - sensor.dryer_temp_rising
+  - type: custom:mini-graph-card
+    #points_per_hour: 12
+    #hours_to_show: 24
+    points_per_hour: 60
+    hours_to_show: 1
+    aggregate_func: max
+    entities:
+      - sensor.dryer_temp_falling
   - type: custom:mini-graph-card
     points_per_hour: 4
     hours_to_show: 24

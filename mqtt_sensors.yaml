@@ -26,7 +26,7 @@ binary_sensor:
   - platform: mqtt
     qos: 1
     state_topic: "home-assistant/sensors/4814"
-    name: "Hallway Motion"
+    name: "Upstairs Back Stairs Motion"
     value_template: >
       {{ value_json.cmd }}
     payload_on: 204
@@ -36,7 +36,7 @@ binary_sensor:
   - platform: mqtt
     qos: 1
     state_topic: "home-assistant/sensors/20078"
-    name: "Back Stairs Motion"
+    name: "Downstairs Back Stairs Motion"
     value_template: >
       {{ value_json.cmd }}
     payload_on: 28
@@ -56,7 +56,7 @@ binary_sensor:
   - platform: mqtt
     qos: 1
     state_topic: "home-assistant/sensors/25771"
-    name: "Office Motion"
+    name: "Entry Hallway Motion"
     value_template: >
       {{ value_json.cmd }}
     payload_on: 92
@@ -154,14 +154,14 @@ sensor:
   - platform: mqtt
     state_topic: "home-assistant/sensors/2966"
     device_class: temperature
-    name: "Master Bathroom Temperature"
+    name: "Dryer Temperature"
     value_template: >
       {{ value_json.temperature_C | float }}
     unit_of_measurement: "°C"
   - platform: mqtt
     state_topic: "home-assistant/sensors/2966"
     device_class: humidity
-    name: "Master Bathroom Humidity"
+    name: "Dryer Humidity"
     value_template: >
       {{ value_json.humidity | float }}
     unit_of_measurement: "%"

@@ -36,6 +36,8 @@ kitchen_island_lights_off:
   name: Kitchen Island Lights (Off)
 kitchen_lights_off:
   name: Kitchen Lights (Off)
+kitchen_lights_warning:
+  name: Kitchen Lights Warning
 kitchen_nook_lights_off:
   name: Kitchen Nook Lights (Off)
 laundry_room_lights_off:

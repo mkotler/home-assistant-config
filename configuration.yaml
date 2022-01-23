@@ -72,11 +72,6 @@ input_boolean:
   null_boolean:
     name: "Null Boolean"
 input_number:
-  master_in_bed:
-    name: "Count in Master Bed"
-    initial: 0
-    min: 0
-    max: 2
   office_motion_count:
     name: "Office Motion Count"
     initial: 0
@@ -128,10 +123,34 @@ sensor:
   # Format sensor for lovelace
   - platform: template
     sensors:
-      master_in_bed:
-        friendly_name: "Count in Bed (Int)"
-        value_template: "{{ states('input_number.master_in_bed')|int }}"
-
+      count_in_bed:
+        friendly_name: "Count in Bed"
+        value_template: > 
+          {% set matt = 0 %}
+          {% set julie = 0 %}
+          {% if states('binary_sensor.matt_in_bed') == "on" %}
+            {% set matt = 1 %}
+          {% endif %}
+          {% if states('binary_sensor.julie_in_bed') == "on" %}
+            {% set julie = 1 %}
+          {% endif %}
+          {{ matt + julie }} 
+      dryer_temp_rising:
+        friendly_name: "Dryer Temperature Rising"
+        value_template: >
+          {% set value = 0 %}
+          {% if states('binary_sensor.dryer_temp_rising') == "on" %}
+            {% set value = 1 %}
+          {% endif %}
+          {{ value }}
+      dryer_temp_falling:
+        friendly_name: "Dryer Temperature Falling"
+        value_template: >
+          {% set value = 0 %}
+          {% if states('binary_sensor.dryer_temp_falling') == "on" %}
+            {% set value = 1 %}
+          {% endif %}
+          {{ value }}
   # Monitor system performance
   - platform: systemmonitor
     resources:
@@ -144,6 +163,15 @@ sensor:
       - type: processor_use
 
 binary_sensor:
+  # Add calculated bed presence
+  - platform: template
+    sensors:
+      matt_in_bed: 
+        friendly_name: "Matt in Bed"
+        value_template: "{{ states('sensor.matt_bed_presence') | int > 200 }}"
+      julie_in_bed: 
+        friendly_name: "Julie in Bed"
+        value_template: "{{ states('sensor.julie_bed_presence') | int > 200 }}"
   # Add trend to aqara temp and humidity sensors
   - platform: trend
     sensors:
@@ -157,6 +185,25 @@ binary_sensor:
         sample_duration: 300
         max_samples: 50
         min_gradient: 0.0008
+      master_bathroom_temp_falling_aqara:
+        entity_id: sensor.master_shower_temperature
+        sample_duration: 300
+        max_samples: 50
+        min_gradient: -0.01
+      dryer_temp_rising:
+        entity_id: sensor.dryer_temperature
+        sample_duration: 300
+        max_samples: 50
+        min_gradient: 0.01
+      dryer_temp_falling:
+        entity_id: sensor.dryer_temperature
+        sample_duration: 300
+        max_samples: 50
+        min_gradient: -0.01 
+
+
+# Shelly devices over MQTT
+switch: !include shelly_mqtt.yaml
 
 # Text to speech
 tts:

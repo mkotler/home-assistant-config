@@ -1,7 +1,7 @@
 title: Home
 views:
   - !include /config/ui-lovelace/home.yaml
-#  - !include /config/ui-lovelace/floorplan.yaml
+  #  - !include /config/ui-lovelace/floorplan.yaml
   - !include /config/ui-lovelace/remote.yaml
   - !include /config/ui-lovelace/why.yaml
   - !include /config/ui-lovelace/debug.yaml
