@@ -1,0 +1,16 @@
+input_number:
+  office_motion_count:
+    name: "Office Motion Count"
+    initial: 0
+    min: 0
+    max: 10
+  parents_home:
+    name: "Count of Parents at Home"
+    initial: 0
+    min: 0
+    max: 2
+  null_number:
+    name: "Null Number"
+    initial: 0
+    min: 0
+    max: 10

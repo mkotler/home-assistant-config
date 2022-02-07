@@ -38,37 +38,37 @@ cards:
               state: "on"
               options:
                 type: custom:template-entity-row
-                secondary: '{{ states("input_text." + config.entity[7:] + "_why_on") }}'
+                #secondary: '{{ states("input_text." + config.entity[7:] + "_why_on") }}'
                 toggle: true
             - entity_id: switch.*_lamp*
               state: "on"
               options:
                 type: custom:template-entity-row
-                secondary: '{{ states("input_text." + config.entity[7:] + "_why_on") }}'
+                #secondary: '{{ states("input_text." + config.entity[7:] + "_why_on") }}'
                 toggle: true
             - entity_id: switch.*_fan
               state: "on"
               options:
                 type: custom:template-entity-row
-                secondary: '{{ states("input_text." + config.entity[7:] + "_why_on") }}'
+                #secondary: '{{ states("input_text." + config.entity[7:] + "_why_on") }}'
                 toggle: true
             - entity_id: light.*
               state: "on"
               options:
                 type: custom:template-entity-row
-                secondary: '{{ states("input_text." + config.entity[6:] + "_why_on") }}'
+                #secondary: '{{ states("input_text." + config.entity[6:] + "_why_on") }}'
                 toggle: true
-            - entity_id: timer.*
-              state: "active"
-              options:
-                type: custom:timer-bar-card
-            - entity_id: timer.*
-              state: "paused"
-              options:
-                type: custom:timer-bar-card
-          exclude:
-            - entity_id: timer.rtl_timer
-            - entity_id: timer.null_timer
+            #- entity_id: timer.*
+            #  state: "active"
+            #  options:
+            #    type: custom:timer-bar-card
+            #- entity_id: timer.*
+            #  state: "paused"
+            #  options:
+            #    type: custom:timer-bar-card
+          #exclude:
+          #  - entity_id: timer.rtl_timer
+          #  - entity_id: timer.null_timer
         sort:
           method: name
       - type: custom:auto-entities
@@ -81,36 +81,36 @@ cards:
               state: "off"
               options:
                 type: custom:template-entity-row
-                secondary: '{{ states("input_text." + config.entity[7:] + "_why_off") }}'
+                #secondary: '{{ states("input_text." + config.entity[7:] + "_why_off") }}'
                 toggle: true
             - entity_id: switch.*_lamp*
               state: "off"
               options:
                 type: custom:template-entity-row
-                secondary: '{{ states("input_text." + config.entity[7:] + "_why_off") }}'
+                #secondary: '{{ states("input_text." + config.entity[7:] + "_why_off") }}'
                 toggle: true
             - entity_id: switch.*_fan
               state: "off"
               options:
                 type: custom:template-entity-row
-                secondary: '{{ states("input_text." + config.entity[7:] + "_why_off") }}'
+                #secondary: '{{ states("input_text." + config.entity[7:] + "_why_off") }}'
                 toggle: true
             - entity_id: light.*
               state: "off"
               options:
                 type: custom:template-entity-row
-                secondary: '{{ states("input_text." + config.entity[6:] + "_why_off") }}'
+                #secondary: '{{ states("input_text." + config.entity[6:] + "_why_off") }}'
                 toggle: true
-            - entity_id: timer.*_on
-              state: "active"
-              options:
-                type: custom:timer-bar-card
-            - entity_id: timer.*_on
-              state: "paused"
-              options:
-                type: custom:timer-bar-card
-          exclude:
-            - entity_id: timer.rtl_timer
+            #- entity_id: timer.*_on
+            #  state: "active"
+            #  options:
+            #    type: custom:timer-bar-card
+            #- entity_id: timer.*_on
+            #  state: "paused"
+            #  options:
+            #    type: custom:timer-bar-card
+          #exclude:
+          #  - entity_id: timer.rtl_timer
         sort:
           method: name
       - type: custom:auto-entities

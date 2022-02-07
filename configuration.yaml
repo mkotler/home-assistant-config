@@ -60,8 +60,10 @@ panel_custom:
     require_admin: true
 
 # Setup input variables for all entitites
-input_text: !include input_text.yaml
-timer: !include timer.yaml
+# input_text: !include input_text.yaml
+timer: 
+  rtl_timer:
+    name: RTL Status Timer
 input_boolean:
   guestroom_in_use:
     name: "Guestroom In Use"
@@ -71,22 +73,12 @@ input_boolean:
     name: "Movie Night"
   null_boolean:
     name: "Null Boolean"
-input_number:
-  office_motion_count:
-    name: "Office Motion Count"
-    initial: 0
-    min: 0
-    max: 10
-  parents_home:
-    name: "Count of Parents at Home"
-    initial: 0
-    min: 0
-    max: 2
-  null_number:
-    name: "Null Number"
-    initial: 0
-    min: 0
-    max: 10
+  home_automation_disabled:
+    name: "Home Automation Disabled"
+    initial: false
+  debugging:
+    name: "Debugging"
+    initial: false
 
 # Add support for templating in lovelace
 lovelace_gen:
@@ -125,7 +117,7 @@ sensor:
     sensors:
       count_in_bed:
         friendly_name: "Count in Bed"
-        value_template: > 
+        value_template: >
           {% set matt = 0 %}
           {% set julie = 0 %}
           {% if states('binary_sensor.matt_in_bed') == "on" %}
@@ -134,7 +126,7 @@ sensor:
           {% if states('binary_sensor.julie_in_bed') == "on" %}
             {% set julie = 1 %}
           {% endif %}
-          {{ matt + julie }} 
+          {{ matt + julie }}
       dryer_temp_rising:
         friendly_name: "Dryer Temperature Rising"
         value_template: >
@@ -166,12 +158,24 @@ binary_sensor:
   # Add calculated bed presence
   - platform: template
     sensors:
-      matt_in_bed: 
+      matt_in_bed:
         friendly_name: "Matt in Bed"
         value_template: "{{ states('sensor.matt_bed_presence') | int > 200 }}"
-      julie_in_bed: 
+      julie_in_bed:
         friendly_name: "Julie in Bed"
         value_template: "{{ states('sensor.julie_bed_presence') | int > 200 }}"
+
+      # Add "on"/"off" sensors for AutoMoLi
+      epson_printing:
+        friendly_name: "Epson Printer Printing"
+        value_template: "{{ states('sensor.epson_et_3760_series') == 'printing' }}"
+      garage_door_open:
+        friendly_name: "Garage Door Open"
+        value_template: "{{ states('cover.garage_door') == 'open' }}"
+      kitchen_recently_off:
+        friendly_name: "Kitchen Lights Recently Off"
+        value_template: "{{ states('switch.kitchen_lights') == 'off' and (as_timestamp(now()) - as_timestamp(states.switch.kitchen_lights.last_updated)) < 60  }}"
+
   # Add trend to aqara temp and humidity sensors
   - platform: trend
     sensors:
@@ -199,8 +203,7 @@ binary_sensor:
         entity_id: sensor.dryer_temperature
         sample_duration: 300
         max_samples: 50
-        min_gradient: -0.01 
-
+        min_gradient: -0.01
 
 # Shelly devices over MQTT
 switch: !include shelly_mqtt.yaml
