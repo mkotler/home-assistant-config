@@ -124,20 +124,6 @@ binary_sensor:
     off_delay: 1
     device_class: motion
 
-  ###### Add trends for these sensors ######
-  - platform: trend
-    sensors:
-      master_bathroom_temp_rising:
-        entity_id: sensor.master_bathroom_temperature
-        sample_duration: 300
-        max_samples: 50
-        min_gradient: 0.0008
-      master_bathroom_humidity_rising:
-        entity_id: sensor.master_bathroom_humidity
-        sample_duration: 300
-        max_samples: 50
-        min_gradient: 0.0008
-
   ###### Add RTL_433 script error sensor ######
   - platform: mqtt
     qos: 1

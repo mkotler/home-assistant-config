@@ -18,6 +18,8 @@ default:
   motion_state_off: "off"
   daytimes:
     - { starttime: "00:00", name: "allday", light: 100 }
+  block_on_switch_states: "on"
+  block_off_switch_states: "on"
   debug_log: False
 
 ######################################################
@@ -38,26 +40,30 @@ playroom:
   motion:
     - binary_sensor.downstairs_playroom_motion
     - binary_sensor.epson_printing
+  warning_flash: True
 
 office:
   module: automoli
   class: AutoMoLi
   # Using Occupancy sensor so turn off lights right when occupancy clears
   # Note: delay = 0 means AutoMoLi will never turn off the lights, so setting to 1s
-  delay: 1
+  delay: 600
   # delay_outside_events needs to be longer, otherwise lights will just flash when turned on manually
   delay_outside_events: 600
   transition_on_daytime_switch: true
   lights:
     - light.office_light
     - switch.office_lamp
-  motion:
+  motion: 
+    - binary_sensor.office_motion_aqara
+  block_off_switch_entities:
     - binary_sensor.office_motion_occupancy
   daytimes:
     - { starttime: "sunrise+01:00", name: "morning", light: 70 }
     - { starttime: "12:00", name: "noon", light: 50 }
     - { starttime: "sunset-01:00", name: "evening", light: 70 }
     - { starttime: "sunset+01:00", name: "night", light: 100 }
+  warning_flash: True
 
 laundry:
   module: automoli
@@ -72,10 +78,6 @@ laundry:
 kitchen:
   module: automoli
   class: AutoMoLi
-  disable_switch_entities:
-    - input_boolean.home_automation_disabled
-    - input_boolean.movie_night
-    - input_boolean.kitchen_recently_off
   delay: 1800
   lights:
     - switch.kitchen_lights
@@ -94,33 +96,44 @@ kitchen:
     - binary_sensor.kitchen_desk_motion
     - binary_sensor.kitchen_occupancy
     - binary_sensor.kitchen_table_vibration
-  block_switch_entities:
+  block_on_switch_entities:
+    - input_boolean.kitchen_recently_off
+    - input_boolean.movie_night
+  block_off_switch_entities:
     - input_boolean.dining_room_in_use
-  block_switch_states: "on"
+  warning_flash: True
 
 kitchen_nook:
   module: automoli
   class: AutoMoLi
-  disable_switch_entities:
-    - input_boolean.home_automation_disabled
-    - input_boolean.movie_night
   delay: 1800
   lights:
     - switch.kitchen_nook_lights
   motion:
     - binary_sensor.kitchen_table_vibration
+  block_on_switch_entities:
+    - input_boolean.movie_night
 
 powder_room:
   module: automoli
   class: AutoMoLi
+  disable_switch_entities:
+    - input_boolean.home_automation_disabled
+    # Ignore motion right after open door (to avoid reset of shorten delay)
+    - binary_sensor.powder_door_recently_opened
   delay: 300
   lights:
     - switch.powder_room_lights
   motion:
-    - binary_sensor.inside_powder_room_motion
-    - binary_sensor.outside_powder_room_motion
-  block_switch_entities:
+    # - binary_sensor.inside_powder_room_motion
+    # - binary_sensor.outside_powder_room_motion
+    - binary_sensor.lumi_lumi_sensor_motion_aq2_ias_zone
+  block_off_switch_entities:
     - binary_sensor.powder_room_door
+  block_off_switch_states: "off"
+  shorten_delay:
+    - binary_sensor.powder_room_door
+  warning_flash: True
 
 ########  Just turn off, if turned on manually ########
 outside_pantry:
@@ -129,9 +142,17 @@ outside_pantry:
   delay: 900
   lights:
     - switch.outside_pantry_light
-  block_switch_entities:
+  block_off_switch_entities:
     - input_boolean.dining_room_in_use
-  block_switch_states: "on"
+
+outside_powder_room:
+  module: automoli
+  class: AutoMoLi
+  delay: 1800
+  lights:
+    - switch.outside_powder_lights
+  block_off_switch_entities:
+    - input_boolean.dining_room_in_use
 
 entryway:
   module: automoli
@@ -141,10 +162,9 @@ entryway:
     - switch.entry_way_light
   motion:
     - binary_sensor.front_door
-  block_switch_entities:
+  block_off_switch_entities:
     - input_boolean.dining_room_in_use
     - binary_sensor.front_door
-  block_switch_states: "on"
   daytimes:
     - { starttime: "sunset-01:00", name: "evening", light: 100 }
     - { starttime: "sunrise+01:00", name: "morning", light: 0 }
@@ -178,7 +198,6 @@ master_hall:
     - binary_sensor.entry_hallway_motion
     - binary_sensor.master_bedroom_motion
     - binary_sensor.upstairs_back_stairs_motion
-  debug_log: True
 
 kids_hall:
   module: automoli
@@ -199,15 +218,18 @@ master_bathroom:
     - switch.master_toilet_light
   lights_off:
     - switch.bathroom_vanity_lights
-    - switch.master_toilet_light
     - switch.shower_light
+    - switch.outside_shower_light
   motion:
     - binary_sensor.master_bathroom_motion
     - binary_sensor.toilet_motion
   # Figure out how to not trigger on bedroom motion when in bed
   #  - binary_sensor.master_bedroom_motion
+  shorten_delay:
+    - binary_sensor.julie_in_bed
+    - binary_sensor.matt_in_bed
   humidity: sensor.master_shower_humidity
-  humidity_threshold: 60
+  humidity_threshold: 87
 
 master_bathroom_vanity:
   module: automoli
@@ -218,27 +240,34 @@ master_bathroom_vanity:
   motion:
     - binary_sensor.master_bathroom_motion
     - binary_sensor.toilet_motion
+  shorten_delay:
+    - binary_sensor.julie_in_bed
+    - binary_sensor.matt_in_bed
   daytimes:
     - { starttime: "sunrise-01:00", name: "day", light: 100 }
     - { starttime: "22:00", name: "night", light: 0 }
+  humidity: sensor.master_shower_humidity
+  humidity_threshold: 87
 
 master_bedroom:
   module: automoli
   class: AutoMoLi
   delay: 600
-  disable_switch_entities:
-    - input_boolean.home_automation_disabled
-    - binary_sensor.julie_in_bed
-    - binary_sensor.matt_in_bed
-    # Using bath light as an indicator that I was just in the bathroom,
-    # and likely leaving the bedroom, not entering
-    - switch.bathroom_bath_light
   lights:
     - switch.master_lights
   motion:
     - binary_sensor.master_bedroom_motion
+  shorten_delay:
+    - binary_sensor.julie_in_bed
+    - binary_sensor.matt_in_bed
+  block_on_switch_entities:
+    - binary_sensor.julie_in_bed
+    - binary_sensor.matt_in_bed
+    # Using bathroom motion as an indicator that I was just in the bathroom,
+    # and likely leaving the bedroom, not entering
+    - binary_sensor.master_bath_recent_motion
   daytimes:
-    - { starttime: "sunrise+01:00", name: "day", light: 100 }
+    - { starttime: "sunrise-01:00", name: "day", light: 100 }
     - { starttime: "23:00", name: "night", light: 0 }
 
 master_shower:
@@ -248,10 +277,14 @@ master_shower:
   lights:
     - switch.shower_light
     - switch.shower_fan
+    - switch.outside_shower_light
   motion:
-    - binary_sensor.master_bathroom_humidity_rising
+    - binary_sensor.master_bathroom_humidity_rising_aqara
+    - binary_sensor.master_bathroom_temp_rising_aqara
   humidity: sensor.master_shower_humidity
-  humidity_threshold: 80
+  block_off_switch_entitities:
+    - switch.bathroom_bath_light
+  humidity_threshold: 87
 
 ########  Just turn off, if turned on manually ########
 guestroom:
@@ -301,10 +334,10 @@ front_stairs:
     - binary_sensor.entry_hallway_motion
     - binary_sensor.master_bedroom_motion
     - binary_sensor.front_door
-  block_switch_entities:
+  block_on_switch_entities:
+    - binary_sensor.upstairs_back_stairs_recent_motion
+  block_off_switch_entities:
     - input_boolean.dining_room_in_use
-  block_switch_states: "on"
-  debug_log: True
 
 back_stairs:
   module: automoli
@@ -324,7 +357,7 @@ back_stairs:
 garage:
   module: automoli
   class: AutoMoLi
-  delay: 450
+  delay: 300
   lights:
     - switch.garage_lights
   motion:
@@ -334,16 +367,15 @@ garage:
     - binary_sensor.garage_door_open
   # As long as any of the doors are open, don't turn off lights
   # even if there isn't motion
-  block_switch_entities:
+  block_off_switch_entities:
     - binary_sensor.garage_door_open
     - binary_sensor.outside_garage_door
     - binary_sensor.inside_garage_door
-  block_switch_states: "on"
 
 dogrun:
   module: automoli
   class: AutoMoLi
-  delay: 450
+  delay: 300
   lights:
     - switch.dog_run_light
   motion:
@@ -351,6 +383,8 @@ dogrun:
   daytimes:
     - { starttime: "sunset-01:00", name: "evening", light: 100 }
     - { starttime: "sunrise+01:00", name: "morning", light: 0 }
+  block_off_entitites:
+    - binary_sensor.outside_garage_door
 
 front_porch:
   module: automoli
@@ -376,3 +410,5 @@ back_patio:
   daytimes:
     - { starttime: "sunset-01:00", name: "evening", light: 100 }
     - { starttime: "sunrise+01:00", name: "morning", light: 0 }
+  block_off_entitites:
+    - binary_sensor.kitchen_sliding_door

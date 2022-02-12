@@ -175,6 +175,15 @@ binary_sensor:
       kitchen_recently_off:
         friendly_name: "Kitchen Lights Recently Off"
         value_template: "{{ states('switch.kitchen_lights') == 'off' and (as_timestamp(now()) - as_timestamp(states.switch.kitchen_lights.last_updated)) < 60  }}"
+      master_bath_recent_motion: 
+        friendly_name: "Master Bathrom Recent Motion"
+        value_template: "{{ (as_timestamp(now()) - as_timestamp(states.binary_sensor.master_bathroom_motion.last_updated)) < 30 }}"
+      upstairs_back_stairs_recent_motion: 
+        friendly_name: "Upstairs Back Stairs Recent Motion"
+        value_template: "{{ (as_timestamp(now()) - as_timestamp(states.binary_sensor.upstairs_back_stairs_motion.last_updated)) < 30 }}"
+      powder_door_recently_opened:
+        friendly_name: "Powder Room Door Recently Opened"
+        value_template: "{{ states('binary_sensor.powder_room_door') == 'on' and (as_timestamp(now()) - as_timestamp(states.binary_sensor.powder_room_door.last_updated)) < 15  }}"
 
   # Add trend to aqara temp and humidity sensors
   - platform: trend
@@ -183,12 +192,12 @@ binary_sensor:
         entity_id: sensor.master_shower_temperature
         sample_duration: 300
         max_samples: 50
-        min_gradient: 0.0008
+        min_gradient: 0.02
       master_bathroom_humidity_rising_aqara:
         entity_id: sensor.master_shower_humidity
         sample_duration: 300
         max_samples: 50
-        min_gradient: 0.0008
+        min_gradient: 0.02
       master_bathroom_temp_falling_aqara:
         entity_id: sensor.master_shower_temperature
         sample_duration: 300

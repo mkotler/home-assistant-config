@@ -6,32 +6,32 @@ cards:
   - type: custom:mini-graph-card
     #points_per_hour: 4
     #hours_to_show: 24
-    points_per_hour: 60
-    hours_to_show: 1
+    points_per_hour: 24
+    hours_to_show: 4
     aggregate_func: max
     entities:
       - sensor.dryer_temperature
   - type: custom:mini-graph-card
     #points_per_hour: 4
     #hours_to_show: 24
-    points_per_hour: 60
-    hours_to_show: 1
+    points_per_hour: 24
+    hours_to_show: 4
     aggregate_func: max
     entities:
       - sensor.dryer_humidity
   - type: custom:mini-graph-card
     #points_per_hour: 12
     #hours_to_show: 24
-    points_per_hour: 60
-    hours_to_show: 1
+    points_per_hour: 24
+    hours_to_show: 4
     aggregate_func: max
     entities:
       - sensor.dryer_temp_rising
   - type: custom:mini-graph-card
     #points_per_hour: 12
     #hours_to_show: 24
-    points_per_hour: 60
-    hours_to_show: 1
+    points_per_hour: 24
+    hours_to_show: 4
     aggregate_func: max
     entities:
       - sensor.dryer_temp_falling
@@ -46,13 +46,29 @@ cards:
     hours_to_show: 24
     aggregate_func: max
     entities:
+      - binary_sensor.master_bathroom_temp_rising_aqara
+    state_map:
+      - value: "off"
+        label: "Not Rising"
+      - value: "on"
+        label: "Rising"
+  - type: custom:mini-graph-card
+    points_per_hour: 4
+    hours_to_show: 24
+    aggregate_func: max
+    entities:
       - sensor.master_shower_humidity
   - type: custom:mini-graph-card
     points_per_hour: 4
     hours_to_show: 24
-    aggregate_func: min
+    aggregate_func: max
     entities:
-      - sensor.master_bedroom_bed_presence
+      - binary_sensor.master_bathroom_humidity_rising_aqara
+    state_map:
+      - value: "off"
+        label: "Not Rising"
+      - value: "on"
+        label: "Rising"
   - type: custom:mini-graph-card
     points_per_hour: 4
     aggregate_func: max
@@ -82,31 +98,7 @@ cards:
     entities:
       - sensor.processor_use
   - type: custom:mini-graph-card
-    points_per_hour: 4
-    aggregate_func: max
-    entities:
-      - sensor.speedtest_download
-  - type: custom:mini-graph-card
-    points_per_hour: 4
-    aggregate_func: max
-    entities:
-      - sensor.speedtest_ping
-  - type: custom:mini-graph-card
-    points_per_hour: 4
-    aggregate_func: max
-    entities:
-      - sensor.speedtest_upload
-  - type: custom:mini-graph-card
     points_per_hour: 12
     aggregate_func: max
     entities:
       - sensor.unavailable_entities
-  - type: custom:mini-graph-card
-    points_per_hour: 12
-    aggregate_func: min
-    entities:
-      - sensor.shelly1_e8db84d46c27_link_rate
-      - sensor.shelly1_e8db84d6bda5_link_rate
-      - sensor.shelly1_e8db84d70b7b_link_rate
-      - sensor.shelly1l_e8db84aac8f7_link_rate
-      - sensor.shellyswitch25_8caab55f9690_link_rate
