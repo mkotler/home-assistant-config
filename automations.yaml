@@ -94,8 +94,15 @@
     type: set_preset_mode
     preset_mode: Away
   - service: script.turn_off_all_lights
+    data: {}
   - service: script.turn_off_all_upstairs_lights_except_kids
+    data: {}
   - service: script.turn_off_kids_lights
+    data: {}
+  - type: turn_off
+    device_id: 894bb86f8d542d016d773a9c3f30358d
+    entity_id: switch.master_fireplace
+    domain: switch
   mode: single
 - id: '1621807523686'
   alias: Energy saver (welcome home)
@@ -133,8 +140,6 @@
     target:
       entity_id:
       - switch.garage_lights
-      - switch.kitchen_lights
-      - switch.laundry_room_lights
     data: {}
   - choose:
     - conditions:
@@ -165,20 +170,10 @@
     device_id: d8c1e1f1292a82d5ff174bbec10f80a5
     entity_id: switch.annas_room_closet_light
     domain: switch
-  - service: input_text.set_value
-    target:
-      entity_id: input_text.annas_room_closet_light_why_off
-    data:
-      value: 'Anna''s Room:  Turn off when Anna leaves'
   - type: turn_off
     device_id: d8c1e1f1292a82d5ff174bbec10f80a5
     entity_id: switch.annas_room_overhead_light
     domain: switch
-  - service: input_text.set_value
-    target:
-      entity_id: input_text.annas_room_overhead_light_why_off
-    data:
-      value: 'Anna''s Room:  Turn off when Anna leaves'
   mode: single
 - id: '1623539585816'
   alias: 'Announcement: Someone is almost home'
@@ -224,28 +219,23 @@
       message: 'Warning: Your phone’s storage space is low'
   mode: single
 - id: '1624690742681'
-  alias: 'Family Room Lamp: Turn on when family room lights go on'
+  alias: 'Family Room Lamp: Turn on when turn on family room lights manually'
   description: ''
   trigger:
   - platform: device
     type: turned_on
-    device_id: 7ac4495f01bc553282c24d44578c5679
+    device_id: 19bb98b06940d043ed1bb0152485f0c7
     entity_id: light.family_room_light
     domain: light
   condition: []
   action:
   - type: turn_on
-    device_id: 43bc5cb46bb4e1cb3d49c8e2ae9f605e
+    device_id: 861e337a796679e71de4e3bb44fe864a
     entity_id: switch.family_room_lamp
     domain: switch
-  - service: input_text.set_value
-    target:
-      entity_id: input_text.family_room_lamp_why_on
-    data:
-      value: 'Family Room Lamp: Turn on when family room lights go on'
   mode: single
 - id: '1624690821908'
-  alias: 'Family Room Lamp: Turn off when family room lights go off'
+  alias: 'Family Room Lamp: Turn off when turn off family room lights manually'
   description: ''
   trigger:
   - platform: state
@@ -255,14 +245,9 @@
   condition: []
   action:
   - type: turn_off
-    device_id: 43bc5cb46bb4e1cb3d49c8e2ae9f605e
+    device_id: 861e337a796679e71de4e3bb44fe864a
     entity_id: switch.family_room_lamp
     domain: switch
-  - service: input_text.set_value
-    target:
-      entity_id: input_text.family_room_lamp_why_off
-    data:
-      value: 'Family Room Lamp: Turn off when family room lights go off'
   mode: single
 - id: '1625478716821'
   alias: 'Announcement:  Left door open'
@@ -319,7 +304,7 @@
           message: Did you forget to close the {{ trigger.id }}?
   mode: single
 - id: '1630504836253'
-  alias: 'Office: Turn on desk lamp when turn on lights'
+  alias: 'Office: Turn on desk lamp when turn on lights manually'
   description: ''
   trigger:
   - platform: device
@@ -327,7 +312,9 @@
     device_id: 21d2904ab5e4e63611f6304cbdbcf15b
     entity_id: light.office_light
     domain: light
-  condition: []
+  condition:
+  - condition: template
+    value_template: '{{ trigger.to_state.context.parent_id is none }}'
   action:
   - type: turn_on
     device_id: 52a568acd1f3b04f9214c056c506d39b
@@ -341,7 +328,7 @@
       value: 'Office: Turn on desk lamp when turn on lights'
   mode: single
 - id: '1630504880049'
-  alias: 'Office: Turn off desk lamp when turn off lights'
+  alias: 'Office: Turn off desk lamp when turn off lights manually'
   description: ''
   trigger:
   - platform: device
@@ -349,7 +336,9 @@
     device_id: 21d2904ab5e4e63611f6304cbdbcf15b
     entity_id: light.office_light
     domain: light
-  condition: []
+  condition:
+  - condition: template
+    value_template: '{{ trigger.to_state.context.parent_id is none }}'
   action:
   - type: turn_off
     device_id: 52a568acd1f3b04f9214c056c506d39b
@@ -375,7 +364,8 @@
       switch.family_room_lamp
   condition:
   - condition: template
-    value_template: '{{ trigger.to_state.context.parent_id is none }}'
+    value_template: '{{ trigger.to_state != none and trigger.to_state.context.parent_id
+      is none }}'
   action:
   - service: system_log.write
     data:
@@ -388,11 +378,11 @@
   description: ''
   trigger:
   - platform: state
-    entity_id: binary_sensor.master_bathroom_temp_rising_aqara
+    entity_id: binary_sensor.master_shower_temp_rising
     from: 'off'
     to: 'on'
   - platform: state
-    entity_id: binary_sensor.master_bathroom_humidity_rising_aqara
+    entity_id: binary_sensor.master_shower_humidity_rising
     from: 'off'
     to: 'on'
   condition:
@@ -414,30 +404,7 @@
       entity_id:
       - switch.shower_light
       - switch.outside_shower_light
-  - service: input_text.set_value
-    target:
-      entity_id:
-      - input_text.shower_light_why_on
-      - input_text.outside_shower_light_why_on
-    data:
-      value: 'Shower:  Turn on light with humidity or temperature change (Aqara)'
-  - service: timer.start
-    data:
-      duration: 00:45:00
-    target:
-      entity_id: "{% set entities = \"timer.outside_shower_light_off, timer.shower_light_off\"\
-        \ %}  {% if states(\"timer.bathroom_bath_light_off\") == \"active\" %}\n \
-        \ {% set entities = entities + \", timer.bathroom_bath_light_off\" %}\n{%\
-        \ endif %} {% if states(\"timer.bathroom_vanity_lights_off\") == \"active\"\
-        \ %}\n  {% set entities = entities + \", timer.bathroom_vanity_lights_off\"\
-        \ %}\n{% endif %} {{ entities }}\n"
-  - service: input_text.set_value
-    target:
-      entity_id:
-      - input_text.shower_light_why_off
-      - input_text.outside_shower_light_why_off
-    data:
-      value: 'Shower: 45 min default timer expired (Aqara)'
+    data: {}
   mode: queued
   max: 10
 - id: '1638059972413'
@@ -741,7 +708,7 @@
           minutes: 0
           seconds: 0
       sequence:
-      - service: script.turn_lights_on
+      - service: homeassistant.turn_on
         data:
           lights: light.julie_bedside_lamp
           duration: 01:00:00
@@ -756,7 +723,7 @@
           minutes: 0
           seconds: 0
       sequence:
-      - service: script.turn_lights_on
+      - service: homeassistant.turn_on
         data:
           lights: light.matt_bedside_lamp
           duration: 01:00:00
@@ -792,39 +759,6 @@
     data:
       message: Home Assistant is ready for an update to {{ state_attr("binary_sensor.updater","newest_version")
         }}
-  mode: single
-- id: '1642312093622'
-  alias: 'Family Room: Turn on lights when detect vibration in couch'
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: binary_sensor.couch_vibration
-    from: 'off'
-    to: 'on'
-  condition: []
-  action:
-  - service: homeassistant.turn_on
-    target:
-      entity_id:
-      - light.family_room_light
-  - service: input_text.set_value
-    target:
-      entity_id:
-      - input_text.family_room_light_why_on
-    data:
-      value: 'Family Room: Detected vibration on couch'
-  - service: timer.start
-    data:
-      duration: 00:60:00
-    target:
-      entity_id:
-      - timer.family_room_light_off
-  - service: input_text.set_value
-    target:
-      entity_id:
-      - input_text.family_room_light_why_off
-    data:
-      value: 'Family Room: 60 min timer expired'
   mode: single
 - id: '1642316274583'
   alias: 'Powder Room: Turn on fan 5 minutes after door closes'
@@ -873,7 +807,7 @@
       - condition: trigger
         id: Julie
       sequence:
-      - service: script.turn_lights_on
+      - service: homeassistant.turn_on
         data:
           lights: light.julie_bedside_lamp
           duration: 00:03:00
@@ -881,7 +815,7 @@
       - condition: trigger
         id: Matt
       sequence:
-      - service: script.turn_lights_on
+      - service: homeassistant.turn_on
         data:
           lights: light.matt_bedside_lamp
           duration: 00:03:00
@@ -905,4 +839,169 @@
       - switch.outside_powder_lights
       - switch.outside_pantry_light
       - switch.front_stairs_lights
+  mode: single
+- id: '1645294479994'
+  alias: 'Announcement:  Dryer is done drying'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.dryer_vibration
+    id: dryer
+    to: 'off'
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+    from: 'on'
+  condition: []
+  action:
+  - service: notify.alexa_media_kitchen_alexa
+    data:
+      data:
+        type: announce
+        method: speak
+      message: The dryer is done
+  - service: notify.mobile_app_matts_iphone
+    data:
+      message: The dryer is done. Time for folding.
+  mode: single
+- id: '1645303796091'
+  alias: 'Announcement:  Sensor Battery is Low'
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.dryer_vibration_power
+    id: Dryer Vibration Sensor
+    below: '10'
+  - platform: numeric_state
+    entity_id: sensor.julie_lamp_button_power
+    id: Julie's Lamp Button
+    below: '10'
+  - platform: numeric_state
+    entity_id: sensor.kitchen_table_vibration_power
+    id: Kitchen Table Vibration Sensor
+    below: '10'
+  - platform: numeric_state
+    entity_id: sensor.master_bathroom_motion_power
+    id: Master Bathroom Motion Sensor
+    below: '10'
+  - platform: numeric_state
+    entity_id: sensor.master_shower_power
+    id: Master Shower Humidity Sensor
+    below: '10'
+  - platform: numeric_state
+    entity_id: sensor.matt_lamp_button_power
+    id: Matt's Lamp Button
+    below: '10'
+  - platform: numeric_state
+    entity_id: sensor.office_motion_power
+    id: Office Motion Sensor
+    below: '10'
+  - platform: numeric_state
+    entity_id: sensor.powder_room_door_power
+    id: Powder Room Door
+    below: '10'
+  - platform: numeric_state
+    entity_id: sensor.powder_room_motion_power
+    id: Powder Room Motion Sensor
+    below: '10'
+  - platform: numeric_state
+    entity_id: sensor.water_heater_sensor_power
+    id: Water Heater Sensor
+    below: '10'
+  - platform: numeric_state
+    entity_id: sensor.dog_food_sensor_power
+    id: Dog Food Sensor
+    below: '10'
+  condition: []
+  action:
+  - service: notify.mobile_app_matts_iphone
+    data:
+      message: 'Warning: Battery is low for {{ trigger.id }}'
+  - service: persistent_notification.create
+    data:
+      title: Battery Low
+      message: 'Warning: Battery is low for {{ trigger.id }}'
+      notification_id: battery_low
+  mode: single
+- id: '1645395042238'
+  alias: 'Announcement:  Washer is done'
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.washing_machine_energy
+    id: washer
+    below: '2'
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+  condition: []
+  action:
+  - service: notify.alexa_media_kitchen_alexa
+    data:
+      data:
+        type: announce
+        method: speak
+      message: The washing machine is done
+  - service: notify.mobile_app_matts_iphone
+    data:
+      message: The washing machine is done. Time for drying.
+  mode: single
+- id: '1645420665555'
+  alias: 'Garbage: Update garbage days based on holidays'
+  description: ''
+  use_blueprint:
+    path: bruxy70/multiple_holidays_in_week.yaml
+    input:
+      garbage_collection_entity: sensor.garbage
+      holiday_entity: calendar.republic_services_holidays
+- id: '1645436020073'
+  alias: 'Toyota: Start car at 6:45am on school day'
+  description: ''
+  trigger:
+  - platform: time
+    at: 06:45:00
+  condition:
+  - condition: state
+    entity_id: binary_sensor.school_today
+    state: 'on'
+  - condition: state
+    entity_id: person.anna_kotler
+    state: home
+  action:
+  - service: toyota_na.door_lock
+    data:
+      vehicle: 47b09d59e791c7d57298000f38b51fef
+  - service: toyota_na.engine_start
+    data:
+      vehicle: 47b09d59e791c7d57298000f38b51fef
+  mode: single
+- id: '1645471584038'
+  alias: 'Announcement: Don''t forget to feed dogs'
+  description: ''
+  trigger:
+  - platform: time
+    at: 07:00:00
+    id: breakfast
+  - platform: time
+    at: '19:00:00'
+    id: dinner
+  condition:
+  - condition: state
+    entity_id: binary_sensor.dogs_fed
+    state: 'off'
+  action:
+  - service: notify.alexa_media_kitchen_alexa
+    data:
+      data:
+        type: announce
+        method: speak
+      message: Don't forget to feed the dogs
+  - service: notify.mobile_app_matts_iphone
+    data:
+      message: Don't forget to feed the dogs!
+  - service: notify.mobile_app_julies_iphone
+    data:
+      message: Don't forget to feed the dogs!
   mode: single

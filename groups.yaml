@@ -40,7 +40,6 @@ upstairs_master_and_halls:
     - switch.bathroom_vanity_lights
     - switch.shower_fan
     - switch.shower_light
-    - switch.master_fireplace
 upstairs_kids:
   name: Kids Rooms
   entities:
@@ -51,3 +50,10 @@ upstairs_master_lamps:
   entities:
     - light.julie_bedside_lamp
     - light.matt_bedside_lamp
+people:
+  name: People
+  entities:
+    - person.anna_kotler
+    - person.julie_kotler
+    - person.katie_kotler
+    - person.matthew_kotler

@@ -54,10 +54,10 @@ office:
   lights:
     - light.office_light
     - switch.office_lamp
-  motion: 
-    - binary_sensor.office_motion_aqara
+  motion:
+    - binary_sensor.office_motion
   block_off_switch_entities:
-    - binary_sensor.office_motion_occupancy
+    - binary_sensor.office_occupancy
   daytimes:
     - { starttime: "sunrise+01:00", name: "morning", light: 70 }
     - { starttime: "12:00", name: "noon", light: 50 }
@@ -68,10 +68,11 @@ office:
 laundry:
   module: automoli
   class: AutoMoLi
-  delay: 900
+  delay: 600
   lights:
     - switch.laundry_room_lights
   motion:
+    - binary_sensor.garage_door_open
     - binary_sensor.inside_garage_door
     - binary_sensor.laundry_room_motion
 
@@ -88,6 +89,7 @@ kitchen:
     - switch.family_room_lamp
     - switch.outside_powder_lights
   motion:
+    - binary_sensor.garage_door_open
     - binary_sensor.inside_garage_door
     - binary_sensor.downstairs_back_stairs_motion
     - binary_sensor.front_entry_motion
@@ -96,11 +98,13 @@ kitchen:
     - binary_sensor.kitchen_desk_motion
     - binary_sensor.kitchen_occupancy
     - binary_sensor.kitchen_table_vibration
+    - binary_sensor.family_room_motion
   block_on_switch_entities:
-    - input_boolean.kitchen_recently_off
+    - binary_sensor.kitchen_recently_off
     - input_boolean.movie_night
   block_off_switch_entities:
     - input_boolean.dining_room_in_use
+    - binary_sensor.downstairs_tv
   warning_flash: True
 
 kitchen_nook:
@@ -127,13 +131,32 @@ powder_room:
   motion:
     # - binary_sensor.inside_powder_room_motion
     # - binary_sensor.outside_powder_room_motion
-    - binary_sensor.lumi_lumi_sensor_motion_aq2_ias_zone
+    - binary_sensor.powder_room_motion
   block_off_switch_entities:
-    - binary_sensor.powder_room_door
-  block_off_switch_states: "off"
+    - binary_sensor.powder_door_closed_under_30min
+    # - binary_sensor.powder_room_door
+  # block_off_switch_states: "off"
   shorten_delay:
     - binary_sensor.powder_room_door
   warning_flash: True
+
+family_room:
+  module: automoli
+  class: AutoMoLi
+  delay: 1800
+  lights:
+    - light.family_room_light
+    - switch.family_room_lamp
+  motion:
+    - binary_sensor.family_room_motion
+    - binary_sensor.downstairs_tv
+  block_on_switch_entities:
+    - input_boolean.movie_night
+  block_off_switch_entities:
+    - binary_sensor.downstairs_tv
+  daytimes:
+    - { starttime: "sunset", name: "evening", light: 100 }
+    - { starttime: "sunrise", name: "morning", light: 0 }
 
 ########  Just turn off, if turned on manually ########
 outside_pantry:
@@ -208,6 +231,7 @@ kids_hall:
     - switch.kids_hall_lights
   motion:
     - binary_sensor.upstairs_back_stairs_motion
+    - binary_sensor.kids_hall_motion
 
 master_bathroom:
   module: automoli
@@ -223,7 +247,7 @@ master_bathroom:
   motion:
     - binary_sensor.master_bathroom_motion
     - binary_sensor.toilet_motion
-    # Special template that checks for both bedroom motion and 
+    # Special template that checks for both bedroom motion and
     # that it is between 6am and 11pm
     - binary_sensor.bedroom_motion_for_bathroom_lights
   shorten_delay:
@@ -241,7 +265,7 @@ master_bathroom_vanity:
   motion:
     - binary_sensor.master_bathroom_motion
     - binary_sensor.toilet_motion
-    # Special template that checks for both bedroom motion and 
+    # Special template that checks for both bedroom motion and
     # that it is between 6am and 11pm
     - binary_sensor.bedroom_motion_for_bathroom_lights
   shorten_delay:
@@ -283,8 +307,8 @@ master_shower:
     - switch.shower_fan
     - switch.outside_shower_light
   motion:
-    - binary_sensor.master_bathroom_humidity_rising_aqara
-    - binary_sensor.master_bathroom_temp_rising_aqara
+    - binary_sensor.master_shower_humidity_rising
+    - binary_sensor.master_shower_temp_rising
   humidity: sensor.master_shower_humidity
   block_off_switch_entitities:
     - switch.bathroom_bath_light
@@ -319,7 +343,7 @@ master_toilet_fan:
 master_fireplace:
   module: automoli
   class: AutoMoLi
-  delay: 7200
+  delay: 3600
   lights:
     - switch.master_fireplace
 
@@ -338,6 +362,7 @@ front_stairs:
     - binary_sensor.entry_hallway_motion
     - binary_sensor.master_bedroom_motion
     - binary_sensor.front_door
+    - binary_sensor.front_entry_motion
   block_on_switch_entities:
     - binary_sensor.upstairs_back_stairs_recent_motion
   block_off_switch_entities:

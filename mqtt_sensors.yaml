@@ -6,7 +6,7 @@ binary_sensor:
   - platform: mqtt
     qos: 1
     state_topic: "home-assistant/sensors/25410"
-    name: "Master Bathroom Motion"
+    name: "Upstairs Playroom Motion"
     value_template: >
       {{ value_json.cmd }}
     payload_on: 156
@@ -66,7 +66,7 @@ binary_sensor:
   - platform: mqtt
     qos: 1
     state_topic: "home-assistant/sensors/17137"
-    name: "Outside Powder Room Motion"
+    name: "Family Room Motion"
     value_template: >
       {{ value_json.cmd }}
     payload_on: 172
@@ -76,7 +76,7 @@ binary_sensor:
   - platform: mqtt
     qos: 1
     state_topic: "home-assistant/sensors/21469"
-    name: "Inside Powder Room Motion"
+    name: "Kids Hall Motion"
     value_template: >
       {{ value_json.cmd }}
     payload_on: 188
@@ -140,14 +140,14 @@ sensor:
   - platform: mqtt
     state_topic: "home-assistant/sensors/2966"
     device_class: temperature
-    name: "Dryer Temperature"
+    name: "TV Temperature"
     value_template: >
       {{ value_json.temperature_C | float }}
     unit_of_measurement: "°C"
   - platform: mqtt
     state_topic: "home-assistant/sensors/2966"
     device_class: humidity
-    name: "Dryer Humidity"
+    name: "TV Humidity"
     value_template: >
       {{ value_json.humidity | float }}
     unit_of_measurement: "%"

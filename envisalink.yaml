@@ -5,7 +5,7 @@ password: !secret honeywell_password
 port: 4025
 evl_version: 4
 keepalive_interval: 60
-zonedump_interval: 30
+zonedump_interval: 15
 timeout: 10
 zones:
   1:
@@ -35,7 +35,7 @@ zones:
   11:
     name: "Play Room Right Window"
     type: "opening"
-  12: 
+  12:
     name: "Kitchen Sink Window"
     type: "opening"
   13:

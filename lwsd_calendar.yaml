@@ -1,0 +1,25 @@
+binary_sensor:
+  - platform: template
+    sensors:
+      school_today:
+        unique_id: "school_today"
+        friendly_name: "School Today"
+        value_template: >
+          {% set sensor = namespace(state=false) %}
+          {% set first_day = "2021-09-01" %}
+          {% set last_day = "2022-06-17" %}
+          {% set no_school_days=[ "2022-02-21", "2022-03-11", "2022-04-04", "2022-04-05", 
+                                  "2022-04-06", "2022-04-07", "2022-04-08", "2022-05-27", 
+                                  "2022-05-30", "2022-05-31"] %}
+          {% set sensor.state = false %}
+          {% if first_day | as_datetime <= now().strftime("%Y-%m-%d") | as_datetime <= last_day | as_datetime%}
+            {% if now().weekday() < 5 %}
+              {% set sensor.state = true %}
+              {% for no_school_day in no_school_days %}
+                {% if now().strftime("%Y-%m-%d") | as_datetime == no_school_day | as_datetime %}
+                  {% set sensor.state = false %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          {% endif %}
+          {{ sensor.state }}

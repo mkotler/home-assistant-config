@@ -14,8 +14,6 @@ cards:
           include:
             - entity_id: "*"
               state: "unavailable"
-            - entity_id: "*"
-              state: "unknown"
           exclude:
             - entity_id: "button.*_ota_update"
             - entity_id: "button.*_reboot"
@@ -23,9 +21,11 @@ cards:
             - entity_id: "sensor.*alexa*"
             - entity_id: "switch.*alexa*"
             - entity_id: "sensor.toyota*_window"
+            - entity_id: "sensor.key*"
             - entity_id: "sensor.toyota_hood"
             - entity_id: "sensor.toyota_moonroof"
             - entity_id: "media_player.toyota_alexa"
+            - entity_id: "button.*_identify"
         sort:
           method: name
       - type: custom:auto-entities
@@ -187,3 +187,25 @@ cards:
         sort:
           method: last_triggered
           reverse: true
+      - type: custom:auto-entities
+        card:
+          type: entities
+          title: Unknown
+        show_empty: false
+        filter:
+          include:
+            - entity_id: "*"
+              state: "unknown"
+          exclude:
+            - entity_id: "button.*_ota_update"
+            - entity_id: "button.*_reboot"
+            - entity_id: "button.tesla*"
+            - entity_id: "sensor.*alexa*"
+            - entity_id: "switch.*alexa*"
+            - entity_id: "sensor.toyota*_window"
+            - entity_id: "sensor.toyota_hood"
+            - entity_id: "sensor.toyota_moonroof"
+            - entity_id: "media_player.toyota_alexa"
+            - entity_id: "button.*_identify"
+        sort:
+          method: name

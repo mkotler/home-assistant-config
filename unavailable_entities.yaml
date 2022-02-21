@@ -23,13 +23,29 @@ template:
             {{ states
               |rejectattr('domain','eq','group')
               |rejectattr('entity_id','in',state_attr('group.ignored_entities','entity_id'))
-              |selectattr('state','in',['unavailable','unknown','none'])|map(attribute='entity_id')|list }}
+              |selectattr('state','in',['unavailable','none'])|map(attribute='entity_id')|list }}
+      - unique_id: unknown_entities
+        name: "Unknown Entities"
+        unit_of_measurement: entities
+        state: >
+          {% if state_attr('sensor.unknown_entities','entities') != none %}
+            {{ state_attr('sensor.unknown_entities','entities')|count }}
+          {% else %}
+            0
+          {% endif %}
+        attributes:
+          entities: >
+            {{ states
+              |rejectattr('domain','eq','group')
+              |rejectattr('entity_id','in',state_attr('group.ignored_entities','entity_id'))
+              |selectattr('state','in',['unknown'])|map(attribute='entity_id')|list }}
 # REQUIRED - Add any entities you do not with to monitor in this group.
 # IMPORTANT - This group MUST exist even if empty for sensor template to render.
 group:
   ignored_entities:
     entities:
       - sensor.unavailable_entities # prevent template loop warnings?
+      - sensor.unknown_entitites # prevent template loop warnings?
       - binary_sensor.updater # always unknown after restart
       # button.*_ota_update
       - button.anna_s_room_ota_update
@@ -44,8 +60,6 @@ group:
       - button.shelly1_8caab56e7b5b_ota_update
       - button.shelly1_e8db84d36cc7_ota_update
       - button.shelly1_e8db84d3c77b_ota_update
-      - button.shelly1_e8db84d46c27_ota_update
-      - button.shelly1l_e8db84aac8f7_ota_update
       - button.shelly1l_e8db84aba4d9_ota_update
       - button.shellyix3_e8db84d6e72f_ota_update
       - button.shellyswitch25_483fda8d2271_ota_update
@@ -56,6 +70,12 @@ group:
       - button.shellyswitch25_e8db84d6f3c8_ota_update
       - button.shellyswitch25_e8db84d6f3dc_ota_update
       - button.shower_ota_update
+      - button.dog_run_ota_update
+      - button.downstairs_playroom_ota_update
+      - button.garage_lights_ota_update
+      - button.guest_bedroom_lights_ota_update
+      - button.master_bedroom_ota_update
+      - button.master_toilet_ota_update
       # button.*_reboot
       - button.anna_s_room_reboot
       - button.bathroom_reboot
@@ -69,8 +89,6 @@ group:
       - button.shelly1_8caab56e7b5b_reboot
       - button.shelly1_e8db84d36cc7_reboot
       - button.shelly1_e8db84d3c77b_reboot
-      - button.shelly1_e8db84d46c27_reboot
-      - button.shelly1l_e8db84aac8f7_reboot
       - button.shelly1l_e8db84aba4d9_reboot
       - button.shellyix3_e8db84d6e72f_reboot
       - button.shellyswitch25_483fda8d2271_reboot
@@ -81,6 +99,12 @@ group:
       - button.shellyswitch25_e8db84d6f3c8_reboot
       - button.shellyswitch25_e8db84d6f3dc_reboot
       - button.shower_reboot
+      - button.dog_run_reboot
+      - button.downstairs_playroom_reboot
+      - button.garage_lights_reboot
+      - button.guest_bedroom_lights_reboot
+      - button.master_bedroom_reboot
+      - button.master_toilet_reboot
       # button.tesla* and sensor.toyota*
       - button.tesla_flash_lights
       - button.tesla_horn
@@ -90,6 +114,7 @@ group:
       - sensor.toyota_passenger_side_window
       - sensor.toyota_hood
       - sensor.toyota_moonroof
+      - sensor.key_battery_status_2022_toyota_highlander_limited_v6_awd
       # sensor.*alexa*
       - sensor.anna_alexa_next_alarm
       - sensor.anna_alexa_next_reminder
@@ -122,6 +147,18 @@ group:
       - switch.toyota_alexa_do_not_disturb_switch
       - switch.toyota_alexa_repeat_switch
       - switch.toyota_alexa_shuffle_switch
+      # button.*_identify
+      - button.dryer_vibration_identify
+      - button.family_room_lamp_identify
+      - button.kitchen_table_vibration_identify
+      - button.lumi_lumi_sensor_motion_aq2_92811107_identify
+      - button.master_bathroom_motion_identify
+      - button.master_shower_identify
+      - button.powder_room_door_identify
+      - button.powder_room_motion_identify
+      - button.washing_machine_identify
+      - button.water_heater_sensor_identify
+      - button.dog_food_sensor_identify
       # Toyota media player
       - media_player.toyota_alexa
 # OPTIONAL - filter template loop warnings from the Home Assistant log.

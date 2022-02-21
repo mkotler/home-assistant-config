@@ -2,39 +2,24 @@ title: Debug
 path: debug
 badges: []
 cards:
-  # Graph system monitor values
   - type: custom:mini-graph-card
-    #points_per_hour: 4
-    #hours_to_show: 24
-    points_per_hour: 24
-    hours_to_show: 4
+    points_per_hour: 30
+    hours_to_show: 2
     aggregate_func: max
     entities:
-      - sensor.dryer_temperature
+      - sensor.washing_machine_energy
   - type: custom:mini-graph-card
-    #points_per_hour: 4
-    #hours_to_show: 24
-    points_per_hour: 24
-    hours_to_show: 4
+    points_per_hour: 12
+    hours_to_show: 24
     aggregate_func: max
     entities:
-      - sensor.dryer_humidity
+      - sensor.tv_temperature
   - type: custom:mini-graph-card
-    #points_per_hour: 12
-    #hours_to_show: 24
-    points_per_hour: 24
-    hours_to_show: 4
+    points_per_hour: 12
+    hours_to_show: 24
     aggregate_func: max
     entities:
-      - sensor.dryer_temp_rising
-  - type: custom:mini-graph-card
-    #points_per_hour: 12
-    #hours_to_show: 24
-    points_per_hour: 24
-    hours_to_show: 4
-    aggregate_func: max
-    entities:
-      - sensor.dryer_temp_falling
+      - sensor.tv_humidity
   - type: custom:mini-graph-card
     points_per_hour: 4
     hours_to_show: 24
@@ -46,7 +31,7 @@ cards:
     hours_to_show: 24
     aggregate_func: max
     entities:
-      - binary_sensor.master_bathroom_temp_rising_aqara
+      - binary_sensor.master_shower_temp_rising
     state_map:
       - value: "off"
         label: "Not Rising"
@@ -63,12 +48,23 @@ cards:
     hours_to_show: 24
     aggregate_func: max
     entities:
-      - binary_sensor.master_bathroom_humidity_rising_aqara
+      - binary_sensor.master_shower_humidity_rising
     state_map:
       - value: "off"
         label: "Not Rising"
       - value: "on"
         label: "Rising"
+  - type: custom:mini-graph-card
+    points_per_hour: 12
+    hours_to_show: 24
+    aggregate_func: max
+    entities:
+      - binary_sensor.dryer_vibration
+    state_map:
+      - value: "off"
+        label: "off"
+      - value: "on"
+        label: "on"
   - type: custom:mini-graph-card
     points_per_hour: 4
     aggregate_func: max
@@ -98,7 +94,36 @@ cards:
     entities:
       - sensor.processor_use
   - type: custom:mini-graph-card
+    name: Downstairs Temperature
+    points_per_hour: 6
+    aggregate_func: max
+    entities:
+      - sensor.downstairs_hall_temperature
+      - sensor.kitchen_occupancy_temperature
+      - sensor.kitchen_table_vibration_temperature
+      - sensor.office_motion_temperature
+      - sensor.powder_room_door_temperature
+      - sensor.powder_room_motion_temperature
+      - sensor.tv_temperature
+  - type: custom:mini-graph-card
+    name: Upstairs Temperature
+    points_per_hour: 6
+    aggregate_func: max
+    entities:
+      - sensor.anna_room_temperature
+      - sensor.master_bathroom_motion_temperature
+      - sensor.master_bedroom_temperature
+      - sensor.master_shower_temperature
+  - type: custom:mini-graph-card
+    name: Garage Temperature
+    points_per_hour: 6
+    aggregate_func: max
+    entities:
+      - sensor.tesla_temperature_sensor_outside
+      - sensor.water_heater_sensor_temperature
+  - type: custom:mini-graph-card
     points_per_hour: 12
     aggregate_func: max
     entities:
       - sensor.unavailable_entities
+      - sensor.unknown_entities

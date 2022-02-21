@@ -167,18 +167,12 @@ turn_off_all_lights:
   - service: homeassistant.turn_off
     target:
       entity_id: group.downstairs
-  - service: timer.cancel
-    target:
-      entity_id: "{% set var = namespace(timer=\"\") %} {% for entity in state_attr('group.downstairs','entity_id')\
-        \ %}\n  {% set parts = entity.split('.') %}\n  {% set var.timer = var.timer\
-        \ + \"timer.\" + parts[1] + \"_off\" %}\n  {% if not loop.last %}\n    {%\
-        \ set var.timer = var.timer + \", \" %}\n  {% endif %}\n{% endfor %} {{ var.timer\
-        \ }}\n"
+    data: {}
   mode: single
   alias: Turn off all downstairs lights
   icon: mdi:lightbulb
 turn_off_all_upstairs_lights_except_kids:
-  alias: Turn off all upstairs lights (except kids)
+  alias: Turn off all upstairs lights (except kids and master fireplace)
   sequence:
   - choose:
     - conditions:
@@ -190,20 +184,11 @@ turn_off_all_upstairs_lights_except_kids:
         device_id: c32cc10983532262a768e043288f286f
         entity_id: switch.guest_bedroom_lights
         domain: switch
-      - service: timer.cancel
-        target:
-          entity_id: timer.guest_bedroom_lights_off
     default: []
   - service: homeassistant.turn_off
     target:
       entity_id: group.upstairs_master_and_halls
-  - service: timer.cancel
-    target:
-      entity_id: "{% set var = namespace(timer=\"\") %} {% for entity in state_attr('group.upstairs_master_and_halls','entity_id')\
-        \ %}\n  {% set parts = entity.split('.') %}\n  {% set var.timer = var.timer\
-        \ + \"timer.\" + parts[1] + \"_off\" %}\n  {% if not loop.last %}\n    {%\
-        \ set var.timer = var.timer + \", \" %}\n  {% endif %}\n{% endfor %} {{ var.timer\
-        \ }}\n"
+    data: {}
   mode: single
   icon: mdi:lightbulb
 turn_off_kids_lights:
@@ -212,13 +197,7 @@ turn_off_kids_lights:
   - service: homeassistant.turn_off
     target:
       entity_id: group.upstairs_kids
-  - service: timer.cancel
-    target:
-      entity_id: "{% set var = namespace(timer=\"\") %} {% for entity in state_attr('group.upstairs_kids','entity_id')\
-        \ %}\n  {% set parts = entity.split('.') %}\n  {% set var.timer = var.timer\
-        \ + \"timer.\" + parts[1] + \"_off\" %}\n  {% if not loop.last %}\n    {%\
-        \ set var.timer = var.timer + \", \" %}\n  {% endif %}\n{% endfor %} {{ var.timer\
-        \ }}\n"
+    data: {}
   mode: single
   icon: mdi:lightbulb
 find_matts_phone:
@@ -252,71 +231,3 @@ reset_system_on_restart:
     target:
       entity_id: timer.rtl_timer
   mode: single
-turn_lights_on:
-  alias: 'Lights: Turn on lights, start timer, and set explanation text'
-  icon: mdi:lightbulb-variant
-  fields:
-    lights:
-      name: Lights
-      description: Lights to turn on
-      required: true
-    duration:
-      name: Timer Duration
-      description: Duration of timer to turn lights off
-      required: true
-  max: 10
-  mode: parallel
-  sequence:
-  - service: homeassistant.turn_on
-    target:
-      entity_id: '{{ lights }}'
-  - service: input_text.set_value
-    target:
-      entity_id: '{{ lights | map(''regex_replace'', ''^.*[.]'', ''input_text.'')
-        | map(''regex_replace'', ''$'', ''_why_on'') | list }}'
-    data:
-      value: "{% set message = \"Lights turned on manually\" %}\n{% if not (context.id\
-        \ is none) %}\n  {% set message = state_attr((states.automation | selectattr(\"\
-        context.id\", \"eq\", context.id) | map(attribute=\"entity_id\") | join),\
-        \ \"friendly_name\") %}\n{% endif %}\n{{ message }}\n"
-  - service: timer.start
-    data:
-      entity_id: '{{ lights | map(''regex_replace'', ''^.*[.]'', ''timer.'') | map(''regex_replace'',''$'',
-        ''_off'') | list}}'
-      duration: '{{duration }}'
-  - service: input_text.set_value
-    target:
-      entity_id: '{{ lights | map(''regex_replace'', ''^.*[.]'', ''input_text.'')
-        | map(''regex_replace'', ''$'', ''_why_off'') | list }}'
-    data:
-      value: "{% set message = duration + \" timer expired\" %}\n{% if not (context.id\
-        \ is none) %}\n  {% set message = message + \" from \" + state_attr((states.automation\
-        \ | selectattr(\"context.id\", \"eq\", context.id) | map(attribute=\"entity_id\"\
-        ) | join), \"friendly_name\") %}\n{% endif %}\n{{ message }}\n"
-turn_lights_off:
-  alias: 'Lights: Turn off lights and set explanation text'
-  icon: mdi:lightbulb-variant
-  fields:
-    lights:
-      name: Lights
-      description: Lights to turn on
-      required: true
-    source:
-      name: Script Caller
-      description: Caller of script to use in logging
-      required: true
-  max: 10
-  mode: parallel
-  sequence:
-  - service: homeassistant.turn_off
-    target:
-      entity_id: '{{ lights }}'
-  - service: input_text.set_value
-    target:
-      entity_id: '{{ lights | map(''regex_replace'', ''^.*[.]'', ''input_text.'')
-        | map(''regex_replace'', ''$'', ''_why_off'') | list }}'
-    data:
-      value: "{% set message = \"Lights turned off manually\" %} {% if not (context.id\
-        \ is none) %}\n  {% set message = state_attr((states.automation | selectattr(\"\
-        context.id\", \"eq\", context.id) | map(attribute=\"entity_id\") | join),\
-        \ \"friendly_name\") %}\n{% endif %} {{ message }}\n"

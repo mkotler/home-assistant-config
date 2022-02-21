@@ -187,6 +187,14 @@ cards:
               left: 37.5%
               "--paper-item-icon-color": "#FDD835"
               "--mdc-icon-size": 15px
+      - type: state-icon
+        icon: mdi:signal-variant
+        entity: binary_sensor.upstairs_playroom_motion
+        style:
+          top: 25%
+          left: -6%
+          transform: rotate(0deg)
+          "--mdc-icon-size": 10px
     image: /local/floorplan/upstairs.png
   - type: picture-elements
     elements:
@@ -233,6 +241,22 @@ cards:
           top: 24%
           left: 93%
           "--mdc-icon-size": 15px
+      - type: state-icon
+        icon: mdi:signal-variant
+        entity: binary_sensor.family_room_motion
+        style:
+          top: 30%
+          left: 85%
+          transform: rotate(-90deg)
+          "--mdc-icon-size": 10px
+      - type: state-icon
+        icon: mdi:youtube-tv
+        entity: binary_sensor.downstairs_tv
+        style:
+          top: 27%
+          left: 82.5%
+          transform: rotate(-45deg)
+          "--mdc-icon-size": 10px
       - type: state-icon
         icon: mdi:lamp
         entity: switch.family_room_lamp
@@ -310,6 +334,32 @@ cards:
           top: 54%
           left: 22%
           "--mdc-icon-size": 15px
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.dogs_fed
+            state: "off"
+        elements:
+          - type: state-icon
+            icon: mdi:dog-side
+            entity: binary_sensor.dogs_fed
+            style:
+              top: 50.3%
+              left: 4.5%
+              "--mdc-icon-size": 15px
+              "--paper-item-icon-active-color": red
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.dogs_fed
+            state: "on"
+        elements:
+          - type: state-icon
+            icon: mdi:dog-side
+            entity: binary_sensor.dogs_fed
+            style:
+              top: 50.3%
+              left: 4.5%
+              "--mdc-icon-size": 15px
+              "--paper-item-icon-active-color": green
       - type: state-icon
         icon: mdi:lightbulb
         entity: light.office_light
@@ -369,17 +419,10 @@ cards:
         icon: mdi:signal-variant
         entity: binary_sensor.kitchen_nook_motion
         style:
-          top: "-5%"
-          left: 51%
+          top: "-4.5%"
+          left: 51.7%
           transform: rotate(135deg)
           "--mdc-icon-size": 10px
-      - type: state-icon
-        icon: mdi:minus
-        entity: binary_sensor.outside_powder_room_motion
-        style:
-          top: 32%
-          left: 49%
-          transform: rotate(90deg)
       - type: state-icon
         icon: mdi:signal-variant
         entity: binary_sensor.front_entry_motion

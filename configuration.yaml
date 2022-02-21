@@ -7,6 +7,8 @@ homeassistant:
     unavailable_entities: !include unavailable_entities.yaml
     tesla: !include tesla.yaml
     movie_night: !include movie_night.yaml
+    lwsd_calendar: !include lwsd_calendar.yaml
+    dogs_fed: !include dogs_fed.yaml
 
 # Debugging
 logger:
@@ -61,7 +63,7 @@ panel_custom:
 
 # Setup input variables for all entitites
 # input_text: !include input_text.yaml
-timer: 
+timer:
   rtl_timer:
     name: RTL Status Timer
 input_boolean:
@@ -107,9 +109,14 @@ envisalink: !include envisalink.yaml
 
 # Alexa integration with Philips Hue emulated bridge
 # Used by several packages (e.g., tesla, movie_night)
+# in addition to the ones below
 emulated_hue:
   listen_port: 80
   expose_by_default: false
+  entities:
+    switch.family_room_lamp:
+      name: "Family Room Lamp"
+      hidden: false
 
 sensor:
   # Format sensor for lovelace
@@ -127,22 +134,7 @@ sensor:
             {% set julie = 1 %}
           {% endif %}
           {{ matt + julie }}
-      dryer_temp_rising:
-        friendly_name: "Dryer Temperature Rising"
-        value_template: >
-          {% set value = 0 %}
-          {% if states('binary_sensor.dryer_temp_rising') == "on" %}
-            {% set value = 1 %}
-          {% endif %}
-          {{ value }}
-      dryer_temp_falling:
-        friendly_name: "Dryer Temperature Falling"
-        value_template: >
-          {% set value = 0 %}
-          {% if states('binary_sensor.dryer_temp_falling') == "on" %}
-            {% set value = 1 %}
-          {% endif %}
-          {{ value }}
+
   # Monitor system performance
   - platform: systemmonitor
     resources:
@@ -160,10 +152,10 @@ binary_sensor:
     sensors:
       matt_in_bed:
         friendly_name: "Matt in Bed"
-        value_template: "{{ states('sensor.matt_bed_presence') | int > 200 }}"
+        value_template: "{{ states('sensor.matt_bed_presence') | int > 200 if is_number(states('sensor.matt_bed_presence')) else 0 }}"
       julie_in_bed:
         friendly_name: "Julie in Bed"
-        value_template: "{{ states('sensor.julie_bed_presence') | int > 200 }}"
+        value_template: "{{ states('sensor.julie_bed_presence') | int > 200 if is_number(states('sensor.julie_bed_presence')) else 0 }}"
 
       # Add "on"/"off" sensors for AutoMoLi
       epson_printing:
@@ -175,47 +167,84 @@ binary_sensor:
       kitchen_recently_off:
         friendly_name: "Kitchen Lights Recently Off"
         value_template: "{{ states('switch.kitchen_lights') == 'off' and (as_timestamp(now()) - as_timestamp(states.switch.kitchen_lights.last_updated)) < 60  }}"
-      master_bath_recent_motion: 
-        friendly_name: "Master Bathrom Recent Motion"
-        value_template: "{{ (as_timestamp(now()) - as_timestamp(states.binary_sensor.master_bathroom_motion.last_updated)) < 30 }}"
+      master_bath_recent_motion:
+        friendly_name: "Master Bathroom Recent Motion"
+        value_template: "{{ states('binary_sensor.master_bathroom_motion') != None and (as_timestamp(now()) - as_timestamp(states.binary_sensor.master_bathroom_motion.last_updated)) < 30 }}"
       bedroom_motion_for_bathroom_lights:
         friendly_name: "Bedroom Motion Triggers Bathroom Lights"
         value_template: "{{ states('binary_sensor.master_bedroom_motion') == 'on' and (now() > today_at('06:00') and now() < today_at('23:00')) }}"
-      upstairs_back_stairs_recent_motion: 
+      upstairs_back_stairs_recent_motion:
         friendly_name: "Upstairs Back Stairs Recent Motion"
-        value_template: "{{ (as_timestamp(now()) - as_timestamp(states.binary_sensor.upstairs_back_stairs_motion.last_updated)) < 30 }}"
+        value_template: "{{ states('binary_sensor.upstairs_back_stairs_motion') and (as_timestamp(now()) - as_timestamp(states.binary_sensor.upstairs_back_stairs_motion.last_updated)) < 30 }}"
       powder_door_recently_opened:
         friendly_name: "Powder Room Door Recently Opened"
         value_template: "{{ states('binary_sensor.powder_room_door') == 'on' and (as_timestamp(now()) - as_timestamp(states.binary_sensor.powder_room_door.last_updated)) < 15  }}"
+      powder_door_closed_under_30min:
+        friendly_name: "Powder Room Door Closed Under 30 Min"
+        value_template: "{{ states('binary_sensor.powder_room_door') == 'off' and (as_timestamp(now()) - as_timestamp(states.binary_sensor.powder_room_door.last_updated)) < 1800 }}"
+      downstairs_tv:
+        friendly_name: "Downstairs TV"
+        value_template: "{{ states('sensor.tv_temperature') | int >= 90 if is_number(states('sensor.tv_temperature')) else False }}"
 
   # Add trend to aqara temp and humidity sensors
   - platform: trend
     sensors:
-      master_bathroom_temp_rising_aqara:
+      master_shower_temp_rising:
         entity_id: sensor.master_shower_temperature
-        sample_duration: 300
-        max_samples: 50
-        min_gradient: 0.02
-      master_bathroom_humidity_rising_aqara:
+        sample_duration: 120
+        max_samples: 20
+        min_gradient: 0.015
+      master_shower_humidity_rising:
         entity_id: sensor.master_shower_humidity
-        sample_duration: 300
-        max_samples: 50
-        min_gradient: 0.02
-      master_bathroom_temp_falling_aqara:
-        entity_id: sensor.master_shower_temperature
-        sample_duration: 300
-        max_samples: 50
-        min_gradient: -0.01
-      dryer_temp_rising:
-        entity_id: sensor.dryer_temperature
-        sample_duration: 300
-        max_samples: 50
-        min_gradient: 0.01
-      dryer_temp_falling:
-        entity_id: sensor.dryer_temperature
-        sample_duration: 300
-        max_samples: 50
-        min_gradient: -0.01
+        sample_duration: 120
+        max_samples: 20
+        min_gradient: 0.015
+
+# Track people at home
+template:
+  - sensor:
+      - unique_id: people_at_home
+        name: People at Home
+        state: >
+          {%- set people = expand('group.people') %}
+          {{ people | selectattr('state', 'in', ['home', 'on'] ) | list | count }}
+        icon: >
+          {%- set icons = ['account-off', 'account', 'account-multiple'] %}
+          {%- set people = expand('group.people') %}
+          {%- set cnt = people | selectattr('state', 'in', ['home', 'on'] ) | list | count %}
+          {%- if cnt >= 0 %}
+            mdi:{{ icons[cnt] if cnt in range(icons | count) else 'account-group' }}
+          {%- else %}
+            mdi:account-alert
+          {%- endif %}
+        attributes:
+          template: people_tracker
+          people: >
+            {%- set people = expand('group.people') | selectattr('state', 'eq', 'home') | map(attribute='name') | list %}
+            {%- set company = expand('group.people') | selectattr('state', 'eq', 'on') | map(attribute='name') | list %}
+            {%- set people = people + company %}
+            {{ people }}
+          and: >
+            {%- set people = expand('group.people') | selectattr('state', 'eq', 'home') | map(attribute='name') | list %}
+            {%- set company = expand('group.people') | selectattr('state', 'eq', 'on') | map(attribute='name') | list %}
+            {%- set people = people + company %}
+            {%- if people | count > 0 %}
+              {{- [people[:-1] | join(', '), 'and', people[-1]] | join(' ') if people | count > 1 else people[0] }}
+            {%- else %}unknown
+            {%- endif %}
+          or: >
+            {%- set people = expand('group.people') | selectattr('state', 'eq', 'home') | map(attribute='name') | list %}
+            {%- set company = expand('group.people') | selectattr('state', 'eq', 'on') | map(attribute='name') | list %}
+            {%- set people = people + company %}
+            {%- if people | count > 0 %}
+              {{- [people[:-1] | join(', '), 'or', people[-1]] | join(' ') if people | count > 1 else people[0] }}
+            {%- else %}unknown
+            {%- endif %}
+          count: >
+            {%- set people = expand('group.people') | selectattr('state', 'eq', 'home') | map(attribute='name') | list %}
+            {%- set company = expand('group.people') | selectattr('state', 'eq', 'on') | map(attribute='name') | list %}
+            {%- set people = people + company %}
+            {{ people | count }}
 
 # Shelly devices over MQTT
 switch: !include shelly_mqtt.yaml

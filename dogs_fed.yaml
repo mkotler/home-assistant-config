@@ -1,0 +1,21 @@
+binary_sensor:
+  - platform: template
+    sensors:
+      dogs_fed:
+        unique_id: "dogs_fed"
+        friendly_name: "Dogs Have Been Fed"
+        value_template: >
+          {% set sensor = namespace(state=false) %}
+          {% set breakfast_start = now().strftime("%Y-%m-%d 05:00") %}
+          {% set breakfast_end = now().strftime("%Y-%m-%d 12:00") %}
+          {% set dinner_start = now().strftime("%Y-%m-%d 17:00")  %}
+          {% set dinner_end = now().strftime("%Y-%m-%d 23:59") %}
+          {% set last_changed = as_local(states.binary_sensor.dog_food_open.last_changed).strftime("%Y-%m-%d %H:%M") %}
+
+          {% set sensor.state = false %}
+          {% if breakfast_start | as_datetime <= last_changed | as_datetime <= breakfast_end | as_datetime %}
+              {% set sensor.state = true %}
+          {% elif dinner_start | as_datetime <= last_changed | as_datetime <= dinner_end | as_datetime %}
+              {% set sensor.state = true %}
+          {% endif %}
+          {{ sensor.state }}
