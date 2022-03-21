@@ -122,6 +122,12 @@ cards:
       - sensor.tesla_temperature_sensor_outside
       - sensor.water_heater_sensor_temperature
   - type: custom:mini-graph-card
+    name: Dryer Temperature
+    points_per_hour: 12
+    aggregate_func: max
+    entities:
+      - sensor.dryer_vibration_temperature
+  - type: custom:mini-graph-card
     points_per_hour: 12
     aggregate_func: max
     entities:

@@ -174,6 +174,13 @@
     device_id: d8c1e1f1292a82d5ff174bbec10f80a5
     entity_id: switch.annas_room_overhead_light
     domain: switch
+  - condition: state
+    entity_id: device_tracker.life360_katie
+    state: not_home
+  - type: turn_off
+    device_id: cfe3edbb953f6b6e2a9de89d980b3502
+    entity_id: switch.katies_room_lights
+    domain: switch
   mode: single
 - id: '1623539585816'
   alias: 'Announcement: Someone is almost home'
@@ -750,14 +757,12 @@
   description: ''
   trigger:
   - platform: state
-    entity_id: binary_sensor.updater
-    from: 'off'
-    to: 'on'
+    entity_id: sensor.latest_version
   condition: []
   action:
   - service: notify.mobile_app_matts_iphone
     data:
-      message: Home Assistant is ready for an update to {{ state_attr("binary_sensor.updater","newest_version")
+      message: Home Assistant is ready for an update to {{ states("sensor.latest_version")
         }}
   mode: single
 - id: '1642316274583'
@@ -864,6 +869,9 @@
   - service: notify.mobile_app_matts_iphone
     data:
       message: The dryer is done. Time for folding.
+  - service: notify.mobile_app_julies_iphone
+    data:
+      message: The dryer is done. Time for folding.
   mode: single
 - id: '1645303796091'
   alias: 'Announcement:  Sensor Battery is Low'
@@ -947,6 +955,9 @@
   - service: notify.mobile_app_matts_iphone
     data:
       message: The washing machine is done. Time for drying.
+  - service: notify.mobile_app_julies_iphone
+    data:
+      message: The washing machine is done. Time for drying.
   mode: single
 - id: '1645420665555'
   alias: 'Garbage: Update garbage days based on holidays'
@@ -957,11 +968,11 @@
       garbage_collection_entity: sensor.garbage
       holiday_entity: calendar.republic_services_holidays
 - id: '1645436020073'
-  alias: 'Toyota: Start car at 6:45am on school day'
+  alias: 'Toyota: Start car at 6:47am on school day'
   description: ''
   trigger:
   - platform: time
-    at: 06:45:00
+    at: 06:47:00
   condition:
   - condition: state
     entity_id: binary_sensor.school_today
@@ -969,13 +980,46 @@
   - condition: state
     entity_id: person.anna_kotler
     state: home
+  - condition: state
+    entity_id: device_tracker.toyota_current_location
+    state: home
   action:
-  - service: toyota_na.door_lock
-    data:
-      vehicle: 47b09d59e791c7d57298000f38b51fef
-  - service: toyota_na.engine_start
-    data:
-      vehicle: 47b09d59e791c7d57298000f38b51fef
+  - choose:
+    - conditions:
+      - condition: and
+        conditions:
+        - condition: state
+          entity_id: binary_sensor.toyota_front_driver_door_lock
+          state: 'off'
+        - condition: state
+          entity_id: binary_sensor.toyota_rear_driver_door_lock
+          state: 'off'
+        - condition: state
+          entity_id: binary_sensor.toyota_hatch
+          state: 'off'
+        - condition: state
+          entity_id: binary_sensor.toyota_front_passenger_door_lock
+          state: 'off'
+        - condition: state
+          entity_id: binary_sensor.toyota_rear_passenger_door_lock
+          state: 'off'
+      sequence:
+      - service: toyota_na.engine_start
+        data:
+          vehicle: 47b09d59e791c7d57298000f38b51fef
+    default:
+    - service: lock.lock
+      data: {}
+      target:
+        entity_id: lock.toyota_highlander
+    - delay:
+        hours: 0
+        minutes: 1
+        seconds: 0
+        milliseconds: 0
+    - service: toyota_na.engine_start
+      data:
+        vehicle: 47b09d59e791c7d57298000f38b51fef
   mode: single
 - id: '1645471584038'
   alias: 'Announcement: Don''t forget to feed dogs'
@@ -1004,4 +1048,26 @@
   - service: notify.mobile_app_julies_iphone
     data:
       message: Don't forget to feed the dogs!
+  mode: single
+- id: '1646527041609'
+  alias: 'Shelly:  Notify when there are updates'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.front_stairs_and_hall_firmware_update
+    from: 'off'
+    to: 'on'
+  - platform: state
+    entity_id: binary_sensor.master_fireplace_firmware_update
+    from: 'off'
+    to: 'on'
+  - platform: state
+    entity_id: binary_sensor.outside_powder_room_firmware_update
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - service: notify.mobile_app_matts_iphone
+    data:
+      message: Shelly devices are ready for a firmware update
   mode: single

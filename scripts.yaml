@@ -188,6 +188,7 @@ turn_off_all_upstairs_lights_except_kids:
   - service: homeassistant.turn_off
     target:
       entity_id: group.upstairs_master_and_halls
+      device_id: a18933f833eeb1398986e921211f7eab
     data: {}
   mode: single
   icon: mdi:lightbulb

@@ -10,6 +10,10 @@ homeassistant:
     lwsd_calendar: !include lwsd_calendar.yaml
     dogs_fed: !include dogs_fed.yaml
 
+frontend:
+  extra_module_url:
+    - /hacsfiles/lovelace-card-mod/card-mod.js
+
 # Debugging
 logger:
   default: warning
@@ -81,6 +85,15 @@ input_boolean:
   debugging:
     name: "Debugging"
     initial: false
+input_datetime:
+  last_riley_nail_trim:
+    name: Last Date Riley's Nails Trimmed
+    has_date: true
+    has_time: false
+  last_gracie_nail_trim:
+    name: Last Date Gracie's Nails Trimmed
+    has_date: true
+    has_time: false
 
 # Add support for templating in lovelace
 lovelace_gen:
@@ -103,6 +116,10 @@ lovelace:
       type: module
     - url: /hacsfiles/timer-bar-card/timer-bar-card.js
       type: module
+    - url: /hacsfiles/lovelace-card-mod/card-mod.js
+      type: module
+    - url: /local/entity-attributes-card.js
+      type: module
 
 # Envisalink Alarm Panel
 envisalink: !include envisalink.yaml
@@ -117,6 +134,13 @@ emulated_hue:
     switch.family_room_lamp:
       name: "Family Room Lamp"
       hidden: false
+
+# input text for alexa actionable notifications
+input_text:
+  alexa_actionable_notification:
+    name: Alexa Actionable Notification Holder
+    max: 255
+    initial: '{"text": "This is a test of the alexa actions custom skill. Did it work?", "event": "actionable.skill.test"}'
 
 sensor:
   # Format sensor for lovelace
@@ -134,6 +158,13 @@ sensor:
             {% set julie = 1 %}
           {% endif %}
           {{ matt + julie }}
+      # Dog Nail Trim Sensors
+      weeks_since_riley_nail_trim:
+        friendly_name: "Weeks Since Riley's Last Nail Trim"
+        value_template: "{{ (((as_timestamp(now()) - state_attr('input_datetime.last_riley_nail_trim', 'timestamp')) / 86400) / 7) | round(1) }} Weeks"
+      weeks_since_gracie_nail_trim:
+        friendly_name: "Weeks Since Gracie's Last Nail Trim"
+        value_template: "{{ (((as_timestamp(now()) - state_attr('input_datetime.last_gracie_nail_trim', 'timestamp')) / 86400) / 7) | round(1) }} Weeks"
 
   # Monitor system performance
   - platform: systemmonitor
@@ -173,31 +204,34 @@ binary_sensor:
       bedroom_motion_for_bathroom_lights:
         friendly_name: "Bedroom Motion Triggers Bathroom Lights"
         value_template: "{{ states('binary_sensor.master_bedroom_motion') == 'on' and (now() > today_at('06:00') and now() < today_at('23:00')) }}"
+      master_toilet_motion_with_bath_light_on:
+        friendly_name: "Master Toilet Motion When Bath Light On"
+        value_template: "{{ states('binary_sensor.toilet_motion') == 'on' and states('switch.bathroom_bath_light') == 'on' }}"
       upstairs_back_stairs_recent_motion:
         friendly_name: "Upstairs Back Stairs Recent Motion"
         value_template: "{{ states('binary_sensor.upstairs_back_stairs_motion') and (as_timestamp(now()) - as_timestamp(states.binary_sensor.upstairs_back_stairs_motion.last_updated)) < 30 }}"
-      powder_door_recently_opened:
-        friendly_name: "Powder Room Door Recently Opened"
-        value_template: "{{ states('binary_sensor.powder_room_door') == 'on' and (as_timestamp(now()) - as_timestamp(states.binary_sensor.powder_room_door.last_updated)) < 15  }}"
       powder_door_closed_under_30min:
         friendly_name: "Powder Room Door Closed Under 30 Min"
         value_template: "{{ states('binary_sensor.powder_room_door') == 'off' and (as_timestamp(now()) - as_timestamp(states.binary_sensor.powder_room_door.last_updated)) < 1800 }}"
       downstairs_tv:
         friendly_name: "Downstairs TV"
         value_template: "{{ states('sensor.tv_temperature') | int >= 90 if is_number(states('sensor.tv_temperature')) else False }}"
+      is_sunny:
+        friendly_name: "Is Sunny"
+        value_template: "{{ states('weather.national_weather_service') == 'sunny' and state_attr('sun.sun', 'elevation') > 6 }}"
 
   # Add trend to aqara temp and humidity sensors
   - platform: trend
     sensors:
       master_shower_temp_rising:
         entity_id: sensor.master_shower_temperature
-        sample_duration: 120
-        max_samples: 20
+        sample_duration: 600
+        max_samples: 30
         min_gradient: 0.015
       master_shower_humidity_rising:
         entity_id: sensor.master_shower_humidity
-        sample_duration: 120
-        max_samples: 20
+        sample_duration: 600
+        max_samples: 30
         min_gradient: 0.015
 
 # Track people at home

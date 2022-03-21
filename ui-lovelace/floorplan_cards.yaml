@@ -102,6 +102,13 @@ cards:
           "--mdc-icon-size": 15px
       - type: state-icon
         icon: mdi:lightbulb
+        entity: switch.katies_room_lights
+        style:
+          top: 77%
+          left: 11%
+          "--mdc-icon-size": 15px
+      - type: state-icon
+        icon: mdi:lightbulb
         entity: switch.guest_bedroom_lights
         style:
           top: 63%
@@ -113,6 +120,13 @@ cards:
         style:
           top: 11%
           left: 63%
+          "--mdc-icon-size": 15px
+      - type: state-icon
+        icon: mdi:floor-lamp
+        entity: switch.master_bedroom_lamp
+        style:
+          top: 5%
+          left: 61.5%
           "--mdc-icon-size": 15px
       - type: state-icon
         icon: mdi:lightbulb
@@ -258,11 +272,11 @@ cards:
           transform: rotate(-45deg)
           "--mdc-icon-size": 10px
       - type: state-icon
-        icon: mdi:lamp
+        icon: mdi:floor-lamp
         entity: switch.family_room_lamp
         style:
           top: 33%
-          left: 70%
+          left: 68.5%
           "--mdc-icon-size": 15px
       - type: state-icon
         icon: mdi:lightbulb
@@ -347,6 +361,7 @@ cards:
               left: 4.5%
               "--mdc-icon-size": 15px
               "--paper-item-icon-active-color": red
+              "--paper-item-icon-color": red
       - type: conditional
         conditions:
           - entity: binary_sensor.dogs_fed

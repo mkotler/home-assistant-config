@@ -7,6 +7,51 @@ visible:
 badges: []
 cards:
   - !include /config/ui-lovelace/floorplan_cards.yaml
+  - type: glance
+    entities:
+      - entity: binary_sensor.dogs_fed
+        name: Dogs Fed
+        icon: mdi:dog-side
+        card_mod:
+          style: |
+            :host {
+              --card-mod-icon-color: 
+                {% if is_state('binary_sensor.dogs_fed', 'on') %}
+                  green
+                {% else %}
+                  red
+                {% endif %}
+                ;
+              }
+      - entity: sensor.weeks_since_riley_nail_trim
+        name: Last Riley Trim
+        icon: mdi:paw
+        card_mod:
+          style: |
+            :host {
+              --card-mod-icon-color: 
+                {% if states('sensor.weeks_since_riley_nail_trim') | float < 3.0 %}
+                  green
+                {% else %}
+                  red
+                {% endif %}
+                ;
+              }
+      - entity: sensor.weeks_since_gracie_nail_trim
+        name: Last Gracie Trim
+        icon: mdi:paw
+        card_mod:
+          style: |
+            :host {
+              --card-mod-icon-color: 
+                {% if states('sensor.weeks_since_riley_nail_trim') | float < 3.0 %}
+                  green
+                {% else %}
+                  red
+                {% endif %}
+                ;
+              }
+    title: Dogs
   - type: grid
     title: Quick Actions
     cards:
@@ -70,7 +115,7 @@ cards:
         tap_action:
           action: toggle
       - entity: switch.family_room_lamp
-        icon: mdi:lamp
+        icon: mdi:floor-lamp
         name: Lamp
         tap_action:
           action: toggle
@@ -138,7 +183,7 @@ cards:
           action: toggle
     title: Garage
   - type: glance
-    columns: 4
+    columns: 3
     entities:
       - entity: switch.master_lights
         name: Master Bedroom
@@ -152,24 +197,16 @@ cards:
         name: Julie Lamp
         tap_action:
           action: toggle
+      - entity: switch.master_bedroom_lamp
+        name: Lamp
+        tap_action:
+          action: toggle
       - entity: switch.master_fireplace
         name: Fireplace
         tap_action:
           action: toggle
         icon: mdi:fire
-      - entity: switch.master_hall_lights
-        name: Master Hallway
-        tap_action:
-          action: toggle
-      - entity: switch.front_stairs_lights
-        name: Front Stairs
-        tap_action:
-          action: toggle
-      - entity: switch.back_stairs_lights
-        name: Back Stairs
-        tap_action:
-          action: toggle
-    title: Upstairs
+    title: Master Bedroom
   - type: glance
     columns: 4
     entities:
@@ -209,15 +246,23 @@ cards:
     state_color: true
     title: Master Bathroom
   - type: glance
-    columns: 2
+    columns: 3
     entities:
+      - entity: switch.master_hall_lights
+        name: Master Hallway
+        tap_action:
+          action: toggle
+      - entity: switch.front_stairs_lights
+        name: Front Stairs
+        tap_action:
+          action: toggle
+      - entity: switch.back_stairs_lights
+        name: Back Stairs
+        tap_action:
+          action: toggle
       - entity: switch.kids_hall_lights
         name: Kids Hall
         icon: mdi:lightbulb
-        tap_action:
-          action: toggle
-      - entity: switch.guest_bedroom_lights
-        name: Guest Room
         tap_action:
           action: toggle
       - entity: switch.annas_room_overhead_light
@@ -230,7 +275,21 @@ cards:
         icon: mdi:lightbulb
         tap_action:
           action: toggle
-    title: Bedrooms
+      - entity: switch.katies_room_lights
+        name: Katie's Room
+        icon: mdi:lightbulb
+        tap_action:
+          action: toggle
+      - entity: switch.guest_bedroom_lights
+        name: Guest Room
+        tap_action:
+          action: toggle
+      - entity: switch.upstairs_playroom_lights
+        name: Playroom
+        icon: mdi:lightbulb
+        tap_action:
+          action: toggle
+    title: Upstairs
   - type: glance
     entities:
       - entity: binary_sensor.kitchen_occupancy
@@ -255,7 +314,7 @@ cards:
         name: Anna
     title: Family Whereabouts
   - type: weather-forecast
-    entity: weather.downstairs_hall
+    entity: weather.national_weather_service
     show_forecast: true
     name: " "
   - type: custom:sun-card

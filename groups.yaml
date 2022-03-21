@@ -45,6 +45,7 @@ upstairs_kids:
   entities:
     - switch.annas_room_closet_light
     - switch.annas_room_overhead_light
+    - switch.katies_room_lights
 upstairs_master_lamps:
   name: Master Lamps
   entities:

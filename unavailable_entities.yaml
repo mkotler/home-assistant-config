@@ -46,7 +46,6 @@ group:
     entities:
       - sensor.unavailable_entities # prevent template loop warnings?
       - sensor.unknown_entitites # prevent template loop warnings?
-      - binary_sensor.updater # always unknown after restart
       # button.*_ota_update
       - button.anna_s_room_ota_update
       - button.bathroom_ota_update
@@ -76,6 +75,8 @@ group:
       - button.guest_bedroom_lights_ota_update
       - button.master_bedroom_ota_update
       - button.master_toilet_ota_update
+      - button.upstairs_playroom_ota_update
+      - button.katie_room_ota_update
       # button.*_reboot
       - button.anna_s_room_reboot
       - button.bathroom_reboot
@@ -105,6 +106,8 @@ group:
       - button.guest_bedroom_lights_reboot
       - button.master_bedroom_reboot
       - button.master_toilet_reboot
+      - button.upstairs_playroom_reboot
+      - button.katies_room_reboot
       # button.tesla* and sensor.toyota*
       - button.tesla_flash_lights
       - button.tesla_horn
@@ -114,7 +117,6 @@ group:
       - sensor.toyota_passenger_side_window
       - sensor.toyota_hood
       - sensor.toyota_moonroof
-      - sensor.key_battery_status_2022_toyota_highlander_limited_v6_awd
       # sensor.*alexa*
       - sensor.anna_alexa_next_alarm
       - sensor.anna_alexa_next_reminder

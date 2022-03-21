@@ -16,17 +16,14 @@ default:
   only_own_events: false
   motion_state_on: "on"
   motion_state_off: "off"
+  # Setting starttime to 6s after midnight to cleanup logs at midnight
   daytimes:
-    - { starttime: "00:00", name: "allday", light: 100 }
+    - { starttime: "00:00:06", name: "allday", light: 100 }
   block_on_switch_states: "on"
   block_off_switch_states: "on"
+  track_room_stats: True
   debug_log: False
-
-######################################################
-####################### TO DO ########################
-######################################################
-
-# anna_bedroom:
+  colorize_logging: False
 
 ######################################################
 ##################### DOWNSTAIRS #####################
@@ -34,7 +31,8 @@ default:
 playroom:
   module: automoli
   class: AutoMoLi
-  delay: 900
+  dependencies: default
+  delay: 1800
   lights:
     - switch.downstairs_playroom_lights
   motion:
@@ -45,6 +43,7 @@ playroom:
 office:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   # Using Occupancy sensor so turn off lights right when occupancy clears
   # Note: delay = 0 means AutoMoLi will never turn off the lights, so setting to 1s
   delay: 600
@@ -68,6 +67,7 @@ office:
 laundry:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   delay: 600
   lights:
     - switch.laundry_room_lights
@@ -75,19 +75,16 @@ laundry:
     - binary_sensor.garage_door_open
     - binary_sensor.inside_garage_door
     - binary_sensor.laundry_room_motion
+  block_on_switch_entities:
+    - binary_sensor.is_sunny
 
 kitchen:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   delay: 1800
   lights:
     - switch.kitchen_lights
-  lights_off:
-    - switch.kitchen_island_lights
-    - switch.kitchen_nook_lights
-    - light.family_room_light
-    - switch.family_room_lamp
-    - switch.outside_powder_lights
   motion:
     - binary_sensor.garage_door_open
     - binary_sensor.inside_garage_door
@@ -106,10 +103,26 @@ kitchen:
     - input_boolean.dining_room_in_use
     - binary_sensor.downstairs_tv
   warning_flash: True
+  #debug_log: True
+
+kitchen_island:
+  module: automoli
+  class: AutoMoLi
+  dependencies: default
+  delay: 1800
+  lights:
+    - switch.kitchen_island_lights
+  block_off_switch_entitites:
+    - switch.kitchen_lights
+  daytimes:
+    - { starttime: "sunset-02:00", name: "evening", light: 100 }
+    - { starttime: "sunrise+02:00", name: "morning", light: 0 }
+  transition_on_daytime_switch: true
 
 kitchen_nook:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   delay: 1800
   lights:
     - switch.kitchen_nook_lights
@@ -121,10 +134,9 @@ kitchen_nook:
 powder_room:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   disable_switch_entities:
     - input_boolean.home_automation_disabled
-    # Ignore motion right after open door (to avoid reset of shorten delay)
-    - binary_sensor.powder_door_recently_opened
   delay: 300
   lights:
     - switch.powder_room_lights
@@ -143,6 +155,7 @@ powder_room:
 family_room:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   delay: 1800
   lights:
     - light.family_room_light
@@ -162,6 +175,7 @@ family_room:
 outside_pantry:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   delay: 900
   lights:
     - switch.outside_pantry_light
@@ -171,6 +185,7 @@ outside_pantry:
 outside_powder_room:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   delay: 1800
   lights:
     - switch.outside_powder_lights
@@ -180,6 +195,7 @@ outside_powder_room:
 entryway:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   delay: 600
   lights:
     - switch.entry_way_light
@@ -195,13 +211,17 @@ entryway:
 powder_room_fan:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   delay: 600
   lights:
     - switch.powder_room_fan
+  block_off_switch_entities:
+    - binary_sensor.powder_door_closed_under_30min
 
 family_room_fireplace:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   delay: 7200
   lights:
     - switch.downstairs_fireplace
@@ -213,6 +233,7 @@ family_room_fireplace:
 master_hall:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   delay: 180
   delay_outside_events: 600
   lights:
@@ -225,6 +246,7 @@ master_hall:
 kids_hall:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   delay: 180
   delay_outside_events: 600
   lights:
@@ -236,20 +258,17 @@ kids_hall:
 master_bathroom:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   delay: 600
   lights:
     - switch.bathroom_bath_light
-    - switch.master_toilet_light
-  lights_off:
-    - switch.bathroom_vanity_lights
-    - switch.shower_light
-    - switch.outside_shower_light
   motion:
     - binary_sensor.master_bathroom_motion
-    - binary_sensor.toilet_motion
     # Special template that checks for both bedroom motion and
     # that it is between 6am and 11pm
     - binary_sensor.bedroom_motion_for_bathroom_lights
+    # Special template that checks for toilet motion only when bath light is on
+    - binary_sensor.master_toilet_motion_with_bath_light_on
   shorten_delay:
     - binary_sensor.julie_in_bed
     - binary_sensor.matt_in_bed
@@ -259,12 +278,12 @@ master_bathroom:
 master_bathroom_vanity:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   delay: 600
   lights:
     - switch.bathroom_vanity_lights
   motion:
     - binary_sensor.master_bathroom_motion
-    - binary_sensor.toilet_motion
     # Special template that checks for both bedroom motion and
     # that it is between 6am and 11pm
     - binary_sensor.bedroom_motion_for_bathroom_lights
@@ -277,9 +296,29 @@ master_bathroom_vanity:
   humidity: sensor.master_shower_humidity
   humidity_threshold: 87
 
+master_bathroom_toilet:
+  module: automoli
+  class: AutoMoLi
+  dependencies: default
+  delay: 300
+  lights:
+    - switch.master_toilet_light
+  motion:
+    - binary_sensor.master_bathroom_motion
+    # Special template that checks for both bedroom motion and
+    # that it is between 6am and 11pm
+    - binary_sensor.bedroom_motion_for_bathroom_lights
+    # Special template that checks for toilet motion only when bath light is on
+    # Prevents false motion sensor reading in middle of night
+    - binary_sensor.master_toilet_motion_with_bath_light_on
+  shorten_delay:
+    - binary_sensor.julie_in_bed
+    - binary_sensor.matt_in_bed
+
 master_bedroom:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   delay: 600
   lights:
     - switch.master_lights
@@ -301,6 +340,7 @@ master_bedroom:
 master_shower:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   delay: 600
   lights:
     - switch.shower_light
@@ -310,24 +350,39 @@ master_shower:
     - binary_sensor.master_shower_humidity_rising
     - binary_sensor.master_shower_temp_rising
   humidity: sensor.master_shower_humidity
-  block_off_switch_entitities:
-    - switch.bathroom_bath_light
   humidity_threshold: 87
+  # Prevent shower light from going on if nobody is in the bathroom
+  block_on_switch_entitities:
+    - switch.bathroom_bath_light
+  block_on_switch_states: "off"
+
+upstairs_playroom:
+  module: automoli
+  class: AutoMoLi
+  dependencies: default
+  delay: 600
+  lights:
+    - switch.upstairs_playroom_lights
+  motion:
+    - binary_sensor.upstairs_playroom_motion
 
 ########  Just turn off, if turned on manually ########
 guestroom:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   disable_switch_entities:
     - input_boolean.home_automation_disabled
-    - input_boolean.guestroom_in_use
   delay: 900
   lights:
     - switch.guest_bedroom_lights
+  block_off_switch_entities:
+    - input_boolean.guestroom_in_use
 
 master_lamps:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   delay: 1800
   lights:
     - light.julie_bedside_lamp
@@ -336,6 +391,7 @@ master_lamps:
 master_toilet_fan:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   delay: 600
   lights:
     - switch.master_toilet_fan
@@ -343,9 +399,30 @@ master_toilet_fan:
 master_fireplace:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   delay: 3600
   lights:
     - switch.master_fireplace
+
+##############  Just track stats ##############
+# delay: 0 keeps lights on, unless turned off manually
+
+anna_room:
+  module: automoli
+  class: AutoMoLi
+  dependencies: default
+  delay: 0
+  lights:
+    - switch.annas_room_closet_light
+    - switch.annas_room_overhead_light
+
+katie_room:
+  module: automoli
+  class: AutoMoLi
+  dependencies: default
+  delay: 0
+  lights:
+    - switch.katies_room_lights
 
 ######################################################
 ####################### STAIRS #######################
@@ -354,6 +431,7 @@ master_fireplace:
 front_stairs:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   delay: 180
   delay_outside_events: 600
   lights:
@@ -371,6 +449,7 @@ front_stairs:
 back_stairs:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   delay: 180
   delay_outside_events: 600
   lights:
@@ -386,6 +465,7 @@ back_stairs:
 garage:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   delay: 300
   lights:
     - switch.garage_lights
@@ -398,12 +478,14 @@ garage:
   # even if there isn't motion
   block_off_switch_entities:
     - binary_sensor.garage_door_open
-    - binary_sensor.outside_garage_door
+    # Worrying that this may block turning garage off
+    # - binary_sensor.outside_garage_door
     - binary_sensor.inside_garage_door
 
 dogrun:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   delay: 300
   lights:
     - switch.dog_run_light
@@ -418,6 +500,7 @@ dogrun:
 front_porch:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   delay: 900
   lights:
     - switch.front_porch_lights
@@ -431,6 +514,7 @@ front_porch:
 back_patio:
   module: automoli
   class: AutoMoLi
+  dependencies: default
   delay: 900
   lights:
     - switch.patio_lights

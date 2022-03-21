@@ -6,16 +6,33 @@ binary_sensor:
         friendly_name: "Dogs Have Been Fed"
         value_template: >
           {% set sensor = namespace(state=false) %}
-          {% set breakfast_start = now().strftime("%Y-%m-%d 05:00") %}
-          {% set breakfast_end = now().strftime("%Y-%m-%d 12:00") %}
-          {% set dinner_start = now().strftime("%Y-%m-%d 17:00")  %}
-          {% set dinner_end = now().strftime("%Y-%m-%d 23:59") %}
-          {% set last_changed = as_local(states.binary_sensor.dog_food_open.last_changed).strftime("%Y-%m-%d %H:%M") %}
+          {% set breakfast_start = now().strftime("%Y-%m-%d 05:00") | as_datetime %}
+          {% set breakfast_end = now().strftime("%Y-%m-%d 12:00") | as_datetime %}
+          {% set dinner_start = now().strftime("%Y-%m-%d 17:00") | as_datetime %}
+          {% set dinner_end = now().strftime("%Y-%m-%d 23:59:59") | as_datetime %}
+          {% set dinner_start_yesterday = as_local(((dinner_start | as_timestamp) - 86400) | as_datetime).strftime("%Y-%m-%d %H:%M:%S") | as_datetime %}
+          {% set dinner_end_yesterday = as_local(((dinner_end | as_timestamp) - 86400) | as_datetime).strftime("%Y-%m-%d %H:%M:%S") | as_datetime %}
+          {% set midnight = now().strftime("%Y-%m-%d 00:00") | as_datetime %}
+          {% set last_changed = as_local(states.binary_sensor.dog_food_open.last_changed).strftime("%Y-%m-%d %H:%M") | as_datetime %}
+          {% set current_time = as_local(now()).strftime("%Y-%m-%d %H:%M") | as_datetime %}
 
-          {% set sensor.state = false %}
-          {% if breakfast_start | as_datetime <= last_changed | as_datetime <= breakfast_end | as_datetime %}
-              {% set sensor.state = true %}
-          {% elif dinner_start | as_datetime <= last_changed | as_datetime <= dinner_end | as_datetime %}
-              {% set sensor.state = true %}
+          {# Check if time is between breakfast_start and dinner_start #}
+          {# Dogs are fed if they were given breakfast #}
+          {% if breakfast_start <= current_time <= dinner_start %}
+            {% if breakfast_start <= last_changed <= breakfast_end  %}
+                {% set sensor.state = true %}
+            {% endif %}          
+          {# Check if time is between dinner_start and midnight #}
+          {# Dogs are fed if they were given dinner #}
+          {% elif dinner_start <= current_time <= dinner_end %}
+            {% if dinner_start <= last_changed <= dinner_end %}
+                {% set sensor.state = true %}
+            {% endif %}
+          {# Check if time is between midnight and breakfast_start #}            
+          {# Dogs are fed if they were given dinner yesterday #}
+          {% elif midnight <= current_time <= breakfast_start %}
+            {% if dinner_start_yesterday <= last_changed <= dinner_end_yesterday %}
+                {% set sensor.state = true %}
+            {% endif %}
           {% endif %}
           {{ sensor.state }}
