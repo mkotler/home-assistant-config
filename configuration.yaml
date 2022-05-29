@@ -9,10 +9,12 @@ homeassistant:
     movie_night: !include movie_night.yaml
     lwsd_calendar: !include lwsd_calendar.yaml
     dogs_fed: !include dogs_fed.yaml
+    motion_direction: !include motion_direction.yaml
 
 frontend:
   extra_module_url:
     - /hacsfiles/lovelace-card-mod/card-mod.js
+    - /hacsfiles/lovelace-auto-entities/auto-entities.js
 
 # Debugging
 logger:
@@ -34,7 +36,7 @@ panel_custom:
     sidebar_title: "Server Controls"
     sidebar_icon: mdi:server
     js_url: /api/hassio/app/entrypoint.js
-    url_path: "config/server_control"
+    url_path: "developer-tools/yaml"
     embed_iframe: true
     require_admin: true
     config:
@@ -65,7 +67,7 @@ panel_custom:
     embed_iframe: true
     require_admin: true
 
-# Setup input variables for all entitites
+# Setup input variables for all entities
 # input_text: !include input_text.yaml
 timer:
   rtl_timer:
@@ -183,10 +185,10 @@ binary_sensor:
     sensors:
       matt_in_bed:
         friendly_name: "Matt in Bed"
-        value_template: "{{ states('sensor.matt_bed_presence') | int > 200 if is_number(states('sensor.matt_bed_presence')) else 0 }}"
+        value_template: "{{ states('sensor.matt_bed_presence') | int > 150 if is_number(states('sensor.matt_bed_presence')) else 0 }}"
       julie_in_bed:
         friendly_name: "Julie in Bed"
-        value_template: "{{ states('sensor.julie_bed_presence') | int > 200 if is_number(states('sensor.julie_bed_presence')) else 0 }}"
+        value_template: "{{ states('sensor.julie_bed_presence') | int > 100 if is_number(states('sensor.julie_bed_presence')) else 0 }}"
 
       # Add "on"/"off" sensors for AutoMoLi
       epson_printing:
@@ -200,35 +202,59 @@ binary_sensor:
         value_template: "{{ states('switch.kitchen_lights') == 'off' and (as_timestamp(now()) - as_timestamp(states.switch.kitchen_lights.last_updated)) < 60  }}"
       master_bath_recent_motion:
         friendly_name: "Master Bathroom Recent Motion"
-        value_template: "{{ states('binary_sensor.master_bathroom_motion') != None and (as_timestamp(now()) - as_timestamp(states.binary_sensor.master_bathroom_motion.last_updated)) < 30 }}"
+        # My Aqara sensors have a cooldown of 70 seconds, so setting to 75
+        value_template: "{{ states('binary_sensor.master_bathroom_motion') != None and (as_timestamp(now()) - as_timestamp(states.binary_sensor.master_bathroom_motion.last_updated)) < 75 }}"
       bedroom_motion_for_bathroom_lights:
         friendly_name: "Bedroom Motion Triggers Bathroom Lights"
-        value_template: "{{ states('binary_sensor.master_bedroom_motion') == 'on' and (now() > today_at('06:00') and now() < today_at('23:00')) }}"
+        value_template: "{{ states('binary_sensor.entering_bedroom') == 'on' and (now() > today_at('06:00') and now() < today_at('23:00')) }}"
+      anna_occupancy_for_lights:
+        friendly_name: "Anna's Occupancy Triggers Lights"
+        value_template: "{{ states('binary_sensor.anna_room_occupancy') == 'on' and (now() > today_at('06:00') and now() < today_at('8:30')) }}"
       master_toilet_motion_with_bath_light_on:
         friendly_name: "Master Toilet Motion When Bath Light On"
-        value_template: "{{ states('binary_sensor.toilet_motion') == 'on' and states('switch.bathroom_bath_light') == 'on' }}"
+        value_template: "{{ states('binary_sensor.toilet_motion') == 'on' and (states('switch.bathroom_bath_light') == 'on' or (as_timestamp(now()) - as_timestamp(states.switch.master_toilet_light.last_updated)) < 30)}}"
       upstairs_back_stairs_recent_motion:
         friendly_name: "Upstairs Back Stairs Recent Motion"
-        value_template: "{{ states('binary_sensor.upstairs_back_stairs_motion') and (as_timestamp(now()) - as_timestamp(states.binary_sensor.upstairs_back_stairs_motion.last_updated)) < 30 }}"
-      powder_door_closed_under_30min:
-        friendly_name: "Powder Room Door Closed Under 30 Min"
-        value_template: "{{ states('binary_sensor.powder_room_door') == 'off' and (as_timestamp(now()) - as_timestamp(states.binary_sensor.powder_room_door.last_updated)) < 1800 }}"
+        value_template: "{{ states('binary_sensor.upstairs_back_stairs_motion') == 'on' and (as_timestamp(now()) - as_timestamp(states.binary_sensor.upstairs_back_stairs_motion.last_updated)) < 30 }}"
+      entryway_recent_motion:
+        friendly_name: "Entryway Recent Motion"
+        value_template: "{{ states('binary_sensor.front_entry_motion') == 'on' and (as_timestamp(now()) - as_timestamp(states.binary_sensor.front_entry_motion.last_updated)) < 30 }}"
+      powder_door_closed_under_10min:
+        friendly_name: "Powder Room Door Closed Under 15 Min"
+        value_template: "{{ states('binary_sensor.powder_room_door') == 'off' and (as_timestamp(now()) - as_timestamp(states.binary_sensor.powder_room_door.last_updated)) < 900 }}"
       downstairs_tv:
         friendly_name: "Downstairs TV"
         value_template: "{{ states('sensor.tv_temperature') | int >= 90 if is_number(states('sensor.tv_temperature')) else False }}"
-      is_sunny:
-        friendly_name: "Is Sunny"
-        value_template: "{{ states('weather.national_weather_service') == 'sunny' and state_attr('sun.sun', 'elevation') > 6 }}"
+      sunny_weather:
+        friendly_name: "Weather is Sunny"
+        # value_template: "{{ (states('sensor.openweathermap_condition') == 'sunny' or states('sensor.openweathermap_condition') == 'partlycloudy') }}"
+        value_template: "{{ (states('weather.national_weather_service') == 'sunny' or states('weather.national_weather_service') == 'partlycloudy') }}"
+      side_sunny:
+        friendly_name: "Side of House is Sunny"
+        value_template: "{{ states('binary_sensor.sunny_weather') == 'on' and state_attr('sun.sun', 'elevation') > 45 }}"
+      front_sunny:
+        friendly_name: "Front of House is Sunny"
+        value_template: "{{ states('binary_sensor.sunny_weather') == 'on' and state_attr('sun.sun', 'elevation') > 6 and state_attr('sun.sun', 'elevation') < 60 and state_attr('sun.sun', 'rising') == true }}"
+      back_sunny:
+        friendly_name: "Back of House is Sunny"
+        value_template: "{{ states('binary_sensor.sunny_weather') == 'on' and state_attr('sun.sun', 'elevation') > 6 and state_attr('sun.sun', 'elevation') < 60 and state_attr('sun.sun', 'rising') == false }}"
+      shower_in_use:
+        friendly_name: "Shower In Use"
+        value_template: >
+          {{ states('binary_sensor.master_shower_humidity_rising') == 'on' or states('binary_sensor.master_shower_temp_rising') == 'on' 
+          or states('sensor.master_shower_humidity') | int > 60 or states('sensor.master_shower_temperature') | int > 75 }}
 
   # Add trend to aqara temp and humidity sensors
   - platform: trend
     sensors:
       master_shower_temp_rising:
+        friendly_name: "Master Shower Temperature Rising"
         entity_id: sensor.master_shower_temperature
         sample_duration: 600
         max_samples: 30
         min_gradient: 0.015
       master_shower_humidity_rising:
+        friendly_name: "Master Shower Humidity Rising"
         entity_id: sensor.master_shower_humidity
         sample_duration: 600
         max_samples: 30

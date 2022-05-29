@@ -1,0 +1,77 @@
+# Track the direction of motion sensors
+binary_sensor:
+  - platform: template
+    sensors:
+      office_to_front_stairs:
+        friendly_name: "Office to Front Stairs"
+        value_template: >
+          {% if (states.binary_sensor.entry_hallway_motion.state == "on") %}
+            {% set delta = as_timestamp(states.binary_sensor.entry_hallway_motion.last_updated) - 
+                as_timestamp(states.binary_sensor.office_motion.last_updated) %}
+            {% if delta > 0 and delta < 60 %}
+              {{ true }}
+            {% else %}
+              {{ false }}
+            {% endif %}
+          {% else %}
+            {{ false }}
+          {% endif %}
+      powder_room_to_front_stairs:
+        friendly_name: "Powder Room to Front Stairs"
+        value_template: >
+          {% if (states.binary_sensor.entry_hallway_motion.state == "on") %}
+            {% set delta = as_timestamp(states.binary_sensor.entry_hallway_motion.last_updated) - 
+                as_timestamp(states.binary_sensor.powder_room_motion.last_updated) %}
+            {% if delta > 0 and delta < 60 %}
+              {{ true }}
+            {% else %}
+              {{ false }}
+            {% endif %}
+          {% else %}
+            {{ false }}
+          {% endif %}
+      back_stairs_downstairs_to_upstairs:
+        friendly_name: "Back Stairs Downstairs to Upstairs"
+        value_template: >
+          {% if (states.binary_sensor.upstairs_back_stairs_motion.state == "on") %}
+            {% set delta = as_timestamp(states.binary_sensor.upstairs_back_stairs_motion.last_updated) - 
+                as_timestamp(states.binary_sensor.downstairs_back_stairs_motion.last_updated) %}
+            {% if delta > 0 and delta < 20 %}
+              {{ true }}
+            {% else %}
+              {{ false }}
+            {% endif %}
+          {% else %}
+            {{ false }}
+          {% endif %}
+      back_stairs_upstairs_to_downstairs:
+        friendly_name: "Back Stairs Upstairs to Downstairs"
+        value_template: >
+          {% if (states.binary_sensor.downstairs_back_stairs_motion.state == "on") %}
+            {% set delta = as_timestamp(states.binary_sensor.downstairs_back_stairs_motion.last_updated) - 
+                as_timestamp(states.binary_sensor.upstairs_back_stairs_motion.last_updated) %}
+            {% if delta > 0 and delta < 20 %}
+              {{ true }}
+            {% else %}
+              {{ false }}
+            {% endif %}
+          {% else %}
+            {{ false }}
+          {% endif %}
+      entering_bedroom:
+        friendly_name: "Entering Bedroom"
+        value_template: >
+          {% if (states.binary_sensor.master_bedroom_motion.state == "on") %}
+            {% set delta_from_backstairs = as_timestamp(states.binary_sensor.upstairs_back_stairs_motion.last_updated) - 
+                as_timestamp(states.binary_sensor.master_bedroom_motion.last_updated) %}
+            {% set delta_from_frontstairs = as_timestamp(states.binary_sensor.front_entry_motion.last_updated) - 
+                as_timestamp(states.binary_sensor.master_bedroom_motion.last_updated) %}    
+            {% if (delta_from_backstairs > 0 and delta_from_backstairs < 20) or 
+                  (delta_from_frontstairs > 0 and delta_from_frontstairs < 20) %}
+              {{ true }}
+            {% else %}
+              {{ false }}
+            {% endif %}
+          {% else %}
+            {{ false }}
+          {% endif %}

@@ -62,7 +62,7 @@ class EntityAttributesCard extends HTMLElement {
     style.textContent = `
       table {
         width: 100%;
-        padding: 16px;
+        padding: 0px 16px 16px 16px;
       }
       thead th {
         text-align: left;

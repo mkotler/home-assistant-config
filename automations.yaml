@@ -67,18 +67,18 @@
   condition:
   - condition: and
     conditions:
-    - condition: state
-      entity_id: device_tracker.life360_anna
-      state: not_home
-    - condition: state
-      entity_id: device_tracker.life360_julie_kotler
-      state: not_home
-    - condition: state
-      entity_id: device_tracker.life360_katie
-      state: not_home
-    - condition: state
-      entity_id: device_tracker.life360_matt
-      state: not_home
+    - condition: template
+      value_template: '{% if not is_state(''device_tracker.life360_anna'', ''home'')
+        %}true{%else%}false{%endif%}'
+    - condition: template
+      value_template: '{% if not is_state(''device_tracker.life360_julie_kotler'',
+        ''home'') %}true{%else%}false{%endif%}'
+    - condition: template
+      value_template: '{% if not is_state(''device_tracker.life360_matt'', ''home'')
+        %}true{%else%}false{%endif%}'
+    - condition: template
+      value_template: '{% if not is_state(''device_tracker.life360_katie'', ''home'')
+        %}true{%else%}false{%endif%}'
     - condition: state
       entity_id: input_boolean.guestroom_in_use
       state: 'off'
@@ -152,6 +152,7 @@
         target:
           entity_id:
           - switch.front_porch_lights
+          - switch.laundry_room_lights
         data: {}
     default: []
   mode: queued
@@ -174,12 +175,31 @@
     device_id: d8c1e1f1292a82d5ff174bbec10f80a5
     entity_id: switch.annas_room_overhead_light
     domain: switch
-  - condition: state
-    entity_id: device_tracker.life360_katie
-    state: not_home
+  - condition: template
+    value_template: '{% if not is_state(''device_tracker.life360_katie'', ''home'')
+      %}true{%else%}false{%endif%}'
   - type: turn_off
     device_id: cfe3edbb953f6b6e2a9de89d980b3502
     entity_id: switch.katies_room_lights
+    domain: switch
+  - type: turn_off
+    device_id: 2c4da0e1ab2882801b43c83cc4ad40cf
+    entity_id: switch.kids_toilet_light
+    domain: switch
+  - type: turn_off
+    device_id: 2c4da0e1ab2882801b43c83cc4ad40cf
+    entity_id: switch.kids_toilet_heat_lamp
+    domain: switch
+  - condition: state
+    entity_id: input_boolean.guestroom_in_use
+    state: 'off'
+  - type: turn_off
+    device_id: 05e41542a9224aac321fbf76508b0fe5
+    entity_id: switch.guest_bathroom_lights
+    domain: switch
+  - type: turn_off
+    device_id: 05e41542a9224aac321fbf76508b0fe5
+    entity_id: switch.guest_bathroom_heat_lamp
     domain: switch
   mode: single
 - id: '1623539585816'
@@ -272,7 +292,10 @@
     entity_id: binary_sensor.inside_garage_door
     id: door into the garage
     to: 'on'
-    for: 00:05:00
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
   - platform: state
     entity_id: binary_sensor.kitchen_sliding_door
     id: sliding door
@@ -293,6 +316,8 @@
       hours: 0
       minutes: 10
       seconds: 0
+    variables:
+      action_close: '{{"CLOSE_" ~ trigger.to_state.context.id}}'
   condition: []
   action:
   - choose:
@@ -300,15 +325,79 @@
       - condition: template
         value_template: '{{ trigger.to_state.state|int(0) == 0 }}'
       sequence:
-      - service: notify.alexa_media_kitchen_alexa
-        data:
+      - choose:
+        - conditions:
+          - condition: trigger
+            id: garage door
+          sequence:
+          - service: notify.alexa_media_kitchen_alexa
+            data:
+              data:
+                type: announce
+                method: speak
+              message: Did you forget to close the {{ trigger.id }}?
+          - service: notify.mobile_app_matts_iphone
+            data:
+              message: Did you forget to close the {{ trigger.id }}?
+              data:
+                actions:
+                - action: '{{ action_close }}'
+                  title: Close Garage Door
+          - wait_for_trigger:
+            - platform: event
+              event_type: mobile_app_notification_action
+              event_data:
+                action: '{{ action_close }}'
+          - choose:
+            - conditions:
+              - condition: template
+                value_template: '{{ ("CLOSE_" ~ trigger.to_state.context.id) == action_close
+                  }}'
+              sequence:
+              - device_id: 126611f2ed378ebe7c139b2543132f69
+                domain: cover
+                entity_id: cover.garage_door
+                type: close
+            default: []
+        default:
+        - service: notify.alexa_media_kitchen_alexa
           data:
-            type: announce
-            method: speak
-          message: Did you forget to close the {{ trigger.id }}?
-      - service: notify.mobile_app_matts_iphone
-        data:
-          message: Did you forget to close the {{ trigger.id }}?
+            data:
+              type: tts
+            message: "{% set door = trigger.id %} {% set messages =  \n    [\"Surprise\
+              \ surprise, the \" ~ door ~ \" is open\", \n    \"Roses are <prosody\
+              \ pitch='medium'>red</prosody>, violets are blue, the \" ~ door ~ \"\
+              \ is open, but I still <prosody pitch='medium'>love you</prosody>\"\
+              ,\n    \"Really? I just closed it. Your turn. The \" ~ door ~ \" is\
+              \ open.\",\n    \"Oops! You did <say-as interpret-as='interjection'>it</say-as>\
+              \ again. The \" ~ door ~ \" is open.\",\n    \"<prosody rate='fast'>Knock<prosody\
+              \ pitch='high'>knock</prosody></prosody><voice name='Joey'>Who's there?</voice>Clothes.<voice\
+              \ name='Joey'>Clothes <prosody pitch='high'>who?</prosody></voice>Close\
+              \ the <say-as interpret-as='expletive'>fricking</say-as> \"  ~ door,\
+              \ \n    \"For the billionth time, close the \" ~ door, \n    \"The \"\
+              \ ~ door ~ \" is a jar. <voice name='Joey'>A <prosody pitch='high'>what?</prosody></voice>A\
+              \ jar. Close it!\",\n    \"The barn door is open. Wait, that's not right.\
+              \ It's the \" ~ door,\n    \"Are we at a seder? You didn't need to leave\
+              \ the \" ~ door ~ \" open for elijah.\",\n    \"Please, for the sake\
+              \ of everything that is holy, will you close the \" ~ door, \n    \"\
+              Stop letting all the cold air in! Close the \" ~ door, \n    \"If I've\
+              \ asked you once, I've asked you a thousand times. Close the \" ~ door,\n\
+              \    \"Pretty please with sugar on top. Will you close the \" ~ door\
+              \ ~ \"?\",\n    \"Would it kill you to close the \" ~ door ~ \"?\",\n\
+              \    \"The \" ~ door ~ \" is open. Tag, you're it.\",\n    \"You want\
+              \ the <prosody pitch='50%'>truth</prosody>? <prosody pitch='50%' rate='x-slow'>You</prosody>\
+              \ can't handle the <prosody pitch='-20%'> truth!</prosody> The \" ~\
+              \ door ~ \" is open.\",\n    \"If you were the \" ~ door ~ \"<break\
+              \ time='500ms' />would you want to still be open? <break time='700ms'\
+              \ />I didn't <emphasis level='moderate'>think</emphasis> <prosody rate='fast'>so</prosody>.\"\
+              ,\n    \"If I had just one wish, it would be that you would close the\
+              \ \" ~ door,\n    \"This place is going downhill fast. The \" ~ door\
+              \ ~ \" is still open!\", \n    \"Hey! I'm talking to you. Stop messing\
+              \ around. The \" ~ door ~ \" is open.\"] \n%} {% set rand = range(0,\
+              \ messages | count) | random %} {{ messages[rand] }}\n"
+        - service: notify.mobile_app_matts_iphone
+          data:
+            message: Did you forget to close the {{ trigger.id }}?
   mode: single
 - id: '1630504836253'
   alias: 'Office: Turn on desk lamp when turn on lights manually'
@@ -368,7 +457,8 @@
       switch.kitchen_island_lights, switch.kitchen_lights, switch.kitchen_nook_lights,
       light.family_room_light, switch.master_fireplace, switch.downstairs_fireplace,
       switch.annas_room_closet_light, switch.annas_room_overhead_light, switch.office_lamp,
-      switch.family_room_lamp
+      switch.family_room_lamp, switch.kids_toilet_light, switch.kids_toilet_heat_lamp,
+      switch.guest_bathroom_lights, switch.guest_bathroom_heat_lamp
   condition:
   - condition: template
     value_template: '{{ trigger.to_state != none and trigger.to_state.context.parent_id
@@ -757,13 +847,42 @@
   description: ''
   trigger:
   - platform: state
-    entity_id: sensor.latest_version
+    entity_id: update.home_assistant_core_update
+    to: 'on'
+    variables:
+      action_update: '{{ ''UPDATE_'' ~ trigger.to_state.context.id }}'
   condition: []
   action:
   - service: notify.mobile_app_matts_iphone
     data:
-      message: Home Assistant is ready for an update to {{ states("sensor.latest_version")
-        }}
+      message: Home Assistant is ready for an update to {{ state_attr('update.home_assistant_core_update',
+        'latest_version') }}
+      data:
+        actions:
+        - action: URI
+          title: View Release Notes
+          uri: '{{ state_attr(''update.home_assistant_core_update'', ''release_url'')
+            }}'
+        - action: '{{ action_update }}'
+          title: Update Home Assistant
+  - wait_for_trigger:
+    - platform: event
+      event_type: mobile_app_notification_action
+      event_data:
+        action: '{{ action_update }}'
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ (''UPDATE_'' ~ trigger.to_state.context.id) == action_update
+          }}'
+      sequence:
+      - service: update.install
+        target:
+          entity_id:
+          - update.home_assistant_core_update
+        data:
+          backup: true
+    default: []
   mode: single
 - id: '1642316274583'
   alias: 'Powder Room: Turn on fan 5 minutes after door closes'
@@ -860,18 +979,37 @@
     from: 'on'
   condition: []
   action:
+  - service: input_text.set_value
+    data:
+      value: "{% if (((as_timestamp(now()) - state_attr('input_datetime.last_dryer_start',\
+        \ 'timestamp')) / 60) > 30) %} \n  The dryer is done. Time to fluff. \n{%\
+        \ elif states('input_boolean.washer_pending_notification') == 'on' %}\n  The\
+        \ dryer is done. Time to turn over the laundry. \n{% else %}\n  The dryer\
+        \ is done.\n{% endif %}\n"
+    target:
+      entity_id: input_text.dryer_done_message
   - service: notify.alexa_media_kitchen_alexa
     data:
       data:
         type: announce
         method: speak
-      message: The dryer is done
+      message: "{% set message = states('input_text.dryer_done_message') %} {{ message\
+        \ }} \n"
   - service: notify.mobile_app_matts_iphone
     data:
-      message: The dryer is done. Time for folding.
+      message: "{% set message = states('input_text.dryer_done_message') %} {{ message\
+        \ }} \n"
   - service: notify.mobile_app_julies_iphone
     data:
-      message: The dryer is done. Time for folding.
+      message: "{% set message = states('input_text.dryer_done_message') %} {{ message\
+        \ }} \n"
+  - condition: state
+    state: The dryer is done. Time to turn over the laundry.
+    entity_id: input_text.dryer_done_message
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id: input_boolean.washer_pending_notification
   mode: single
 - id: '1645303796091'
   alias: 'Announcement:  Sensor Battery is Low'
@@ -946,18 +1084,33 @@
       seconds: 0
   condition: []
   action:
-  - service: notify.alexa_media_kitchen_alexa
-    data:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: binary_sensor.dryer_vibration
+        state: 'on'
+      sequence:
+      - service: input_boolean.turn_on
+        data: {}
+        target:
+          entity_id: input_boolean.washer_pending_notification
+    default:
+    - service: notify.alexa_media_kitchen_alexa
       data:
-        type: announce
-        method: speak
-      message: The washing machine is done
-  - service: notify.mobile_app_matts_iphone
-    data:
-      message: The washing machine is done. Time for drying.
-  - service: notify.mobile_app_julies_iphone
-    data:
-      message: The washing machine is done. Time for drying.
+        data:
+          type: announce
+          method: speak
+        message: The washing machine is done
+    - service: notify.mobile_app_matts_iphone
+      data:
+        message: The washing machine is done. Time for drying.
+    - service: notify.mobile_app_julies_iphone
+      data:
+        message: The washing machine is done. Time for drying.
+    - service: input_boolean.turn_off
+      data: {}
+      target:
+        entity_id: input_boolean.washer_pending_notification
   mode: single
 - id: '1645420665555'
   alias: 'Garbage: Update garbage days based on holidays'
@@ -968,11 +1121,11 @@
       garbage_collection_entity: sensor.garbage
       holiday_entity: calendar.republic_services_holidays
 - id: '1645436020073'
-  alias: 'Toyota: Start car at 6:47am on school day'
+  alias: 'Toyota: Start car at 6:51am on school day'
   description: ''
   trigger:
   - platform: time
-    at: 06:47:00
+    at: 06:51:00
   condition:
   - condition: state
     entity_id: binary_sensor.school_today
@@ -1070,4 +1223,168 @@
   - service: notify.mobile_app_matts_iphone
     data:
       message: Shelly devices are ready for a firmware update
+  mode: single
+- id: '1648325693481'
+  alias: 'Barn: Save date and time when Anna leaves barn'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: device_tracker.life360_anna
+    from: Barn
+  condition: []
+  action:
+  - service: input_datetime.set_datetime
+    data:
+      datetime: '{{ now() }}'
+    target:
+      entity_id: input_datetime.last_left_barn
+  mode: single
+- id: '1648326385224'
+  alias: 'Fireplace: Turn on when Anna comes home from barn'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: device_tracker.life360_anna
+    to: home
+  condition:
+  - condition: numeric_state
+    entity_id: weather.national_weather_service
+    attribute: temperature
+    below: '65'
+  - condition: template
+    value_template: '{{ ((as_timestamp(now()) - state_attr(''input_datetime.last_left_barn'',
+      ''timestamp'')) / 60) < 60 }}'
+  action:
+  - type: turn_on
+    device_id: f7d71653250c2a8a414fbd4fb25ca8ff
+    entity_id: switch.downstairs_fireplace
+    domain: switch
+  mode: single
+- id: '1648328773374'
+  alias: 'Toyota: Lock car when it arrives home'
+  description: ''
+  trigger:
+  - platform: state
+    to: home
+    entity_id: device_tracker.toyota_current_location
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+  condition:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: binary_sensor.toyota_front_driver_door_lock
+      state: 'off'
+    - condition: state
+      entity_id: binary_sensor.toyota_rear_driver_door_lock
+      state: 'off'
+    - condition: state
+      entity_id: binary_sensor.toyota_hatch
+      state: 'off'
+    - condition: state
+      entity_id: binary_sensor.toyota_front_passenger_door_lock
+      state: 'off'
+    - condition: state
+      entity_id: binary_sensor.toyota_rear_passenger_door_lock
+      state: 'off'
+  action:
+  - service: lock.lock
+    data: {}
+    target:
+      entity_id: lock.toyota_highlander
+  mode: single
+- id: '1649079324813'
+  alias: 'Dryer: Set last dryer start when dryer begins'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.dryer_vibration
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - service: input_datetime.set_datetime
+    data:
+      datetime: '{{ now() }}'
+    target:
+      entity_id: input_datetime.last_dryer_start
+  mode: single
+- id: '1649274286335'
+  alias: 'Dogfood: Set last dogfood open when lid is open'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.dog_food_open
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - service: input_datetime.set_datetime
+    data:
+      datetime: '{{ now() }}'
+    target:
+      entity_id: input_datetime.last_time_dogfood_open
+  mode: single
+- id: '1649385570324'
+  alias: Test
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: input_boolean.test_toggle
+    id: the toggle
+    variables:
+      action_test: '{{ ''test_'' ~ trigger.to_state.context.id  }}'
+  condition: []
+  action:
+  - service: notify.mobile_app_matts_iphone
+    data:
+      message: 'action_test:{{ action_test }} with data.action: {{ ''test_'' ~ trigger.to_state.context.id  }}'
+      data:
+        actions:
+        - action: '{{ action_test }}'
+          title:
+  - wait_for_trigger:
+    - platform: event
+      event_type: mobile_app_notification_action
+      event_data:
+        action: '{{ action_test }}'
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ (''test_'' ~ trigger.to_state.context.id) == action_test
+          }}'
+      sequence:
+      - service: notify.mobile_app_matts_iphone
+        data:
+          message: That worked!
+    default: []
+  mode: single
+- id: '1650866143116'
+  alias: 'Announcement:  Washing machine power turned off'
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: switch.washing_machine_on_off
+    to: 'off'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+    from: 'on'
+  condition: []
+  action:
+  - service: notify.alexa_media_kitchen_alexa
+    data:
+      data:
+        type: announce
+        method: speak
+      message: Uh oh! The washing machine power went off.
+  - service: notify.mobile_app_matts_iphone
+    data:
+      message: 'Warning: The washing machine power went off.'
+  - service: notify.mobile_app_julies_iphone
+    data:
+      message: 'Warning: The washing machine power went off.'
   mode: single

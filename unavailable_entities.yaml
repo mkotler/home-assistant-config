@@ -45,7 +45,7 @@ group:
   ignored_entities:
     entities:
       - sensor.unavailable_entities # prevent template loop warnings?
-      - sensor.unknown_entitites # prevent template loop warnings?
+      - sensor.unknown_entities # prevent template loop warnings?
       # button.*_ota_update
       - button.anna_s_room_ota_update
       - button.bathroom_ota_update

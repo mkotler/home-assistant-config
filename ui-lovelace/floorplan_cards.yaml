@@ -102,6 +102,20 @@ cards:
           "--mdc-icon-size": 15px
       - type: state-icon
         icon: mdi:lightbulb
+        entity: switch.kids_toilet_light
+        style:
+          top: 86%
+          left: 31%
+          "--mdc-icon-size": 15px
+      - type: state-icon
+        icon: mdi:lightbulb
+        entity: switch.kids_toilet_heat_lamp
+        style:
+          top: 86%
+          left: 26%
+          "--mdc-icon-size": 15px
+      - type: state-icon
+        icon: mdi:lightbulb
         entity: switch.katies_room_lights
         style:
           top: 77%
@@ -113,6 +127,27 @@ cards:
         style:
           top: 63%
           left: 11%
+          "--mdc-icon-size": 15px
+      - type: state-icon
+        icon: mdi:lightbulb
+        entity: switch.guest_bathroom_lights
+        style:
+          top: 67%
+          left: 45%
+          "--mdc-icon-size": 15px
+      - type: state-icon
+        icon: mdi:lightbulb
+        entity: switch.guest_bathroom_heat_lamp
+        style:
+          top: 73%
+          left: 45%
+          "--mdc-icon-size": 15px
+      - type: state-icon
+        icon: mdi:lightbulb
+        entity: switch.upstairs_playroom_lights
+        style:
+          top: 16%
+          left: 17%
           "--mdc-icon-size": 15px
       - type: state-icon
         icon: mdi:fire

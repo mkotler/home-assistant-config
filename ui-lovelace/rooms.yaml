@@ -16,27 +16,12 @@ cards:
               options:
                 type: custom:entity-attributes-card
                 entity: this.entity_id
-                title: this.entity_id
+                title: this.entity_id.friendly_name
                 heading_name: Property
                 heading_state: Status
                 filter:
                   include:
-                    - key: this.entity_id.friendly_name
-                    - key: this.entity_id.time_lights_on_today
-                    - key: this.entity_id.last_turned_on
-                    - key: this.entity_id.last_motion_detected
-                    - key: this.entity_id.last_motion_by
-                    - key: this.entity_id.turning_off_at
-                    - key: this.entity_id.blocked_off_by
-                    - key: this.entity_id.blocked_on_by
-                    - key: this.entity_id.disabled_by
-                    - key: this.entity_id.times_turned_on_automatically
-                    - key: this.entity_id.times_turned_off_automatically
-                    - key: this.entity_id.times_turned_on_manually
-                    - key: this.entity_id.times_turned_off_manually
-                    - key: this.entity_id.*
-        sort:
-          method: entity_id
+                    - this.entity_id.*
       - type: custom:auto-entities
         card:
           type: vertical-stack
@@ -49,24 +34,9 @@ cards:
               options:
                 type: custom:entity-attributes-card
                 entity: this.entity_id
-                title: this.entity_id
+                title: this.entity_id.friendly_name
                 heading_name: Property
                 heading_state: Status
                 filter:
                   include:
-                    - key: this.entity_id.friendly_name
-                    - key: this.entity_id.time_lights_on_today
-                    - key: this.entity_id.last_turned_on
-                    - key: this.entity_id.last_motion_detected
-                    - key: this.entity_id.last_motion_by
-                    - key: this.entity_id.turning_off_at
-                    - key: this.entity_id.blocked_off_by
-                    - key: this.entity_id.blocked_on_by
-                    - key: this.entity_id.disabled_by
-                    - key: this.entity_id.times_turned_on_automatically
-                    - key: this.entity_id.times_turned_off_automatically
-                    - key: this.entity_id.times_turned_on_manually
-                    - key: this.entity_id.times_turned_off_manually
-                    - key: this.entity_id.*
-        sort:
-          method: entity_id
+                    - this.entity_id.*

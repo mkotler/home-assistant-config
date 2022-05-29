@@ -3,6 +3,18 @@ path: debug
 badges: []
 cards:
   - type: custom:mini-graph-card
+    points_per_hour: 6
+    hours_to_show: 24
+    aggregate_func: max
+    entities:
+      - binary_sensor.matt_in_bed
+      - binary_sensor.julie_in_bed
+    state_map:
+      - value: "off"
+        label: "Not In Bed"
+      - value: "on"
+        label: "In Bed"
+  - type: custom:mini-graph-card
     points_per_hour: 30
     hours_to_show: 2
     aggregate_func: max

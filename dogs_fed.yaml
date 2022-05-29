@@ -13,7 +13,7 @@ binary_sensor:
           {% set dinner_start_yesterday = as_local(((dinner_start | as_timestamp) - 86400) | as_datetime).strftime("%Y-%m-%d %H:%M:%S") | as_datetime %}
           {% set dinner_end_yesterday = as_local(((dinner_end | as_timestamp) - 86400) | as_datetime).strftime("%Y-%m-%d %H:%M:%S") | as_datetime %}
           {% set midnight = now().strftime("%Y-%m-%d 00:00") | as_datetime %}
-          {% set last_changed = as_local(states.binary_sensor.dog_food_open.last_changed).strftime("%Y-%m-%d %H:%M") | as_datetime %}
+          {% set last_changed = states("input_datetime.last_time_dogfood_open") | as_datetime %}
           {% set current_time = as_local(now()).strftime("%Y-%m-%d %H:%M") | as_datetime %}
 
           {# Check if time is between breakfast_start and dinner_start #}

@@ -184,6 +184,14 @@ turn_off_all_upstairs_lights_except_kids:
         device_id: c32cc10983532262a768e043288f286f
         entity_id: switch.guest_bedroom_lights
         domain: switch
+      - type: turn_off
+        device_id: 05e41542a9224aac321fbf76508b0fe5
+        entity_id: switch.guest_bathroom_lights
+        domain: switch
+      - type: turn_off
+        device_id: 05e41542a9224aac321fbf76508b0fe5
+        entity_id: switch.guest_bathroom_heat_lamp
+        domain: switch
     default: []
   - service: homeassistant.turn_off
     target:

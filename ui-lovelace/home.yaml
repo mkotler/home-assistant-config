@@ -30,7 +30,7 @@ cards:
           style: |
             :host {
               --card-mod-icon-color: 
-                {% if states('sensor.weeks_since_riley_nail_trim') | float < 3.0 %}
+                {% if states('sensor.weeks_since_riley_nail_trim')[:-6] | float < 3.0 %}
                   green
                 {% else %}
                   red
@@ -44,7 +44,7 @@ cards:
           style: |
             :host {
               --card-mod-icon-color: 
-                {% if states('sensor.weeks_since_riley_nail_trim') | float < 3.0 %}
+                {% if states('sensor.weeks_since_gracie_nail_trim')[:-6] | float < 3.0 %}
                   green
                 {% else %}
                   red
