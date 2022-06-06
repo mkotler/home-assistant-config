@@ -1,5 +1,4 @@
-- platform: mqtt
-  name: Laundry Room Lights
+- name: Laundry Room Lights
   payload_on: "on"
   payload_off: "off"
   qos: 0

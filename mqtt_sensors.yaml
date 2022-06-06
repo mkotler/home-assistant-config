@@ -1,160 +1,147 @@
 ###### Add all the motion sensors ######
-binary_sensor:
-  - platform: mqtt
-    qos: 1
-    state_topic: "home-assistant/sensors/25410"
-    name: "Upstairs Playroom Motion"
-    value_template: >
-      {{ value_json.cmd }}
-    payload_on: 156
-    force_update: true
-    off_delay: 1
-    device_class: motion
-  - platform: mqtt
-    qos: 1
-    state_topic: "home-assistant/sensors/3171229"
-    name: "Toilet Motion"
-    value_template: >
-      {{ value_json.cmd }}
-    payload_on: 1
-    force_update: true
-    off_delay: 1
-    device_class: motion
-  - platform: mqtt
-    qos: 1
-    state_topic: "home-assistant/sensors/4814"
-    name: "Upstairs Back Stairs Motion"
-    value_template: >
-      {{ value_json.cmd }}
-    payload_on: 204
-    force_update: true
-    off_delay: 1
-    device_class: motion
-  - platform: mqtt
-    qos: 1
-    state_topic: "home-assistant/sensors/20078"
-    name: "Downstairs Back Stairs Motion"
-    value_template: >
-      {{ value_json.cmd }}
-    payload_on: 28
-    force_update: true
-    off_delay: 1
-    device_class: motion
-  - platform: mqtt
-    qos: 1
-    state_topic: "home-assistant/sensors/2074077"
-    name: "Master Bedroom Motion"
-    value_template: >
-      {{ value_json.cmd }}
-    payload_on: 1
-    force_update: true
-    off_delay: 1
-    device_class: motion
-  - platform: mqtt
-    qos: 1
-    state_topic: "home-assistant/sensors/25771"
-    name: "Entry Hallway Motion"
-    value_template: >
-      {{ value_json.cmd }}
-    payload_on: 92
-    force_update: true
-    off_delay: 1
-    device_class: motion
-  - platform: mqtt
-    qos: 1
-    state_topic: "home-assistant/sensors/17137"
-    name: "Family Room Motion"
-    value_template: >
-      {{ value_json.cmd }}
-    payload_on: 172
-    force_update: true
-    off_delay: 1
-    device_class: motion
-  - platform: mqtt
-    qos: 1
-    state_topic: "home-assistant/sensors/21469"
-    name: "Kids Hall Motion"
-    value_template: >
-      {{ value_json.cmd }}
-    payload_on: 188
-    force_update: true
-    off_delay: 1
-    device_class: motion
-  - platform: mqtt
-    qos: 1
-    state_topic: "home-assistant/sensors/2267069"
-    name: "Laundry Room Motion"
-    value_template: >
-      {{ value_json.cmd }}
-    payload_on: 1
-    force_update: true
-    off_delay: 1
-    device_class: motion
-  - platform: mqtt
-    qos: 1
-    state_topic: "home-assistant/sensors/2012701"
-    name: "Kitchen Desk Motion"
-    value_template: >
-      {{ value_json.cmd }}
-    payload_on: 1
-    force_update: true
-    off_delay: 1
-    device_class: motion
-  - platform: mqtt
-    qos: 1
-    state_topic: "home-assistant/sensors/5932"
-    name: "Downstairs Playroom Motion"
-    value_template: >
-      {{ value_json.cmd }}
-    payload_on: 28
-    force_update: true
-    off_delay: 1
-    device_class: motion
-  - platform: mqtt
-    qos: 1
-    state_topic: "home-assistant/sensors/7255"
-    name: "Garage Motion"
-    value_template: >
-      {{ value_json.cmd }}
-    payload_on: 172
-    force_update: true
-    off_delay: 1
-    device_class: motion
+mqtt:
+  binary_sensor:
+    - name: "Upstairs Playroom Motion"
+      qos: 1
+      state_topic: "home-assistant/sensors/25410"
+      value_template: >
+        {{ value_json.cmd }}
+      payload_on: 156
+      force_update: true
+      off_delay: 1
+      device_class: motion
+    - name: "Toilet Motion"
+      qos: 1
+      state_topic: "home-assistant/sensors/3171229"
+      value_template: >
+        {{ value_json.cmd }}
+      payload_on: 1
+      force_update: true
+      off_delay: 1
+      device_class: motion
+    - name: "Upstairs Back Stairs Motion"
+      qos: 1
+      state_topic: "home-assistant/sensors/4814"
+      value_template: >
+        {{ value_json.cmd }}
+      payload_on: 204
+      force_update: true
+      off_delay: 1
+      device_class: motion
+    - name: "Downstairs Back Stairs Motion"
+      qos: 1
+      state_topic: "home-assistant/sensors/20078"
+      value_template: >
+        {{ value_json.cmd }}
+      payload_on: 28
+      force_update: true
+      off_delay: 1
+      device_class: motion
+    - name: "Master Bedroom Motion"
+      qos: 1
+      state_topic: "home-assistant/sensors/2074077"
+      value_template: >
+        {{ value_json.cmd }}
+      payload_on: 1
+      force_update: true
+      off_delay: 1
+      device_class: motion
+    - name: "Entry Hallway Motion"
+      qos: 1
+      state_topic: "home-assistant/sensors/25771"
+      value_template: >
+        {{ value_json.cmd }}
+      payload_on: 92
+      force_update: true
+      off_delay: 1
+      device_class: motion
+    - name: "Family Room Motion"
+      qos: 1
+      state_topic: "home-assistant/sensors/17137"
+      value_template: >
+        {{ value_json.cmd }}
+      payload_on: 172
+      force_update: true
+      off_delay: 1
+      device_class: motion
+    - name: "Kids Hall Motion"
+      qos: 1
+      state_topic: "home-assistant/sensors/21469"
+      value_template: >
+        {{ value_json.cmd }}
+      payload_on: 188
+      force_update: true
+      off_delay: 1
+      device_class: motion
+    - name: "Laundry Room Motion"
+      qos: 1
+      state_topic: "home-assistant/sensors/2267069"
+      value_template: >
+        {{ value_json.cmd }}
+      payload_on: 1
+      force_update: true
+      off_delay: 1
+      device_class: motion
+    - name: "Kitchen Desk Motion"
+      qos: 1
+      state_topic: "home-assistant/sensors/2012701"
+      value_template: >
+        {{ value_json.cmd }}
+      payload_on: 1
+      force_update: true
+      off_delay: 1
+      device_class: motion
+    - name: "Downstairs Playroom Motion"
+      qos: 1
+      state_topic: "home-assistant/sensors/5932"
+      value_template: >
+        {{ value_json.cmd }}
+      payload_on: 28
+      force_update: true
+      off_delay: 1
+      device_class: motion
+    - name: "Garage Motion"
+      qos: 1
+      state_topic: "home-assistant/sensors/7255"
+      value_template: >
+        {{ value_json.cmd }}
+      payload_on: 172
+      force_update: true
+      off_delay: 1
+      device_class: motion
 
-  ###### Add RTL_433 script error sensor ######
-  - platform: mqtt
-    qos: 1
-    state_topic: "home-assistant/sensors/rtl_error"
-    name: "RTL Error"
-    value_template: >
-      {{ value_json.cmd }}
-    payload_on: 911
-    payload_off: 411
-    device_class: problem
+    ###### Add RTL_433 script error sensor ######
+    - name: "RTL Error"
+      qos: 1
+      state_topic: "home-assistant/sensors/rtl_error"
+      value_template: >
+        {{ value_json.cmd }}
+      payload_on: 911
+      payload_off: 411
+      device_class: problem
 
-###### Add the Accurite temperature/humidity and Bed sensors ######
-sensor:
-  - platform: mqtt
-    state_topic: "home-assistant/sensors/2966"
-    device_class: temperature
-    name: "TV Temperature"
-    value_template: >
-      {{ value_json.temperature_C | float }}
-    unit_of_measurement: "°C"
-  - platform: mqtt
-    state_topic: "home-assistant/sensors/2966"
-    device_class: humidity
-    name: "TV Humidity"
-    value_template: >
-      {{ value_json.humidity | float }}
-    unit_of_measurement: "%"
-  - platform: mqtt
-    state_topic: "home-assistant/sensors/matt_bed"
-    name: "Matt Bed Presence"
-    value_template: >
-      {{ value_json.pressure | float }}
-  - platform: mqtt
-    state_topic: "home-assistant/sensors/julie_bed"
-    name: "Julie Bed Presence"
-    value_template: >
-      {{ value_json.pressure | float }}
+  ###### Add the Accurite temperature/humidity and Bed sensors ######
+  sensor:
+    - name: "TV Temperature"
+      state_topic: "home-assistant/sensors/2966"
+      device_class: temperature
+      value_template: >
+        {{ value_json.temperature_C | float }}
+      unit_of_measurement: "°C"
+    - name: "TV Humidity"
+      state_topic: "home-assistant/sensors/2966"
+      device_class: humidity
+      value_template: >
+        {{ value_json.humidity | float }}
+      unit_of_measurement: "%"
+    - name: "Matt Bed Presence"
+      state_topic: "home-assistant/sensors/matt_bed"
+      value_template: >
+        {{ value_json.pressure | float }}
+    - name: "Julie Bed Presence"
+      state_topic: "home-assistant/sensors/julie_bed"
+      value_template: >
+        {{ value_json.pressure | float }}
+
+  ###### Shelly devices over MQTT ######
+  switch: !include shelly_mqtt.yaml
